@@ -1,0 +1,19 @@
+syntax = "proto2";
+
+package game;
+
+message Move{
+  required bool moving =1;
+  required int32 direction = 2;
+  required int32 attack =3;
+}
+
+message Update{
+  required int32 health = 1;
+  required int32 enemyMove = 2;
+  required bool moving =3;
+  required int32 enemyHealth = 4;
+  required int32 enemyAttack = 5;
+}
+
+
