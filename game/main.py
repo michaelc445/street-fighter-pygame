@@ -48,13 +48,13 @@ def gameLoop():
     run = True
     while run:
 
-        #next frame
+        #cap frame rate
         clock.tick(FPS)
 
         #draw background
         draw_bg()
 
-        #draw player stats
+        #draw health bars
         draw_health_bar(fighter_1.health, 20, 20)
         draw_health_bar(fighter_2.health, 580, 20)
 
