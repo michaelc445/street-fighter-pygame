@@ -127,12 +127,12 @@ class Fighter():
             if self.attack_type == 1:
                 damage = 10
                 attacking_rect = pygame.Rect(self.rect.centerx - (2 * self.rect.width * self.flip), self.rect.y, 2*self.rect.width, self.rect.height // 2)
-                self.attack_cooldown = 30
+                self.attack_cooldown = 0
 
             if self.attack_type == 2:
                 damage = 20
                 attacking_rect = pygame.Rect(self.rect.centerx - (2 * self.rect.width * self.flip) , self.rect.centery, 2*self.rect.width, self.rect.height // 2)
-                self.attack_cooldown = 100
+                self.attack_cooldown = 0
 
             if attacking_rect.colliderect(target.rect):
                 target.health -= damage
