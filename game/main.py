@@ -21,7 +21,7 @@ RED = (255, 0, 0)
 WHITE = (255, 255, 255)
 
 #load bg image
-bg_image = pygame.image.load("assets/background.png").convert_alpha()
+bg_image = pygame.image.load("game/assets/background.png").convert_alpha()
 
 def draw_bg():
     scaled_bg = pygame.transform.scale(bg_image, (SCREEN_WIDTH, SCREEN_HEIGHT))
