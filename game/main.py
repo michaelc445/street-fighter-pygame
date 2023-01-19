@@ -44,36 +44,39 @@ obstacle_2 = Obstacle(700, 200, 200, 50)
 obstacles = [obstacle_1, obstacle_2]
 
 #game loop
-run = True
-while run:
+def gameLoop():
+    run = True
+    while run:
 
-    #next frame
-    clock.tick(FPS)
+        #next frame
+        clock.tick(FPS)
 
-    #draw background
-    draw_bg()
+        #draw background
+        draw_bg()
 
-    #draw player stats
-    draw_health_bar(fighter_1.health, 20, 20)
-    draw_health_bar(fighter_2.health, 580, 20)
+        #draw player stats
+        draw_health_bar(fighter_1.health, 20, 20)
+        draw_health_bar(fighter_2.health, 580, 20)
 
-    #move fighters
-    fighter_1.move(SCREEN_WIDTH, SCREEN_HEIGHT, screen, fighter_2, obstacles)
-    fighter_2.move(SCREEN_WIDTH, SCREEN_HEIGHT, screen, fighter_1, obstacles)
+        #move fighters
+        fighter_1.move(SCREEN_WIDTH, SCREEN_HEIGHT, screen, fighter_2, obstacles)
+        fighter_2.move(SCREEN_WIDTH, SCREEN_HEIGHT, screen, fighter_1, obstacles)
 
-    #draw fighters
-    fighter_1.draw(screen)
-    fighter_2.draw(screen)
+        #draw fighters
+        fighter_1.draw(screen)
+        fighter_2.draw(screen)
 
-    #draw obstacles
-    for obstacle in obstacles:
-        obstacle.draw(screen)
+        #draw obstacles
+        for obstacle in obstacles:
+            obstacle.draw(screen)
 
 
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            run = False
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                run = False
 
-    #update display
-    pygame.display.update()
-pygame.quit()
+        #update display
+        pygame.display.update()
+    pygame.quit()
+
+gameLoop()
