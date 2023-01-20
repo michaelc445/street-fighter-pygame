@@ -2,6 +2,7 @@ import pygame,sys,os
 from fighter import Fighter
 from obstacle import Obstacle
 from network import game_client
+from proto import game_pb2 as pb
 1
 YELLOW = (255, 255, 0)
 RED = (255, 0, 0)
@@ -114,8 +115,11 @@ def multiGameLoop(SCREEN_WIDTH,SCREEN_HEIGHT,game_client):
         draw_health_bar(screen, fighter_2.health, 580, 20)
 
         # move fighters
-        fighter_1.move_new(SCREEN_WIDTH, SCREEN_HEIGHT, screen, fighter_2, obstacles)
-        fighter_2.move_enemy(SCREEN_WIDTH, SCREEN_HEIGHT, screen, fighter_1, obstacles, None)
+        fighter_1.move_new(SCREEN_WIDTH, SCREEN_HEIGHT, screen, fighter_2, obstacles,game_client)
+        for message in game_client.get_updates():
+            print(message)
+            fighter_1.health = message.enemyHealth
+            fighter_2.move_enemy(SCREEN_WIDTH, SCREEN_HEIGHT, screen, fighter_1, obstacles, message)
 
         # draw fighters
         fighter_1.draw(screen)

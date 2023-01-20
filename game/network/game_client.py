@@ -28,7 +28,7 @@ class GameClient(object):
                 print("connected")
             except:
                 continue
-
+        print(self.enemy_address)
         if self.enemy_address is None:
             raise ConnectionAbortedError
 
@@ -44,6 +44,7 @@ class GameClient(object):
                 self.enemy_address = address
             except:
                 continue
+        print(self.enemy_address)
         if self.enemy_address is None:
             raise ConnectionAbortedError
 
@@ -53,6 +54,7 @@ class GameClient(object):
     def get_updates(self) -> list[pb.Update]:
         result: list[pb.Update] = []
         data = 1
+
         while data is not None:
             try:
                 data, addr = self.socket.recvfrom(self.BUFFER_SIZE)
