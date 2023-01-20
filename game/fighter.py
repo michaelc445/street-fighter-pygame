@@ -21,6 +21,7 @@ class Fighter():
         self.GRAVITY= gravity
         self.dx=0
         self.dy=0
+        self.game_keys = [pygame.K_a,pygame.K_d,pygame.K_w,pygame.K_r,pygame.K_t]
 
     def move(self, screen_width, screen_height, surface, target, obstacles):
         SPEED = 10
@@ -133,6 +134,77 @@ class Fighter():
         self.dy=0
         # get keypresses
         key = pygame.key.get_pressed()
+        t = {z: True for z in self.game_keys if key[z]}
+        message = pb.Update(keys=t)
+        message.health = self.health
+        message.enemyMove=0
+        message.moving=False
+        message.enemyHealth = target.health
+        message.enemyAttack = 0
+        message.x = self.rect.x
+        message.y = self.rect.y
+        # cannot move if attacking
+
+        if self.attacking == False:
+            # check player 1 movement
+            # movement
+            if pygame.K_a in t:
+                self.dx = -self.SPEED
+                message.enemyMove =1
+                ##game_client.send_update(message)
+
+            if pygame.K_d in t:
+                self.dx = self.SPEED
+                message.enemyMove = 2
+                ##game_client.send_update(message)
+
+            # jump
+            if pygame.K_w in t and not self.jump:
+                self.vel_y = -30
+                self.jump = True
+                message.enemyMove= 3
+                ##game_client.send_update(message)
+            # attack
+            if pygame.K_r in t or pygame.K_t in t:
+                # determine attack type
+                if pygame.K_r in t:
+                    self.attack_type = 1
+                    message.enemyAttack = 1
+                if pygame.K_t in t:
+                    self.attack_type = 2
+                    message.enemyAttack = 2
+                ##game_client.send_update(message)
+                self.attack(surface, target)
+
+        # apply gravity
+        self.vel_y += self.GRAVITY
+        self.dy += self.vel_y
+
+        # keep players on screen
+        if self.rect.left + self.dx < 0:
+            self.dx = -self.rect.left
+
+        if self.rect.right + self.dx > screen_width:
+            self.dx = screen_width - self.rect.right
+
+        if self.rect.bottom + self.dy > screen_height - 100:
+            self.vel_y = 0
+            self.dy = screen_height - 100 - self.rect.bottom
+            self.jump = False
+
+        # face direction of other player
+        self.face_enemy(target)
+        # update player position
+        message.x = self.rect.x
+        message.y = self.rect.y
+        game_client.send_update(message)
+        self.update_player(self.dx, self.dy, obstacles, surface)
+
+    def move_enemy2(self, screen_width, screen_height, surface, target, obstacles,game_client,key):
+        self.dx=0
+        self.dy=0
+        # get keypresses
+
         message = pb.Update()
         message.health = self.health
         message.enemyMove=0
@@ -194,10 +266,8 @@ class Fighter():
         # update player position
         message.x = self.rect.x
         message.y = self.rect.y
-        game_client.send_update(message)
+        ##game_client.send_update(message)
         self.update_player(self.dx, self.dy, obstacles, surface)
-
-
     def move_enemy(self,screen_width, screen_height, surface, target, obstacles,message):
         self.dx = 0
         self.dy = 0

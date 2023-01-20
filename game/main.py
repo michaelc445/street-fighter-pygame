@@ -80,6 +80,7 @@ def gameLoop(SCREEN_WIDTH, SCREEN_HEIGHT):
 
 
 def multiGameLoop(SCREEN_WIDTH,SCREEN_HEIGHT,game_client):
+    gameKeys = [pygame.K_a,pygame.K_d,pygame.K_w,pygame.K_r,pygame.K_t]
     pygame.init()
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     bg_image = pygame.image.load("assets/background.png").convert_alpha()
@@ -117,9 +118,9 @@ def multiGameLoop(SCREEN_WIDTH,SCREEN_HEIGHT,game_client):
         # move fighters
         fighter_1.move_new(SCREEN_WIDTH, SCREEN_HEIGHT, screen, fighter_2, obstacles,game_client)
         for message in game_client.get_updates():
-            print(message)
             fighter_1.health = message.enemyHealth
-            fighter_2.move_enemy(SCREEN_WIDTH, SCREEN_HEIGHT, screen, fighter_1, obstacles, message)
+
+            fighter_2.move_enemy2(SCREEN_WIDTH, SCREEN_HEIGHT, screen, fighter_1, obstacles, game_client,message.keys)
 
         # draw fighters
         fighter_1.draw(screen)
