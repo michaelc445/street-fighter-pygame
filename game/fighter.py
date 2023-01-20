@@ -1,17 +1,25 @@
-import pygame
+import pygame, os
+from network import game_client
+
+print(os.getcwd())
+
 
 class Fighter():
-    def __init__(self, player, x, y, width, height, flip):
+    def __init__(self, player, x, y, width, height, flip,speed,gravity):
         self.player = player
         self.flip = flip
-        self.rect = pygame.Rect((x,y, width, height))
+        self.rect = pygame.Rect((x, y, width, height))
         self.vel_y = 0
         self.jump = False
         self.attacking = False
         self.attack_type = 0
         self.health = 100
         self.attack_cooldown = 0
-        self.color = (255,0,0)
+        self.color = (255, 0, 0)
+        self.SPEED = speed
+        self.GRAVITY= gravity
+        self.dx=0
+        self.dy=0
 
     def move(self, screen_width, screen_height, surface, target, obstacles):
         SPEED = 10
@@ -98,7 +106,7 @@ class Fighter():
 
         if self.attack_cooldown > 0:
             self.attack_cooldown -= 1
-        
+
         #update player position
         updatex, updatey = True, True
         x_collision_check = pygame.Rect((self.rect.x + dx , self.rect.y , self.rect.width, self.rect.height))
@@ -119,29 +127,157 @@ class Fighter():
             self.rect.x += dx
         if updatey:
             self.rect.y += dy
-            
+    def move_new(self, screen_width, screen_height, surface, target, obstacles):
+        self.dx=0
+        self.dy=0
+
+        # get keypresses
+        key = pygame.key.get_pressed()
+        # cannot move if attacking
+        if self.attacking == False:
+            # check player 1 movement
+            # movement
+            if key[pygame.K_a]:
+                self.dx = -self.SPEED
+
+            if key[pygame.K_d]:
+                self.dx = self.SPEED
+
+            # jump
+            if key[pygame.K_w] and not self.jump:
+                self.vel_y = -30
+                self.jump = True
+            # attack
+            if key[pygame.K_r] or key[pygame.K_t]:
+                # determine attack type
+                if key[pygame.K_r]:
+                    self.attack_type = 1
+                if key[pygame.K_t]:
+                    self.attack_type = 2
+                self.attack(surface, target)
+
+        # apply gravity
+        self.vel_y += self.GRAVITY
+        self.dy += self.vel_y
+
+        # keep players on screen
+        if self.rect.left + self.dx < 0:
+            self.dx = -self.rect.left
+
+        if self.rect.right + self.dx > screen_width:
+            self.dx = screen_width - self.rect.right
+
+        if self.rect.bottom + self.dy > screen_height - 100:
+            self.vel_y = 0
+            self.dy = screen_height - 100 - self.rect.bottom
+            self.jump = False
+
+        # face direction of other player
+        self.face_enemy(target)
+        # update player position
+        self.update_player(self.dx, self.dy, obstacles, surface)
+
+
+    def move_enemy(self,screen_width, screen_height, surface, target, obstacles,message):
+        self.dx = 0
+        self.dy = 0
+
+        # get keypresses
+        key = pygame.key.get_pressed()
+        # cannot move if attacking
+        if not message.enemyAttack:
+            # check player 1 movement
+            # movement
+            if message.enemyMove == 1:
+                self.dx = -self.SPEED
+
+            if message.enemyMove == 2:
+                self.dx = self.SPEED
+
+            # jump
+            if message.enemyMove == 3 and not self.jump:
+                self.vel_y = -30
+                self.jump = True
+            # attack
+            if message.enemyAttack != 0:
+                # determine attack type
+                self.attack_type = message.enemyAttack
+                self.attack(surface, target)
+
+        # apply gravity
+        self.vel_y += self.GRAVITY
+        self.dy += self.vel_y
+
+        # keep players on screen
+        if self.rect.left + self.dx < 0:
+            self.dx = -self.rect.left
+
+        if self.rect.right + self.dx > screen_width:
+            self.dx = screen_width - self.rect.right
+
+        if self.rect.bottom + self.dy > screen_height - 100:
+            self.vel_y = 0
+            self.dy = screen_height - 100 - self.rect.bottom
+            self.jump = False
+
+        # face direction of other player
+        self.face_enemy(target)
+        # update player position
+        self.update_player(self.dx, self.dy, obstacles, surface)
+
+    def face_enemy(self, target):
+        # face direction of other player
+        if target.rect.centerx > self.rect.centerx:
+            self.flip = False
+        else:
+            self.flip = True
+
+        if self.attack_cooldown > 0:
+            self.attack_cooldown -= 1
+
+    def update_player(self, dx, dy, obstacles, surface):
+        # update player position
+        updatex, updatey = True, True
+        x_collision_check = pygame.Rect((self.rect.x + dx, self.rect.y, self.rect.width, self.rect.height))
+        y_collision_check = pygame.Rect((self.rect.x, self.rect.y + dy, self.rect.width, self.rect.height))
+        standing_on_platform_check = pygame.Rect((self.rect.x, self.rect.y + self.rect.height, self.rect.width, 10))
+        pygame.draw.rect(surface, (230, 176, 30), standing_on_platform_check)
+        for obstacle in obstacles:
+            if x_collision_check.colliderect(obstacle.rect):
+                updatex = False
+
+            if y_collision_check.colliderect(obstacle.rect):
+                updatey = False
+                self.vel_y = 0
+            if standing_on_platform_check.colliderect(obstacle.rect):
+                self.jump = False
+
+        if updatex:
+            self.rect.x += dx
+        if updatey:
+            self.rect.y += dy
 
     def attack(self, surface, target):
         if self.attack_cooldown == 0:
             # self.attacking = True
             if self.attack_type == 1:
                 damage = 10
-                attacking_rect = pygame.Rect(self.rect.centerx - (2 * self.rect.width * self.flip), self.rect.y, 2*self.rect.width, self.rect.height // 2)
+                attacking_rect = pygame.Rect(self.rect.centerx - (2 * self.rect.width * self.flip), self.rect.y,
+                                             2 * self.rect.width, self.rect.height // 2)
                 self.attack_cooldown = 0
 
             if self.attack_type == 2:
                 damage = 20
-                attacking_rect = pygame.Rect(self.rect.centerx - (2 * self.rect.width * self.flip) , self.rect.centery, 2*self.rect.width, self.rect.height // 2)
+                attacking_rect = pygame.Rect(self.rect.centerx - (2 * self.rect.width * self.flip), self.rect.centery,
+                                             2 * self.rect.width, self.rect.height // 2)
                 self.attack_cooldown = 0
 
             if attacking_rect.colliderect(target.rect):
                 target.health -= damage
-                target.color = (255,255,255)
+                target.color = (255, 255, 255)
 
-            pygame.draw.rect(surface, (0,255,0), attacking_rect)
+            pygame.draw.rect(surface, (0, 255, 0), attacking_rect)
 
     def draw(self, surface):
         pygame.draw.rect(surface, self.color, self.rect)
-        self.color = (255,0,0)
-
-    
+        self.color = (255, 0, 0)

@@ -1,66 +1,64 @@
-import pygame
+import pygame,sys,os
 from fighter import Fighter
 from obstacle import Obstacle
-
-pygame.init()
-
-#create game window
-SCREEN_WIDTH = 1000
-SCREEN_HEIGHT = 600
-
-screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-pygame.display.set_caption("Team 5 Project")
-
-#cap frame rate
-clock = pygame.time.Clock()
-FPS = 60
-
-#define colors
+from network import game_client
+1
 YELLOW = (255, 255, 0)
 RED = (255, 0, 0)
 WHITE = (255, 255, 255)
 
-#load bg image
-bg_image = pygame.image.load("game/assets/background.png").convert_alpha()
-
-def draw_bg():
+def draw_bg(screen, bg_image,SCREEN_WIDTH, SCREEN_HEIGHT):
     scaled_bg = pygame.transform.scale(bg_image, (SCREEN_WIDTH, SCREEN_HEIGHT))
     screen.blit(scaled_bg, (0,0))
 
 #draw health bars
-def draw_health_bar(health, x, y):
+def draw_health_bar(screen, health, x, y):
     ratio = health / 100
     pygame.draw.rect(screen, WHITE, (x-3, y-3, 406, 36))
     pygame.draw.rect(screen, RED, (x, y, 400, 30))
     pygame.draw.rect(screen, YELLOW, (x, y, 400 * ratio, 30))
 
-#create fighters
-fighter_1 = Fighter(1, 200, 310, 40, 100, False)
-fighter_2 = Fighter(2, 700, 310, 40, 100, True)
 
-#create obstacles
-obstacle_1 = Obstacle(400, 300, 100, 300)
-obstacle_2 = Obstacle(700, 200, 200, 50)
-obstacles = [obstacle_1, obstacle_2]
 
 #game loop
-def gameLoop():
+def gameLoop(SCREEN_WIDTH, SCREEN_HEIGHT):
+    pygame.init()
+    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+    bg_image = pygame.image.load("assets/background.png").convert_alpha()
+    pygame.display.set_caption("Team 5 Project")
+
+    # cap frame rate
+
+    # define colors
+
+    # load bg image
+
+    # create fighters
+    fighter_1 = Fighter(1, 200, 310, 40, 100, False,10,2)
+    fighter_2 = Fighter(2, 700, 310, 40, 100, True,10,2)
+
+    # create obstacles
+    obstacle_1 = Obstacle(400, 300, 100, 300)
+    obstacle_2 = Obstacle(700, 200, 200, 50)
+    obstacles = [obstacle_1, obstacle_2]
     run = True
+    clock = pygame.time.Clock()
+    FPS = 60
     while run:
 
         #cap frame rate
         clock.tick(FPS)
 
         #draw background
-        draw_bg()
+        draw_bg(screen,bg_image,SCREEN_WIDTH,SCREEN_HEIGHT)
 
         #draw health bars
-        draw_health_bar(fighter_1.health, 20, 20)
-        draw_health_bar(fighter_2.health, 580, 20)
+        draw_health_bar(screen,fighter_1.health, 20, 20)
+        draw_health_bar(screen,fighter_2.health, 580, 20)
 
         #move fighters
-        fighter_1.move(SCREEN_WIDTH, SCREEN_HEIGHT, screen, fighter_2, obstacles)
-        fighter_2.move(SCREEN_WIDTH, SCREEN_HEIGHT, screen, fighter_1, obstacles)
+        fighter_1.move_new(SCREEN_WIDTH, SCREEN_HEIGHT, screen, fighter_2, obstacles)
+        fighter_2.move_enemy(SCREEN_WIDTH, SCREEN_HEIGHT, screen, fighter_1, obstacles,None)
 
         #draw fighters
         fighter_1.draw(screen)
@@ -79,4 +77,82 @@ def gameLoop():
         pygame.display.update()
     pygame.quit()
 
-gameLoop()
+
+def multiGameLoop(SCREEN_WIDTH,SCREEN_HEIGHT,game_client):
+    pygame.init()
+    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+    bg_image = pygame.image.load("assets/background.png").convert_alpha()
+    pygame.display.set_caption("Team 5 Project")
+
+    # cap frame rate
+
+    # define colors
+
+    # load bg image
+
+    # create fighters
+    fighter_1 = Fighter(1, 200, 310, 40, 100, False, 10, 2)
+    fighter_2 = Fighter(2, 700, 310, 40, 100, True, 10, 2)
+
+    # create obstacles
+    obstacle_1 = Obstacle(400, 300, 100, 300)
+    obstacle_2 = Obstacle(700, 200, 200, 50)
+    obstacles = [obstacle_1, obstacle_2]
+    run = True
+    clock = pygame.time.Clock()
+    FPS = 60
+    while run:
+
+        # cap frame rate
+        clock.tick(FPS)
+
+        # draw background
+        draw_bg(screen, bg_image, SCREEN_WIDTH, SCREEN_HEIGHT)
+
+        # draw health bars
+        draw_health_bar(screen, fighter_1.health, 20, 20)
+        draw_health_bar(screen, fighter_2.health, 580, 20)
+
+        # move fighters
+        fighter_1.move_new(SCREEN_WIDTH, SCREEN_HEIGHT, screen, fighter_2, obstacles)
+        fighter_2.move_enemy(SCREEN_WIDTH, SCREEN_HEIGHT, screen, fighter_1, obstacles, None)
+
+        # draw fighters
+        fighter_1.draw(screen)
+        fighter_2.draw(screen)
+
+        # draw obstacles
+        for obstacle in obstacles:
+            obstacle.draw(screen)
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                run = False
+
+        # update display
+        pygame.display.update()
+    pygame.quit()
+
+if __name__ == "__main__":
+    game_client = game_client.GameClient(1234)
+    choice = int(input("host: 0, join: 1"))
+    if choice == 0:
+        host = True
+        try:
+            game_client.host_game()
+        except ConnectionAbortedError:
+            print("failed to host game")
+            sys.exit(1)
+    else:
+        try:
+            game_client.join_game("192.168.0.205", 1234)
+        except ConnectionAbortedError:
+            print("failed to join game")
+            sys.exit(1)
+
+
+    # create game window
+    SCREEN_WIDTH = 1000
+    SCREEN_HEIGHT = 600
+
+    multiGameLoop(SCREEN_WIDTH, SCREEN_HEIGHT,game_client)
