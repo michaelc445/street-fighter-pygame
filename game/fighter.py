@@ -195,10 +195,11 @@ class Fighter():
         # face direction of other player
         self.face_enemy(target)
         # update player position
+        self.update_player(self.dx, self.dy, obstacles, surface)
         message.x = self.rect.x
         message.y = self.rect.y
         game_client.send_update(message)
-        self.update_player(self.dx, self.dy, obstacles, surface)
+
 
     def move_enemy2(self, screen_width, screen_height, surface, target, obstacles,game_client,key):
         self.dx=0
@@ -206,10 +207,10 @@ class Fighter():
         # get keypresses
 
         message = pb.Update()
-        message.health = self.health
+        message.health = target.health
         message.enemyMove=0
         message.moving=False
-        message.enemyHealth = target.health
+        message.enemyHealth = self.health
         message.enemyAttack = 0
         message.x = self.rect.x
         message.y = self.rect.y
