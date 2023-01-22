@@ -146,12 +146,13 @@ if __name__ == "__main__":
             sys.exit(1)
     else:
         try:
-            game_client.join_game("192.168.0.219", 1234)
-            game_client.character_select()
+            game_client.join_game("192.168.0.33", 1234)
+
         except ConnectionAbortedError:
             print("failed to join game")
             sys.exit(1)
-
+        game_client.character_select()
+        game_client.socket.setblocking(False)
 
     # create game window
     SCREEN_WIDTH = 1000
