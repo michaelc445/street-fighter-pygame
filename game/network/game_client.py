@@ -53,15 +53,16 @@ class GameClient(object):
                 self.socket.close()
                 sys.exit(1)
 
+            self.player_id = join_resp.playerId
             if join_resp.start:
-                self.player_id = join_resp.playerId
+
                 break
 
     def character_select(self):
-        char_req = pb.CharacterSelectRequest(id=self.player_id,character=0,locked_in=True)
+        char_req = pb.CharacterSelectRequest(id=self.player_id, character=0, lockedIn=True)
 
         self.socket.sendto(char_req.SerializeToString(), (self.server_ip, self.server_port))
-        char_resp = pb.CharacterSelectresponse()
+        char_resp = pb.CharacterSelectResponse()
         while True:
             data, address = self.socket.recvfrom(self.BUFFER_SIZE)
             char_resp.ParseFromString(data)

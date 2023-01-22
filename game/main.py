@@ -89,10 +89,14 @@ def multiGameLoop(SCREEN_WIDTH,SCREEN_HEIGHT,game_client):
     # load bg image
 
     # create fighters
-    fighter_1 = Fighter(1, 200, 310, 40, 100, False, 10, 2)
-    fighter_2 = Fighter(2, 700, 310, 40, 100, True, 10, 2)
 
-    # create obstacles
+    fighte_1 = Fighter(1, 200, 310, 40, 100, False, 10, 2)
+    fighte_2 = Fighter(2, 700, 310, 40, 100, True, 10, 2)
+    fighters = [fighte_1,fighte_2]
+    pick = int(game_client.player_id)
+    local_player = fighters[pick]
+    enemy = (pick+1)%2
+    enemy_character =fighters[enemy]
     obstacle_1 = Obstacle(400, 300, 100, 300)
     obstacle_2 = Obstacle(700, 200, 200, 50)
     obstacles = [obstacle_1, obstacle_2]
@@ -108,19 +112,18 @@ def multiGameLoop(SCREEN_WIDTH,SCREEN_HEIGHT,game_client):
         draw_bg(screen, bg_image, SCREEN_WIDTH, SCREEN_HEIGHT)
 
         # draw health bars
-        draw_health_bar(screen, fighter_1.health, 20, 20)
-        draw_health_bar(screen, fighter_2.health, 580, 20)
+        draw_health_bar(screen, fighters[0].health, 20, 20)
+        draw_health_bar(screen, fighters[1].health, 580, 20)
 
         # move fighters
-        fighter_1.move_new(SCREEN_WIDTH, SCREEN_HEIGHT, screen, fighter_2, obstacles,game_client)
+        local_player.move_new(SCREEN_WIDTH, SCREEN_HEIGHT, screen, enemy_character, obstacles,game_client)
         for message in game_client.get_updates():
-            fighter_1.health = message.enemyHealth
-
-            fighter_2.move_enemy2(SCREEN_WIDTH, SCREEN_HEIGHT, screen, fighter_1, obstacles, game_client,message.keys)
+            local_player.health = message.enemyHealth
+            enemy_character.move_enemy2(SCREEN_WIDTH, SCREEN_HEIGHT, screen, local_player, obstacles, game_client,message.keys)
 
         # draw fighters
-        fighter_1.draw(screen)
-        fighter_2.draw(screen)
+        local_player.draw(screen)
+        enemy_character.draw(screen)
 
         # draw obstacles
         for obstacle in obstacles:
@@ -146,12 +149,14 @@ if __name__ == "__main__":
             sys.exit(1)
     else:
         try:
-            game_client.join_game("192.168.0.219", 1234)
-            game_client.character_select()
+            game_client.join_game("192.168.0.33", 1234)
+
         except ConnectionAbortedError:
             print("failed to join game")
             sys.exit(1)
-
+        game_client.character_select()
+        game_client.socket.setblocking(False)
+        print(game_client.player_id)
 
     # create game window
     SCREEN_WIDTH = 1000
