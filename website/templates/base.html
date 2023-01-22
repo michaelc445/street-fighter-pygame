@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8"/> 
+        <title>Street Fighter</title>
+        <link rel="stylesheet" href="../static/styles.css" />
+        <link rel="stylesheet" href="https://pyscript.net/latest/pyscript.css" />
+        <script defer src="https://pyscript.net/latest/pyscript.js"></script>
+    </head>
+    <body>
+        <header>
+            <nav>
+                <a href="{{  url_for( 'index' ) }}">Home</a>
+                <a href="{{  url_for( 'single_player' ) }}">Single Player</a>
+                <a href="{{  url_for( 'Multi_player' ) }}">Multi-Player</a>
+                <a id="logo" href="{{  url_for( 'index' ) }}"><img id="logoimg" src="../images/logo.png"></a>
+                <a href="{{  url_for('Download')   }}">Download</a>
+                <a href="{{  url_for('Download')   }}">About</a>
+                <a href="{{  url_for( 'login_status' ) }}">{% block login_status %}{% endblock %}</a>
+            </nav>
+        </header>
+        <div class="body">
+            {% block main_content %}
+            {% endblock %}
+        </div>
+        <footer>
+
+        </footer>
+    </body>
+
+</html>

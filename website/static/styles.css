@@ -1,0 +1,102 @@
+body{
+    font-family: Arial, Helvetica, sans-serif;
+    margin:auto;
+    display: block;
+    text-align: center;
+    padding-bottom: 5em;
+    padding-top:6em;
+    color: white;
+    background-color: black;
+    width:100%
+}
+.body{
+    font-family: Arial, Helvetica, sans-serif;
+    width: 80%;
+    display: block;
+    text-align: center;
+    padding-bottom: 5em;
+    margin:auto;
+    background-color: #575753;
+}
+
+a {
+    color :blue; 
+}
+
+
+nav{
+    display: block;
+    box-sizing: border-box;
+    border:black;
+    position:fixed;
+    border-style: solid;
+    font-size: large;
+    color:white;
+    background-color: #302F2B;
+    overflow: hidden;
+    bottom: 0;
+    width: 100%;
+    padding: auto;
+    top:0;
+    left:0;
+    max-height: 5em;
+}
+nav a:hover{
+    color: lightblue;
+}
+nav a{
+    color:white;
+    display: inline-block;
+    text-decoration: none;
+    padding: 1em 2em 1em 2em;
+
+ }
+ 
+
+ #logo{
+    color:white;
+    display: inline-flex;
+    position: relative;
+    text-decoration: none;
+    justify-content: center;
+    
+    padding-top: 1em;
+ }
+ #logoimg{
+    max-width: 10em;
+    justify-content: center;
+    display: block;
+ }
+ 
+.game_container{
+    width: 1000px; 
+    height: 450px;
+    overflow: hidden;
+    margin-top:100px;
+    padding-top: 100px;
+    position:absolute;
+    bottom:0;
+}
+
+#iframe-wrapper {
+    position:relative;
+    background: red;
+    width: 300px;
+    height: 300px;
+  }
+  #iframe-overlay-top {
+    height:17px;
+    width:100%;
+    background-color: green;
+    position:absolute;
+    top: 0;
+    left:0;
+  }
+  #iframe-overlay-bottom {
+    height:17px;
+    width:100%;
+    background-color: blue;
+    position:absolute;
+    bottom: 0;
+    left:0;
+  }
