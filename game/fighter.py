@@ -6,7 +6,7 @@ print(os.getcwd())
 
 
 class Fighter():
-    def __init__(self, player, x, y, width, height, flip, speed, gravity):
+    def __init__(self, player, x, y, width, height, flip,speed,gravity):
         self.player = player
         self.flip = flip
         self.rect = pygame.Rect((x, y, width, height))
@@ -18,10 +18,10 @@ class Fighter():
         self.attack_cooldown = 0
         self.color = (255, 0, 0)
         self.SPEED = speed
-        self.GRAVITY = gravity
-        self.dx = 0
-        self.dy = 0
-        self.game_keys = [pygame.K_a, pygame.K_d, pygame.K_w, pygame.K_r, pygame.K_t]
+        self.GRAVITY= gravity
+        self.dx=0
+        self.dy=0
+        self.game_keys = [pygame.K_a,pygame.K_d,pygame.K_w,pygame.K_r,pygame.K_t]
 
     def move(self, screen_width, screen_height, surface, target, obstacles):
         SPEED = 10
@@ -29,53 +29,53 @@ class Fighter():
         dx = 0
         dy = 0
 
-        # get keypresses
+        #get keypresses
         key = pygame.key.get_pressed()
 
-        # cannot move if attacking
+        #cannot move if attacking
         if self.attacking == False:
 
-            # check player 1 movement
+        #check player 1 movement
             if self.player == 1:
 
-                # movement
+                #movement
                 if key[pygame.K_a]:
                     dx = -SPEED
 
                 if key[pygame.K_d]:
                     dx = SPEED
 
-                # jump
+                #jump
                 if key[pygame.K_w] and not self.jump:
                     self.vel_y = -30
                     self.jump = True
 
-                # attack
+                #attack
                 if key[pygame.K_r] or key[pygame.K_t]:
-                    # determine attack type
+                    #determine attack type
                     if key[pygame.K_r]:
                         self.attack_type = 1
                     if key[pygame.K_t]:
                         self.attack_type = 2
 
                     self.attack(surface, target)
-            # check player 2 controls
+            #check player 2 controls
             if self.player == 2:
-                # movement
+                #movement
                 if key[pygame.K_LEFT]:
                     dx = -SPEED
 
                 if key[pygame.K_RIGHT]:
                     dx = SPEED
 
-                # jump
+                #jump
                 if key[pygame.K_UP] and not self.jump:
                     self.vel_y = -30
                     self.jump = True
 
-                # attack
+                #attack
                 if key[pygame.K_n] or key[pygame.K_m]:
-                    # determine attack type
+                    #determine attack type
                     if key[pygame.K_n]:
                         self.attack_type = 1
                     if key[pygame.K_m]:
@@ -83,23 +83,24 @@ class Fighter():
 
                     self.attack(surface, target)
 
-        # apply gravity
+
+        #apply gravity
         self.vel_y += GRAVITY
         dy += self.vel_y
 
-        # keep players on screen
+        #keep players on screen
         if self.rect.left + dx < 0:
             dx = -self.rect.left
 
         if self.rect.right + dx > screen_width:
             dx = screen_width - self.rect.right
 
-        if self.rect.bottom + dy > screen_height - 100:
+        if self.rect.bottom +  dy > screen_height - 100:
             self.vel_y = 0
             dy = screen_height - 100 - self.rect.bottom
             self.jump = False
 
-        # face direction of other player
+        #face direction of other player
         if target.rect.centerx > self.rect.centerx:
             self.flip = False
         else:
@@ -108,11 +109,11 @@ class Fighter():
         if self.attack_cooldown > 0:
             self.attack_cooldown -= 1
 
-        # update player position
+        #update player position
         updatex, updatey = True, True
-        x_collision_check = pygame.Rect((self.rect.x + dx, self.rect.y, self.rect.width, self.rect.height))
-        y_collision_check = pygame.Rect((self.rect.x, self.rect.y + dy, self.rect.width, self.rect.height))
-        standing_on_platform_check = pygame.Rect((self.rect.x, self.rect.y + self.rect.height, self.rect.width, 10))
+        x_collision_check = pygame.Rect((self.rect.x + dx , self.rect.y , self.rect.width, self.rect.height))
+        y_collision_check = pygame.Rect((self.rect.x , self.rect.y + dy , self.rect.width, self.rect.height))
+        standing_on_platform_check = pygame.Rect((self.rect.x, self.rect.y + self.rect.height , self.rect.width, 10))
         pygame.draw.rect(surface, (230, 176, 30), standing_on_platform_check)
         for obstacle in obstacles:
             if x_collision_check.colliderect(obstacle.rect):
@@ -128,17 +129,16 @@ class Fighter():
             self.rect.x += dx
         if updatey:
             self.rect.y += dy
-
-    def move_new(self, screen_width, screen_height, surface, target, obstacles, game_client):
-        self.dx = 0
-        self.dy = 0
+    def move_new(self, screen_width, screen_height, surface, target, obstacles,game_client):
+        self.dx=0
+        self.dy=0
         # get keypresses
         key = pygame.key.get_pressed()
         t = {z: True for z in self.game_keys if key[z]}
         message = pb.Update(keys=t)
         message.health = self.health
-        message.enemyMove = 0
-        message.moving = False
+        message.enemyMove=0
+        message.moving=False
         message.enemyHealth = target.health
         message.enemyAttack = 0
         message.x = self.rect.x
@@ -150,7 +150,7 @@ class Fighter():
             # movement
             if pygame.K_a in t:
                 self.dx = -self.SPEED
-                message.enemyMove = 1
+                message.enemyMove =1
                 ##game_client.send_update(message)
 
             if pygame.K_d in t:
@@ -162,7 +162,7 @@ class Fighter():
             if pygame.K_w in t and not self.jump:
                 self.vel_y = -30
                 self.jump = True
-                message.enemyMove = 3
+                message.enemyMove= 3
                 ##game_client.send_update(message)
             # attack
             if pygame.K_r in t or pygame.K_t in t:
@@ -198,43 +198,54 @@ class Fighter():
         self.update_player(self.dx, self.dy, obstacles, surface)
         message.x = self.rect.x
         message.y = self.rect.y
-        message.id = game_client.player_id
         game_client.send_update(message)
 
-    def move_enemy2(self, screen_width, screen_height, surface, target, obstacles, game_client, key):
-        self.dx = 0
-        self.dy = 0
+
+    def move_enemy2(self, screen_width, screen_height, surface, target, obstacles,game_client,key):
+        self.dx=0
+        self.dy=0
         # get keypresses
 
         t = {z: True for z in self.game_keys if key[z]}
-
+        message = pb.Update(keys=t)
+        message.health = self.health
+        message.enemyMove = 0
+        message.moving = False
+        message.enemyHealth = target.health
+        message.enemyAttack = 0
+        message.x = self.rect.x
+        message.y = self.rect.y
+        message.id = game_client.player_id
         # cannot move if attacking
         if self.attacking == False:
             # check player 1 movement
             # movement
             if key[pygame.K_a]:
                 self.dx = -self.SPEED
-
+                message.enemyMove = 1
+                game_client.send_update(message)
 
             if key[pygame.K_d]:
                 self.dx = self.SPEED
-
+                message.enemyMove = 2
+                game_client.send_update(message)
 
             # jump
             if key[pygame.K_w] and not self.jump:
                 self.vel_y = -30
                 self.jump = True
-
+                message.enemyMove = 3
+                game_client.send_update(message)
             # attack
             if key[pygame.K_r] or key[pygame.K_t]:
                 # determine attack type
                 if key[pygame.K_r]:
                     self.attack_type = 1
-
+                    message.enemyAttack = 1
                 if key[pygame.K_t]:
                     self.attack_type = 2
-
-
+                    message.enemyAttack = 2
+                game_client.send_update(message)
                 self.attack(surface, target)
 
         # apply gravity
@@ -256,11 +267,11 @@ class Fighter():
         # face direction of other player
         self.face_enemy(target)
         # update player position
-
-
+        message.x = self.rect.x
+        message.y = self.rect.y
+        ##game_client.send_update(message)
         self.update_player(self.dx, self.dy, obstacles, surface)
-
-    def move_enemy(self, screen_width, screen_height, surface, target, obstacles, message):
+    def move_enemy(self,screen_width, screen_height, surface, target, obstacles,message):
         self.dx = 0
         self.dy = 0
 
