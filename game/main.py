@@ -29,9 +29,7 @@ def gameLoop(SCREEN_WIDTH, SCREEN_HEIGHT):
     pygame.display.set_caption("Team 5 Project")
 
     # cap frame rate
-
     # define colors
-
     # load bg image
 
     # create fighters
@@ -87,9 +85,7 @@ def multiGameLoop(SCREEN_WIDTH,SCREEN_HEIGHT,game_client):
     pygame.display.set_caption("Team 5 Project")
 
     # cap frame rate
-
     # define colors
-
     # load bg image
 
     # create fighters
@@ -150,7 +146,8 @@ if __name__ == "__main__":
             sys.exit(1)
     else:
         try:
-            game_client.join_game("192.168.0.205", 1234)
+            game_client.join_game("192.168.0.219", 1234)
+            game_client.character_select()
         except ConnectionAbortedError:
             print("failed to join game")
             sys.exit(1)
