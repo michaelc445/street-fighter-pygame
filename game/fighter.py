@@ -9,6 +9,7 @@ class Fighter():
         self.vel_x = 0
         self.jump = False
         self.attacking = False
+        self.blocking = False
         self.attack_type = 0
         self.health = 100
         self.attack_cooldown = 0
@@ -23,12 +24,10 @@ class Fighter():
         #get keypresses
         key = pygame.key.get_pressed()
 
-        #cannot move if attacking
-        if self.attacking == False:
-
         #check player 1 movement
-            if self.player == 1:
+        if self.player == 1:
 
+            if not self.blocking:
                 #movement
                 if key[pygame.K_a]:
                     dx = -SPEED
@@ -50,8 +49,20 @@ class Fighter():
                         self.attack_type = 2
 
                     self.attack(surface, target)
-            #check player 2 controls
-            if self.player == 2:
+
+            #block
+            if key[pygame.K_s]:
+                self.blocking = True
+            else:
+                self.blocking = False
+
+            
+
+        #check player 2 controls
+        if self.player == 2:
+
+            if not self.blocking:
+
                 #movement
                 if key[pygame.K_LEFT]:
                     dx = -SPEED
@@ -75,6 +86,14 @@ class Fighter():
                     self.attack(surface, target)
 
 
+            #block
+            if key[pygame.K_DOWN]:
+                self.blocking = True
+            else:
+                self.blocking = False
+
+            
+
         #apply gravity
         self.vel_y += GRAVITY
         if self.vel_x != 0:
@@ -82,6 +101,9 @@ class Fighter():
         dy += self.vel_y
         dx += self.vel_x
 
+        #change color if blocking
+        if self.blocking:
+            self.color = (0,0,255)
 
         #keep players on screen
         if self.rect.left + dx < 0:
@@ -144,7 +166,7 @@ class Fighter():
                 attacking_rect = pygame.Rect(self.rect.centerx - (2 * self.rect.width * self.flip) , self.rect.centery, 2*self.rect.width, self.rect.height // 2)
                 self.attack_cooldown = 40
 
-            if attacking_rect.colliderect(target.rect):
+            if attacking_rect.colliderect(target.rect) and not target.blocking:
                 target.health -= damage
                 target.color = (255,255,255)
                 target.vel_x += (10 - 20 * self.flip)
