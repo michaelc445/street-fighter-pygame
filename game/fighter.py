@@ -112,9 +112,11 @@ class Fighter():
         #keep players on screen
         if self.rect.left + dx < 0:
             dx = -self.rect.left
+            self.vel_x = 0
 
         if self.rect.right + dx > screen_width:
             dx = screen_width - self.rect.right
+            self.vel_x = 0
 
         if self.rect.bottom +  dy > screen_height - 100:
             self.vel_y = 0
