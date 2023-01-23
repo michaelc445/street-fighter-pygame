@@ -19,4 +19,4 @@ N: light attack (punch)
 M: projectile attack
 
 punch does 10dmg, 30 frame cooldown
-projectile does 5dmg, 100 frame cooldown
+projectile does 5dmg, 50 frame cooldown

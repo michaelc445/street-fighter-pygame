@@ -163,7 +163,7 @@ class Fighter():
         #update projectiles
         if self.projectiles:
             for projectile in self.projectiles:
-                projectile.move(5 - (10 * self.flip), target, screen_width)
+                projectile.move(target, screen_width)
                 projectile.draw(surface)
                 if not projectile.exists:
                     self.projectiles.remove(projectile)
@@ -187,7 +187,7 @@ class Fighter():
 
             if self.attack_type == 2:
                 if self.projectile_cooldown == 0:
-                    self.projectiles.append(Projectile(self.rect.centerx - (2 * self.rect.width * self.flip) , self.rect.y, 2*self.rect.width, self.rect.height // 2, 5, self))
+                    self.projectiles.append(Projectile(self.rect.centerx - (2 * self.rect.width * self.flip) , self.rect.y, 2*self.rect.width, self.rect.height // 2, 5, self, 5 - (10 * self.flip)))
                     self.projectile_cooldown = 100
 
 
