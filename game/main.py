@@ -41,7 +41,8 @@ fighter_2 = Fighter(2, 700, 310, 40, 100, True)
 #create obstacles
 obstacle_1 = Obstacle(400, 300, 100, 300)
 obstacle_2 = Obstacle(700, 200, 200, 50)
-obstacles = [obstacle_1, obstacle_2]
+obstacle_3  = Obstacle(100,300, 100, 50)
+obstacles = [obstacle_1, obstacle_2, obstacle_3]
 
 #game loop
 def gameLoop():

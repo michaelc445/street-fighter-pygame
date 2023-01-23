@@ -6,6 +6,7 @@ class Fighter():
         self.flip = flip
         self.rect = pygame.Rect((x,y, width, height))
         self.vel_y = 0
+        self.vel_x = 0
         self.jump = False
         self.attacking = False
         self.attack_type = 0
@@ -76,7 +77,11 @@ class Fighter():
 
         #apply gravity
         self.vel_y += GRAVITY
+        if self.vel_x != 0:
+            self.vel_x += (0.5 - (1 * self.flip))
         dy += self.vel_y
+        dx += self.vel_x
+
 
         #keep players on screen
         if self.rect.left + dx < 0:
@@ -96,6 +101,7 @@ class Fighter():
         else:
             self.flip = True
 
+        #count attack cooldown
         if self.attack_cooldown > 0:
             self.attack_cooldown -= 1
         
@@ -103,15 +109,19 @@ class Fighter():
         updatex, updatey = True, True
         x_collision_check = pygame.Rect((self.rect.x + dx , self.rect.y , self.rect.width, self.rect.height))
         y_collision_check = pygame.Rect((self.rect.x , self.rect.y + dy , self.rect.width, self.rect.height))
+
+        #draw feet of character
         standing_on_platform_check = pygame.Rect((self.rect.x, self.rect.y + self.rect.height , self.rect.width, 10))
         pygame.draw.rect(surface, (230, 176, 30), standing_on_platform_check)
         for obstacle in obstacles:
             if x_collision_check.colliderect(obstacle.rect):
+                self.vel_x = 0
                 updatex = False
 
             if y_collision_check.colliderect(obstacle.rect):
                 updatey = False
                 self.vel_y = 0
+                
             if standing_on_platform_check.colliderect(obstacle.rect):
                 self.jump = False
 
@@ -127,16 +137,18 @@ class Fighter():
             if self.attack_type == 1:
                 damage = 10
                 attacking_rect = pygame.Rect(self.rect.centerx - (2 * self.rect.width * self.flip), self.rect.y, 2*self.rect.width, self.rect.height // 2)
-                self.attack_cooldown = 0
+                self.attack_cooldown = 20
 
             if self.attack_type == 2:
                 damage = 20
                 attacking_rect = pygame.Rect(self.rect.centerx - (2 * self.rect.width * self.flip) , self.rect.centery, 2*self.rect.width, self.rect.height // 2)
-                self.attack_cooldown = 0
+                self.attack_cooldown = 40
 
             if attacking_rect.colliderect(target.rect):
                 target.health -= damage
                 target.color = (255,255,255)
+                target.vel_x += (10 - 20 * self.flip)
+                target.vel_y -= 10
 
             pygame.draw.rect(surface, (0,255,0), attacking_rect)
 
