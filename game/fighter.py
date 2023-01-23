@@ -187,7 +187,7 @@ class Fighter():
 
             if self.attack_type == 2:
                 if self.projectile_cooldown == 0:
-                    self.projectiles.append(Projectile(self.rect.centerx - (2 * self.rect.width * self.flip) , self.rect.y, 2*self.rect.width, self.rect.height // 2, 5, self, 5 - (10 * self.flip)))
+                    self.projectiles.append(Projectile(self.rect.centerx - (2 * self.rect.width * self.flip) , self.rect.y, 2*self.rect.width, self.rect.height // 2, 5, self, 10 - (20 * self.flip)))
                     self.projectile_cooldown = 100
 
 
@@ -198,7 +198,7 @@ class Fighter():
     def take_hit(self, damage, target):
         self.health -= damage
         self.color = (255,255,255)
-        self.vel_x += (damage - 2*damage * target.flip)
+        self.vel_x += (damage - 2 * damage * target.flip)
         self.vel_y -= damage
 
     
