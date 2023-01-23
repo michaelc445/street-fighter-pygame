@@ -2,7 +2,76 @@
 {% block login_status %}
 {{status}}
 {% endblock %}
-
 {% block main_content %}
+<form action="", method="POST", novalidate>
+    {{ form.hidden_tag() }}
 
+    {{ form.position.label }}
+    {{ form.position() }}
+    <br/>
+    {{ form.teams.label }}
+    {{ form.teams() }}
+    <br/>
+    {{ form.submit.label }}
+    {{ form.submit() }}
+
+
+
+
+
+      
+
+</form>
+<h1>Players to Select</h1>
+<table>
+    {% if N_players %}
+        {% for n_player in N_players %}
+        <tr>
+            <td>
+                {{  n_player["name"] }}
+            </td>
+            <td>
+                {{  n_player["position"] }}
+            </td>
+            <td>
+                <a href ="{{  url_for('add_to_team', name = n_player['name'])   }}" >add to team</a>
+            </td>
+        </tr>
+        {% endfor %}
+    {% else %}
+        <tr>
+            <td>No Teams or Positions selected</td>
+        </tr>
+    {% endif %}
+</table>
+
+<h1>MY Team</h1>
+
+<table>
+    {% if Players %}
+        {% for player in Players %}
+        <tr>
+            <td>
+                {{  player[0] }}
+            </td>
+            <td>
+                {{  player[1] }}
+            </td>
+            <td>
+                {{  player[2] }}
+            </td>
+            <td>
+                <a href ="{{  url_for('remove_from_team', name = player[0])   }}" >remove player</a>
+            </td>
+        </tr>
+        {% endfor %}
+    {% else %}
+        <tr>
+                <td>No Players in your Team</td>
+        </tr>
+
+    {% endif %}
+</table>
+<h1><a href ="{{  url_for('save_team') }}" >save team</a></h1>
+{{no_account}}
 {% endblock %}

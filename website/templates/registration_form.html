@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}register{% endblock %}
+
+{% block main_content %}
+
+    <form action="", method="POST", novalidate>
+        {{ form.hidden_tag() }}
+        {{ form.user_id.label }}
+        {{ form.user_id() }}
+        {{ form.passord.label }}
+        {{ form.password() }}
+        {{ form.passord2.label }}
+        {{ form.password() }}
+        {% for error in form.pasword2.errors %}
+            {{ error }}
+        {% endfor %}
+        <br/>
+        {{ form.submit() }}
+        <br/>
+        {{ error }}
+    </form>
+
+{% endblock %}
