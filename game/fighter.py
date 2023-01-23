@@ -1,4 +1,5 @@
 import pygame
+from projectile import Projectile
 
 class Fighter():
     def __init__(self, player, x, y, width, height, flip):
@@ -10,6 +11,9 @@ class Fighter():
         self.jump = False
         self.attacking = False
         self.blocking = False
+        self.shooting_projectile = False
+        self.projectiles = []
+        self.projectile_cooldown = 0
         self.attack_type = 0
         self.health = 100
         self.attack_cooldown = 0
@@ -126,6 +130,10 @@ class Fighter():
         #count attack cooldown
         if self.attack_cooldown > 0:
             self.attack_cooldown -= 1
+
+        #count projectile cooldown
+        if self.projectile_cooldown > 0:
+            self.projectile_cooldown -=1
         
         #update player position
         updatex, updatey = True, True
@@ -151,31 +159,46 @@ class Fighter():
             self.rect.x += dx
         if updatey:
             self.rect.y += dy
+
+        #update projectiles
+        if self.projectiles:
+            for projectile in self.projectiles:
+                projectile.move(5 - (10 * self.flip), target, screen_width)
+                projectile.draw(surface)
+                if not projectile.exists:
+                    self.projectiles.remove(projectile)
+                
+
+        
             
 
     def attack(self, surface, target):
-        if self.attack_cooldown == 0:
             # self.attacking = True
             if self.attack_type == 1:
-                damage = 10
-                attacking_rect = pygame.Rect(self.rect.centerx - (2 * self.rect.width * self.flip), self.rect.y, 2*self.rect.width, self.rect.height // 2)
-                self.attack_cooldown = 20
+                if self.attack_cooldown == 0:
+                    damage = 10
+                    attacking_rect = pygame.Rect(self.rect.centerx - (2 * self.rect.width * self.flip), self.rect.y, 2*self.rect.width, self.rect.height // 2)
+                    self.attack_cooldown = 20
+
+                    if attacking_rect.colliderect(target.rect) and not target.blocking:
+                        target.take_hit(damage, self)
+
+                    pygame.draw.rect(surface, (0,255,0), attacking_rect)
 
             if self.attack_type == 2:
-                damage = 20
-                attacking_rect = pygame.Rect(self.rect.centerx - (2 * self.rect.width * self.flip) , self.rect.centery, 2*self.rect.width, self.rect.height // 2)
-                self.attack_cooldown = 40
+                if self.projectile_cooldown == 0:
+                    self.projectiles.append(Projectile(self.rect.centerx - (2 * self.rect.width * self.flip) , self.rect.y, 2*self.rect.width, self.rect.height // 2, 5, self))
+                    self.projectile_cooldown = 100
 
-            if attacking_rect.colliderect(target.rect) and not target.blocking:
-                target.health -= damage
-                target.color = (255,255,255)
-                target.vel_x += (10 - 20 * self.flip)
-                target.vel_y -= 10
-
-            pygame.draw.rect(surface, (0,255,0), attacking_rect)
 
     def draw(self, surface):
         pygame.draw.rect(surface, self.color, self.rect)
         self.color = (255,0,0)
+
+    def take_hit(self, damage, target):
+        self.health -= damage
+        self.color = (255,255,255)
+        self.vel_x += (damage - 2*damage * target.flip)
+        self.vel_y -= damage
 
     
