@@ -6,7 +6,7 @@ print(os.getcwd())
 
 
 class Fighter():
-    def __init__(self, player, x, y, width, height, flip, speed, gravity):
+    def __init__(self, player, x, y, width, height, flip):
         self.player = player
         self.flip = flip
         self.rect = pygame.Rect((x, y, width, height))
@@ -17,8 +17,6 @@ class Fighter():
         self.health = 100
         self.attack_cooldown = 0
         self.color = (255, 0, 0)
-        self.SPEED = speed
-        self.GRAVITY = gravity
         self.dx = 0
         self.dy = 0
         self.game_keys = [pygame.K_a, pygame.K_d, pygame.K_w, pygame.K_r, pygame.K_t]
@@ -51,11 +49,11 @@ class Fighter():
                     self.jump = True
 
                 # attack
-                if key[pygame.K_r] or key[pygame.K_t]:
+                if key[pygame.K_q] or key[pygame.K_e]:
                     # determine attack type
-                    if key[pygame.K_r]:
+                    if key[pygame.K_q]:
                         self.attack_type = 1
-                    if key[pygame.K_t]:
+                    if key[pygame.K_e]:
                         self.attack_type = 2
 
                     self.attack(surface, target)
