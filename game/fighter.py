@@ -20,7 +20,9 @@ class Fighter():
         self.color = (255, 0, 0)
         self.dx = 0
         self.dy = 0
-        self.game_keys = [pygame.K_a, pygame.K_d, pygame.K_w, pygame.K_r, pygame.K_t]
+        self.player1_controls = {"left" : pygame.K_a, "right" : pygame.K_d, "jump" : pygame.K_w, "attack1" : pygame.K_r, "attack2" : pygame.K_t, "block" : pygame.K_s}
+        self.player2_controls = {"left" : pygame.K_LEFT, "right" : pygame.K_RIGHT, "jump" : pygame.K_UP, "attack1" : pygame.K_n, "attack2" : pygame.K_m, "block" : pygame.K_DOWN}
+
 
     def move(self, screen_width, screen_height, surface, target, obstacles):
         SPEED = 10
@@ -36,29 +38,29 @@ class Fighter():
 
             if not self.blocking:
                 #movement
-                if key[pygame.K_a]:
+                if key[self.player1_controls["left"]]:
                     dx = -SPEED
 
-                if key[pygame.K_d]:
+                if key[self.player1_controls["right"]]:
                     dx = SPEED
 
                 # jump
-                if key[pygame.K_w] and not self.jump:
+                if key[self.player1_controls["jump"]] and not self.jump:
                     self.vel_y = -30
                     self.jump = True
 
                 # attack
-                if key[pygame.K_q] or key[pygame.K_e]:
+                if key[self.player1_controls["attack1"]] or key[self.player1_controls["attack2"]]:
                     # determine attack type
-                    if key[pygame.K_q]:
+                    if key[self.player1_controls["attack1"]]:
                         self.attack_type = 1
-                    if key[pygame.K_e]:
+                    if key[self.player1_controls["attack2"]]:
                         self.attack_type = 2
 
                     self.attack(surface, target)
 
             #block
-            if key[pygame.K_s]:
+            if key[self.player1_controls["block"]]:
                 self.blocking = True
             else:
                 self.blocking = False
@@ -71,30 +73,30 @@ class Fighter():
             if not self.blocking:
 
                 #movement
-                if key[pygame.K_LEFT]:
+                if key[self.player2_controls["left"]]:
                     dx = -SPEED
 
-                if key[pygame.K_RIGHT]:
+                if key[self.player2_controls["right"]]:
                     dx = SPEED
 
                 # jump
-                if key[pygame.K_UP] and not self.jump:
+                if key[self.player2_controls["jump"]] and not self.jump:
                     self.vel_y = -30
                     self.jump = True
 
                 # attack
-                if key[pygame.K_n] or key[pygame.K_m]:
+                if key[self.player2_controls["attack1"]] or key[self.player2_controls["attack2"]]:
                     # determine attack type
-                    if key[pygame.K_n]:
+                    if key[self.player2_controls["attack1"]]:
                         self.attack_type = 1
-                    if key[pygame.K_m]:
+                    if key[self.player2_controls["attack2"]]:
                         self.attack_type = 2
 
                     self.attack(surface, target)
 
 
             #block
-            if key[pygame.K_DOWN]:
+            if key[self.player2_controls["block"]]:
                 self.blocking = True
             else:
                 self.blocking = False
