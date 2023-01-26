@@ -1,9 +1,11 @@
 import pygame
+from pygame import mixer
 from fighter import Fighter
 from obstacle import Obstacle
 from button import Button
 import sys
 
+mixer.init
 pygame.init()
 
 #create game window
@@ -37,9 +39,19 @@ def draw_health_bar(health, x, y):
     pygame.draw.rect(screen, RED, (x, y, 400, 30))
     pygame.draw.rect(screen, YELLOW, (x, y, 400 * ratio, 30))
 
+
+#use mixer to load music and sounds
+mixer.music.load("game/assets/main.mp3")
+mixer.music.play(-1)
+punch_fx = mixer.Sound("game/assets/punch.wav")
+projectile_fx = mixer.Sound("game/assets/proj.wav")
+hit_fx = mixer.Sound("game/assets/hit.wav")
+
 #create fighters
-fighter_1 = Fighter(1, 200, 310, 40, 100, False)
-fighter_2 = Fighter(2, 700, 310, 40, 100, True)
+fighter_1 = Fighter(1, 200, 310, 40, 100, False, punch_fx, projectile_fx, hit_fx)
+fighter_2 = Fighter(2, 700, 310, 40, 100, True, punch_fx, projectile_fx, hit_fx)
+
+
 
 #create obstacles
 obstacle_1 = Obstacle(400, 300, 100, 300)
@@ -100,6 +112,8 @@ def gameLoop():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     run = False
+
+        #if fighter 1 or 2 punches, play the punch.wav sound effect
 
         # update display
         pygame.display.update()
