@@ -47,6 +47,9 @@ mixer.music.set_volume(0.25)
 punch_fx = mixer.Sound("game/assets/punch.wav")
 projectile_fx = mixer.Sound("game/assets/proj.wav")
 hit_fx = mixer.Sound("game/assets/hit.wav")
+punch_fx.set_volume(0.15)
+projectile_fx.set_volume(0.5)
+hit_fx.set_volume(0.5)
 
 #create fighters
 fighter_1 = Fighter(1, 200, 310, 40, 100, False, punch_fx, projectile_fx, hit_fx)
@@ -86,19 +89,19 @@ def sfx_change(level):
         projectile_fx.set_volume(0)
         hit_fx.set_volume(0)
     elif level == 1:
-        punch_fx.set_volume(0.25)
+        punch_fx.set_volume(0.1)
         projectile_fx.set_volume(0.25)
         hit_fx.set_volume(0.25)
     elif level == 2:
-        punch_fx.set_volume(0.5)
+        punch_fx.set_volume(0.15)
         projectile_fx.set_volume(0.5)
         hit_fx.set_volume(0.5)
     elif level == 3:
-        punch_fx.set_volume(0.75)
+        punch_fx.set_volume(0.2)
         projectile_fx.set_volume(0.75)
         hit_fx.set_volume(0.75)
     elif level == 4:
-        punch_fx.set_volume(1)
+        punch_fx.set_volume(0.3)
         projectile_fx.set_volume(1)
         hit_fx.set_volume(1)
 
