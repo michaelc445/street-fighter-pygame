@@ -140,6 +140,10 @@ def controls():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    pygame.quit()
+                    sys.exit()       
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if controls_back.checkForInput(controls_mouse):
                     opt()
@@ -194,6 +198,10 @@ def player1():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    pygame.quit()
+                    sys.exit()       
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if player1_back.checkForInput(player1_mouse):
                     controls()
@@ -254,6 +262,10 @@ def player2():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    pygame.quit()
+                    sys.exit()       
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if player2_back.checkForInput(player2_mouse):
                     controls()
@@ -301,6 +313,10 @@ def opt():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    pygame.quit()
+                    sys.exit()       
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if opt_back.checkForInput(opt_mouse):
                     pygame.display.set_caption("Main Menu")
@@ -342,6 +358,10 @@ def main_menu():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    pygame.quit()
+                    sys.exit()       
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if play.checkForInput(mouse):
                     pygame.display.set_caption("Game")
