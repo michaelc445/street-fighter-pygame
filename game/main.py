@@ -383,35 +383,35 @@ def audio():
         audio_rect = audio_text.get_rect(center=(500, 65))
         screen.blit(audio_text, audio_rect)
         music_text = font(40).render("MUSIC", True, "#b68f40")
-        music_rect = music_text.get_rect(center=(300, 175))
+        music_rect = music_text.get_rect(center=(200, 175))
         screen.blit(music_text, music_rect)
         audio_back = Button(image=pygame.image.load("game/assets/Play Rect.png"), pos=(500, 475),
                           text_input="BACK", font=font(35), base_color="#d7fcd4", hovering_color="White")
         #make 4 buttons for music volume, 1 for each quarter
-        music_0 = Button(image=None, pos=(500, 175),
+        music_0 = Button(image=None, pos=(400, 175),
                             text_input="0%", font=font(25), base_color="#d7fcd4", hovering_color="White")
-        music_1 = Button(image=None, pos=(600, 175),
+        music_1 = Button(image=None, pos=(510, 175),
                           text_input="25%", font=font(25), base_color="#d7fcd4", hovering_color="White")
-        music_2 = Button(image=None, pos=(700, 175),
+        music_2 = Button(image=None, pos=(620, 175),
                           text_input="50%", font=font(25), base_color="#d7fcd4", hovering_color="White")
-        music_3 = Button(image=None, pos=(800, 175),
+        music_3 = Button(image=None, pos=(730, 175),
                           text_input="75%", font=font(25), base_color="#d7fcd4", hovering_color="White")
-        music_4 = Button(image=None, pos=(900, 175),
+        music_4 = Button(image=None, pos=(840, 175),
                           text_input="100%", font=font(25), base_color="#d7fcd4", hovering_color="White")
 
         #create same buttons as music for sound effects
         sfx_text = font(40).render("SFX", True, "#b68f40")
-        sfx_rect = sfx_text.get_rect(center=(300, 325))
+        sfx_rect = sfx_text.get_rect(center=(200, 325))
         screen.blit(sfx_text, sfx_rect)
-        sfx_0 = Button(image=None, pos=(500, 325),
+        sfx_0 = Button(image=None, pos=(400, 325),
                             text_input="0%", font=font(25), base_color="#d7fcd4", hovering_color="White")
-        sfx_1 = Button(image=None, pos=(600, 325),
+        sfx_1 = Button(image=None, pos=(510, 325),
                           text_input="25%", font=font(25), base_color="#d7fcd4", hovering_color="White")
-        sfx_2 = Button(image=None, pos=(700, 325),
+        sfx_2 = Button(image=None, pos=(620, 325),
                             text_input="50%", font=font(25), base_color="#d7fcd4", hovering_color="White")
-        sfx_3 = Button(image=None, pos=(800, 325),
+        sfx_3 = Button(image=None, pos=(730, 325),
                             text_input="75%", font=font(25), base_color="#d7fcd4", hovering_color="White")
-        sfx_4 = Button(image=None, pos=(900, 325),
+        sfx_4 = Button(image=None, pos=(840, 325),
                             text_input="100%", font=font(25), base_color="#d7fcd4", hovering_color="White")
 
         for button in [audio_back,music_0 ,music_1, music_2, music_3, music_4, sfx_0, sfx_1, sfx_2, sfx_3, sfx_4]:
