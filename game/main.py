@@ -43,6 +43,7 @@ def draw_health_bar(health, x, y):
 #use mixer to load music and sounds
 mixer.music.load("game/assets/main.mp3")
 mixer.music.play(-1)
+mixer.music.set_volume(0.25)
 punch_fx = mixer.Sound("game/assets/punch.wav")
 projectile_fx = mixer.Sound("game/assets/proj.wav")
 hit_fx = mixer.Sound("game/assets/hit.wav")
@@ -78,6 +79,28 @@ def control_handling(keys, key):
                 keys[key] = event.key
                 return
     
+
+def sfx_change(level):
+    if level == 0:
+        punch_fx.set_volume(0)
+        projectile_fx.set_volume(0)
+        hit_fx.set_volume(0)
+    elif level == 1:
+        punch_fx.set_volume(0.25)
+        projectile_fx.set_volume(0.25)
+        hit_fx.set_volume(0.25)
+    elif level == 2:
+        punch_fx.set_volume(0.5)
+        projectile_fx.set_volume(0.5)
+        hit_fx.set_volume(0.5)
+    elif level == 3:
+        punch_fx.set_volume(0.75)
+        projectile_fx.set_volume(0.75)
+        hit_fx.set_volume(0.75)
+    elif level == 4:
+        punch_fx.set_volume(1)
+        projectile_fx.set_volume(1)
+        hit_fx.set_volume(1)
 
 #game loop
 def gameLoop():
@@ -338,12 +361,95 @@ def opt():
                 if opt_controls.checkForInput(opt_mouse):
                     pygame.display.set_caption("Controls")
                     controls()
-                #if opt_audio.checkForInput(opt_mouse):
-                #    pygame.display.set_caption("Audio")
-                #    audio()
+                if opt_audio.checkForInput(opt_mouse):
+                    pygame.display.set_caption("Audio")
+                    audio()
 
         pygame.display.update()
 
+
+#create a function to handle audio levels using buttons for sound effects and music
+def audio():
+    while True:
+        audio_mouse = pygame.mouse.get_pos()
+
+        menu_scaled = pygame.transform.scale(menu_bg, (SCREEN_WIDTH, SCREEN_HEIGHT))
+        screen.blit(menu_scaled, (0, 0))
+
+        audio_text = font(50).render("AUDIO VOLUME", True, "#b68f40")
+        audio_rect = audio_text.get_rect(center=(500, 65))
+        screen.blit(audio_text, audio_rect)
+        music_text = font(40).render("MUSIC", True, "#b68f40")
+        music_rect = music_text.get_rect(center=(300, 175))
+        screen.blit(music_text, music_rect)
+        audio_back = Button(image=pygame.image.load("game/assets/Play Rect.png"), pos=(500, 475),
+                          text_input="BACK", font=font(35), base_color="#d7fcd4", hovering_color="White")
+        #make 4 buttons for music volume, 1 for each quarter
+        music_0 = Button(image=None, pos=(500, 175),
+                            text_input="0%", font=font(25), base_color="#d7fcd4", hovering_color="White")
+        music_1 = Button(image=None, pos=(600, 175),
+                          text_input="25%", font=font(25), base_color="#d7fcd4", hovering_color="White")
+        music_2 = Button(image=None, pos=(700, 175),
+                          text_input="50%", font=font(25), base_color="#d7fcd4", hovering_color="White")
+        music_3 = Button(image=None, pos=(800, 175),
+                          text_input="75%", font=font(25), base_color="#d7fcd4", hovering_color="White")
+        music_4 = Button(image=None, pos=(900, 175),
+                          text_input="100%", font=font(25), base_color="#d7fcd4", hovering_color="White")
+
+        #create same buttons as music for sound effects
+        sfx_text = font(40).render("SFX", True, "#b68f40")
+        sfx_rect = sfx_text.get_rect(center=(300, 325))
+        screen.blit(sfx_text, sfx_rect)
+        sfx_0 = Button(image=None, pos=(500, 325),
+                            text_input="0%", font=font(25), base_color="#d7fcd4", hovering_color="White")
+        sfx_1 = Button(image=None, pos=(600, 325),
+                          text_input="25%", font=font(25), base_color="#d7fcd4", hovering_color="White")
+        sfx_2 = Button(image=None, pos=(700, 325),
+                            text_input="50%", font=font(25), base_color="#d7fcd4", hovering_color="White")
+        sfx_3 = Button(image=None, pos=(800, 325),
+                            text_input="75%", font=font(25), base_color="#d7fcd4", hovering_color="White")
+        sfx_4 = Button(image=None, pos=(900, 325),
+                            text_input="100%", font=font(25), base_color="#d7fcd4", hovering_color="White")
+
+        for button in [audio_back,music_0 ,music_1, music_2, music_3, music_4, sfx_0, sfx_1, sfx_2, sfx_3, sfx_4]:
+            button.changeColor(audio_mouse)
+            button.update(screen)
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    pygame.quit()
+                    sys.exit()       
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if audio_back.checkForInput(audio_mouse):
+                    pygame.display.set_caption("Options")
+                    opt()
+                if music_0.checkForInput(audio_mouse):
+                    mixer.music.set_volume(0)
+                if music_1.checkForInput(audio_mouse):
+                    mixer.music.set_volume(0.25)
+                if music_2.checkForInput(audio_mouse):
+                    mixer.music.set_volume(0.5)
+                if music_3.checkForInput(audio_mouse):
+                    mixer.music.set_volume(0.75)
+                if music_4.checkForInput(audio_mouse):
+                    mixer.music.set_volume(1)
+                if sfx_0.checkForInput(audio_mouse):
+                    sfx_change(0)
+                if sfx_1.checkForInput(audio_mouse):
+                    sfx_change(1)
+                if sfx_2.checkForInput(audio_mouse):
+                    sfx_change(2)
+                if sfx_3.checkForInput(audio_mouse):
+                    sfx_change(3)
+                if sfx_4.checkForInput(audio_mouse):
+                    sfx_change(4)
+
+
+        pygame.display.update()
 
 # main menu
 def main_menu():
