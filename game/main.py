@@ -145,12 +145,12 @@ def controls():
                     opt()
                 if controls_player1.checkForInput(controls_mouse):
                     player1()
-                if controls_player2.rect.collidepoint(controls_mouse):
+                if controls_player2.checkForInput(controls_mouse):
                     player2()
 
         pygame.display.update()
 
-# fighter 1 controls that you can see and change using pygame.key.get_pressed()
+#fighter1 controls displayed and mutable
 def player1():
     #player1_keys = {"left": "a", "right": "d", "jump": "w", "block": "s", "attack1": "r", "attack2": "t"}
     while True:
@@ -159,7 +159,7 @@ def player1():
         menu_scaled = pygame.transform.scale(menu_bg, (SCREEN_WIDTH, SCREEN_HEIGHT))
         screen.blit(menu_scaled, (0, 0))
 
-        player1_text = font(50).render("PLAYER 1 CONTROLS", True, "#b68f40")
+        player1_text = font(50).render("PLAYER 1", True, "#b68f40")
         player1_rect = player1_text.get_rect(center=(500, 65))
         screen.blit(player1_text, player1_rect)
 
@@ -182,8 +182,8 @@ def player1():
         player1_attack2 = Button(image=None, pos=(500, 400),
                           text_input="Projectile : " + pygame.key.name(fighter_1.player1_controls["attack2"]), font=font(15), base_color="#d7fcd4", hovering_color="White")
 
-        player1_back = Button(image=None, pos=(500, 450),
-                          text_input="BACK", font=font(15), base_color="#d7fcd4", hovering_color="White")
+        player1_back = Button(image=pygame.image.load("game/assets/Play Rect.png"), pos=(500, 475),
+                          text_input="BACK", font=font(35), base_color="#d7fcd4", hovering_color="White")
 
 
         for button in [player1_back, player1_up, player1_down, player1_left, player1_right, player1_attack1, player1_attack2]:
@@ -212,7 +212,7 @@ def player1():
 
         pygame.display.update()
 
-#create the same function as player1 but for player 2
+#fighter2 controls displayed and mutable
 def player2():
     while True:
         player2_mouse = pygame.mouse.get_pos()
@@ -220,7 +220,7 @@ def player2():
         menu_scaled = pygame.transform.scale(menu_bg, (SCREEN_WIDTH, SCREEN_HEIGHT))
         screen.blit(menu_scaled, (0, 0))
 
-        player2_text = font(50).render("PLAYER 2 CONTROLS", True, "#b68f40")
+        player2_text = font(50).render("PLAYER 2", True, "#b68f40")
         player2_rect = player2_text.get_rect(center=(500, 65))
         screen.blit(player2_text, player2_rect)
 
@@ -243,8 +243,8 @@ def player2():
         player2_attack2 = Button(image=None, pos=(500, 400),
                           text_input="Projectile : " + pygame.key.name(fighter_2.player2_controls["attack2"]), font=font(15), base_color="#d7fcd4", hovering_color="White")
 
-        player2_back = Button(image=None, pos=(500, 450),
-                          text_input="BACK", font=font(15), base_color="#d7fcd4", hovering_color="White")
+        player2_back = Button(image=pygame.image.load("game/assets/Play Rect.png"), pos=(500, 475),
+                          text_input="BACK", font=font(35), base_color="#d7fcd4", hovering_color="White")
         
         for button in [player2_back, player2_up, player2_down, player2_left, player2_right, player2_attack1, player2_attack2]:
             button.changeColor(player2_mouse)
