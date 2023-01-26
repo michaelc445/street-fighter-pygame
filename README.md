@@ -8,7 +8,7 @@ WASD: movement
 
 R: light attack (punch)
 
-T: heavy attack (kick)
+T: projectile attack
 
 ## PLAYER 2
 
@@ -16,9 +16,7 @@ ARROWS: movement
 
 N: light attack (punch)
 
-M: heavy attack (kick)
+M: projectile attack
 
 punch does 10dmg, 30 frame cooldown
-kick does 20dmg, 100 frame cooldown
-
-punch punch kick seems to be the highest DPS combo;)
+projectile does 5dmg, 50 frame cooldown
