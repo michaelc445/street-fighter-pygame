@@ -18,8 +18,6 @@ class Fighter():
         self.health = 100
         self.attack_cooldown = 0
         self.color = (255, 0, 0)
-        self.dx = 0
-        self.dy = 0
         self.punch_sound = punch_sound
         self.projectile_sound = projectile_sound
         self.hit_sound = hit_sound
@@ -30,112 +28,22 @@ class Fighter():
     def move(self, screen_width, screen_height, surface, target, obstacles):
         SPEED = 10
         GRAVITY = 2
-        dx = 0
-        dy = 0
-
-        # get keypresses
-        key = pygame.key.get_pressed()
+        self.dx = 0
+        self.dy = 0
 
         #check player 1 movement
         if self.player == 1:
+            self.keybinds(self.player1_controls, surface, target, SPEED)
 
-            if not self.blocking:
-                #movement
-                if key[self.player1_controls["left"]]:
-                    dx = -SPEED
-
-                if key[self.player1_controls["right"]]:
-                    dx = SPEED
-
-                # jump
-                if key[self.player1_controls["jump"]] and not self.jump:
-                    self.vel_y = -30
-                    self.jump = True
-
-                # attack
-                if key[self.player1_controls["attack1"]] or key[self.player1_controls["attack2"]]:
-                    # determine attack type
-                    if key[self.player1_controls["attack1"]]:
-                        self.attack_type = 1
-                    if key[self.player1_controls["attack2"]]:
-                        self.attack_type = 2
-
-                    self.attack(surface, target)
-
-            #block
-            if key[self.player1_controls["block"]]:
-                self.blocking = True
-            else:
-                self.blocking = False
-
-            
-
-        #check player 2 controls
+        #check player 2 movement
         if self.player == 2:
-
-            if not self.blocking:
-
-                #movement
-                if key[self.player2_controls["left"]]:
-                    dx = -SPEED
-
-                if key[self.player2_controls["right"]]:
-                    dx = SPEED
-
-                # jump
-                if key[self.player2_controls["jump"]] and not self.jump:
-                    self.vel_y = -30
-                    self.jump = True
-
-                # attack
-                if key[self.player2_controls["attack1"]] or key[self.player2_controls["attack2"]]:
-                    # determine attack type
-                    if key[self.player2_controls["attack1"]]:
-                        self.attack_type = 1
-                    if key[self.player2_controls["attack2"]]:
-                        self.attack_type = 2
-
-                    self.attack(surface, target)
-
-
-            #block
-            if key[self.player2_controls["block"]]:
-                self.blocking = True
-            else:
-                self.blocking = False
-
-            
+            self.keybinds(self.player2_controls, surface, target, SPEED)
 
         #apply gravity
-        self.vel_y += GRAVITY
-        if self.vel_x != 0:
-            self.vel_x += (0.5 - (1 * self.flip))
-        dy += self.vel_y
-        dx += self.vel_x
+        self.grav(GRAVITY)
 
-        #change color if blocking
-        if self.blocking:
-            self.color = (0,0,255)
-
-        # keep players on screen
-        if self.rect.left + dx < 0:
-            dx = -self.rect.left
-            self.vel_x = 0
-
-        if self.rect.right + dx > screen_width:
-            dx = screen_width - self.rect.right
-            self.vel_x = 0
-
-        if self.rect.bottom + dy > screen_height - 100:
-            self.vel_y = 0
-            dy = screen_height - 100 - self.rect.bottom
-            self.jump = False
-
-        # face direction of other player
-        if target.rect.centerx > self.rect.centerx:
-            self.flip = False
-        else:
-            self.flip = True
+        #keep player on screen
+        self.bounds(screen_width, screen_height)
 
         #count attack cooldown
         if self.attack_cooldown > 0:
@@ -145,30 +53,9 @@ class Fighter():
         if self.projectile_cooldown > 0:
             self.projectile_cooldown -=1
         
-        #update player position
-        updatex, updatey = True, True
-        x_collision_check = pygame.Rect((self.rect.x + dx , self.rect.y , self.rect.width, self.rect.height))
-        y_collision_check = pygame.Rect((self.rect.x , self.rect.y + dy , self.rect.width, self.rect.height))
 
-        #draw feet of character
-        standing_on_platform_check = pygame.Rect((self.rect.x, self.rect.y + self.rect.height , self.rect.width, 10))
-        pygame.draw.rect(surface, (230, 176, 30), standing_on_platform_check)
-        for obstacle in obstacles:
-            if x_collision_check.colliderect(obstacle.rect):
-                self.vel_x = 0
-                updatex = False
+        self.feet(surface, obstacles)
 
-            if y_collision_check.colliderect(obstacle.rect):
-                updatey = False
-                self.vel_y = 0
-                
-            if standing_on_platform_check.colliderect(obstacle.rect):
-                self.jump = False
-
-        if updatex:
-            self.rect.x += dx
-        if updatey:
-            self.rect.y += dy
 
         #update projectiles
         if self.projectiles:
@@ -177,7 +64,6 @@ class Fighter():
                 projectile.draw(surface)
                 if not projectile.exists:
                     self.projectiles.remove(projectile)
-                
 
         
             
@@ -214,4 +100,94 @@ class Fighter():
         self.vel_x += (damage - 2 * damage * target.flip)
         self.vel_y -= damage
 
-    
+    def keybinds(self, player_controls, surface, target, speed):
+        # get keypresses
+        key = pygame.key.get_pressed()
+
+        if not self.blocking:
+            # face direction of other player
+            if target.rect.centerx > self.rect.centerx:
+                self.flip = False
+            else:
+                self.flip = True
+
+            #movement
+            #move left
+            if key[player_controls["left"]]:
+                self.dx = -speed
+            #move right
+            if key[player_controls["right"]]:
+                self.dx = speed
+
+            #jump
+            if key[player_controls["jump"]] and not self.jump:
+                self.vel_y = -30
+                self.jump = True
+
+            # attack
+            if key[player_controls["attack1"]] or key[player_controls["attack2"]]:
+                # determine attack type
+                if key[player_controls["attack1"]]:
+                        self.attack_type = 1
+                if key[player_controls["attack2"]]:
+                        self.attack_type = 2
+
+                self.attack(surface, target)
+
+        #block
+        if key[player_controls["block"]]:
+            self.color = (0,0,255)
+            self.blocking = True
+        else:
+            self.blocking = False
+
+
+    def grav(self, gravity):
+        self.vel_y += gravity
+        if self.vel_x != 0:
+            self.vel_x += (0.5 - (1 * self.flip))
+        self.dy += self.vel_y
+        self.dx += self.vel_x
+
+    def feet(self, surface, obstacles):
+        #update player position
+        updatex, updatey = True, True
+        x_collision_check = pygame.Rect((self.rect.x + self.dx , self.rect.y , self.rect.width, self.rect.height))
+        y_collision_check = pygame.Rect((self.rect.x , self.rect.y + self.dy , self.rect.width, self.rect.height))
+
+        #draw feet of character
+        standing_on_platform_check = pygame.Rect((self.rect.x, self.rect.y + self.rect.height , self.rect.width, 10))
+        pygame.draw.rect(surface, (230, 176, 30), standing_on_platform_check)
+        for obstacle in obstacles:
+            if x_collision_check.colliderect(obstacle.rect):
+                self.vel_x = 0
+                updatex = False
+
+            if y_collision_check.colliderect(obstacle.rect):
+                updatey = False
+                self.vel_y = 0
+                
+            if standing_on_platform_check.colliderect(obstacle.rect):
+                self.jump = False
+
+        if updatex:
+            self.rect.x += self.dx
+        if updatey:
+            self.rect.y += self.dy
+
+
+    def bounds(self, screen_width, screen_height):
+        # keep players on screen
+        if self.rect.left + self.dx < 0:
+            self.dx = -self.rect.left
+            self.vel_x = 0
+
+        if self.rect.right + self.dx > screen_width:
+            self.dx = screen_width - self.rect.right
+            self.vel_x = 0
+
+        if self.rect.bottom + self.dy > screen_height - 100:
+            self.vel_y = 0
+            self.dy = screen_height - 100 - self.rect.bottom
+            self.jump = False
+
