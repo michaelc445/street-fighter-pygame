@@ -2,7 +2,7 @@ import pygame
 from projectile import Projectile
 
 class Fighter():
-    def __init__(self, player, x, y, width, height, flip):
+    def __init__(self, player, x, y, width, height, flip, punch_sound, projectile_sound, hit_sound):
         self.player = player
         self.flip = flip
         self.rect = pygame.Rect((x, y, width, height))
@@ -20,6 +20,9 @@ class Fighter():
         self.color = (255, 0, 0)
         self.dx = 0
         self.dy = 0
+        self.punch_sound = punch_sound
+        self.projectile_sound = projectile_sound
+        self.hit_sound = hit_sound
         self.player1_controls = {"left" : pygame.K_a, "right" : pygame.K_d, "jump" : pygame.K_w, "attack1" : pygame.K_r, "attack2" : pygame.K_t, "block" : pygame.K_s}
         self.player2_controls = {"left" : pygame.K_LEFT, "right" : pygame.K_RIGHT, "jump" : pygame.K_UP, "attack1" : pygame.K_n, "attack2" : pygame.K_m, "block" : pygame.K_DOWN}
 
@@ -183,6 +186,7 @@ class Fighter():
             # self.attacking = True
             if self.attack_type == 1:
                 if self.attack_cooldown == 0:
+                    self.punch_sound.play()
                     damage = 10
                     attacking_rect = pygame.Rect(self.rect.centerx - (2 * self.rect.width * self.flip), self.rect.y, 2*self.rect.width, self.rect.height // 2)
                     self.attack_cooldown = 20
@@ -194,6 +198,7 @@ class Fighter():
 
             if self.attack_type == 2:
                 if self.projectile_cooldown == 0:
+                    self.projectile_sound.play()
                     self.projectiles.append(Projectile(self.rect.centerx - (2 * self.rect.width * self.flip) , self.rect.y, 2*self.rect.width, self.rect.height // 2, 5, self, 10 - (20 * self.flip)))
                     self.projectile_cooldown = 100
 
@@ -203,6 +208,7 @@ class Fighter():
         self.color = (255,0,0)
 
     def take_hit(self, damage, target):
+        self.hit_sound.play()
         self.health -= damage
         self.color = (255,255,255)
         self.vel_x += (damage - 2 * damage * target.flip)
