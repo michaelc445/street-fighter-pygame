@@ -143,6 +143,7 @@ class Fighter():
         message.enemyAttack = 0
         message.x = self.rect.x
         message.y = self.rect.y
+        message.id = game_client.player_id
         # cannot move if attacking
 
         if self.attacking == False:
