@@ -143,6 +143,7 @@ class Fighter():
         message.enemyAttack = 0
         message.x = self.rect.x
         message.y = self.rect.y
+        message.id = game_client.player_id
         # cannot move if attacking
 
         if self.attacking == False:
@@ -201,51 +202,40 @@ class Fighter():
         game_client.send_update(message)
 
 
-    def move_enemy2(self, screen_width, screen_height, surface, target, obstacles,game_client,key):
-        self.dx=0
-        self.dy=0
+    def move_enemy2(self, screen_width, screen_height, surface, target, obstacles, game_client, key):
+        self.dx = 0
+        self.dy = 0
         # get keypresses
 
         t = {z: True for z in self.game_keys if key[z]}
-        message = pb.Update(keys=t)
-        message.health = self.health
-        message.enemyMove = 0
-        message.moving = False
-        message.enemyHealth = target.health
-        message.enemyAttack = 0
-        message.x = self.rect.x
-        message.y = self.rect.y
-        message.id = game_client.player_id
+
         # cannot move if attacking
         if self.attacking == False:
             # check player 1 movement
             # movement
             if key[pygame.K_a]:
                 self.dx = -self.SPEED
-                message.enemyMove = 1
-                game_client.send_update(message)
+
 
             if key[pygame.K_d]:
                 self.dx = self.SPEED
-                message.enemyMove = 2
-                game_client.send_update(message)
+
 
             # jump
             if key[pygame.K_w] and not self.jump:
                 self.vel_y = -30
                 self.jump = True
-                message.enemyMove = 3
-                game_client.send_update(message)
+
             # attack
             if key[pygame.K_r] or key[pygame.K_t]:
                 # determine attack type
                 if key[pygame.K_r]:
                     self.attack_type = 1
-                    message.enemyAttack = 1
+
                 if key[pygame.K_t]:
                     self.attack_type = 2
-                    message.enemyAttack = 2
-                game_client.send_update(message)
+
+
                 self.attack(surface, target)
 
         # apply gravity
@@ -267,9 +257,8 @@ class Fighter():
         # face direction of other player
         self.face_enemy(target)
         # update player position
-        message.x = self.rect.x
-        message.y = self.rect.y
-        ##game_client.send_update(message)
+
+
         self.update_player(self.dx, self.dy, obstacles, surface)
     def move_enemy(self,screen_width, screen_height, surface, target, obstacles,message):
         self.dx = 0

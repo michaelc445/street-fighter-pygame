@@ -149,8 +149,8 @@ if __name__ == "__main__":
             sys.exit(1)
     else:
         try:
-            game_client.join_game("192.168.0.33", 1234)
-
+            game_client.join_game("192.168.0.198", 1234)
+            print(game_client.player_id)
         except ConnectionAbortedError:
             print("failed to join game")
             sys.exit(1)
