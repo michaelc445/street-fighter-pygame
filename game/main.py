@@ -1,8 +1,9 @@
 import pygame
 from pygame import mixer
-from fighter import Fighter
+from fighter import Fighter,OnlineFighter
 from obstacle import Obstacle
 from button import Button
+from network.game_client import GameClient
 import sys
 
 
@@ -104,6 +105,75 @@ def game_loop():
     pygame.quit()
     sys.exit()
 
+def multi_player_game_loop(game_client):
+    gameKeys = [pygame.K_a, pygame.K_d, pygame.K_w, pygame.K_r, pygame.K_t]
+    pygame.init()
+
+    pygame.display.set_caption("Team 5 Project")
+
+    # cap frame rate
+    # define colors
+    # load bg image
+
+    # create fighters
+
+    f1 = OnlineFighter(1, 200, 310, 40, 100, False, punch_fx, projectile_fx, hit_fx)
+    f2 = OnlineFighter(1, 700, 310, 40, 100, True, punch_fx, projectile_fx, hit_fx)
+    fighters = [f1, f2]
+    pick = int(game_client.player_id)
+
+    local_player = fighters[pick]
+    local_player.game_client = game_client
+    enemy = (pick + 1) % 2
+    enemy_character = fighters[enemy]
+    obstacle_1 = Obstacle(400, 300, 100, 300)
+    obstacle_2 = Obstacle(700, 200, 200, 50)
+    obstacles = [obstacle_1, obstacle_2]
+    run = True
+    clock = pygame.time.Clock()
+    FPS = 60
+
+    while run:
+
+        # cap frame rate
+        clock.tick(FPS)
+
+        # draw background
+        # draw background
+        draw_bg()
+
+        # draw health bars
+        draw_health_bar(fighters[0].health, 20, 20)
+        draw_health_bar(fighters[1].health, 580, 20)
+
+        # move fighters
+        local_player.move(SCREEN_WIDTH, SCREEN_HEIGHT, screen, enemy_character, obstacles, game_client)
+        for message in game_client.get_updates():
+            local_player.health = message.enemyHealth
+            enemy_character.move_enemy(SCREEN_WIDTH, SCREEN_HEIGHT, screen, local_player, obstacles,
+                                        message.keys,message.x,message.y)
+
+        # draw fighters
+        local_player.draw(screen)
+        enemy_character.draw(screen)
+
+        # draw obstacles
+        for obstacle in obstacles:
+            obstacle.draw(screen)
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                run = False
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    run = False
+
+        # if fighter 1 or 2 punches, play the punch.wav sound effect
+
+        # update display
+        pygame.display.update()
+    pygame.quit()
+    sys.exit()
 
 # controls
 def controls():
@@ -431,18 +501,22 @@ def main_menu():
         mouse = pygame.mouse.get_pos()
 
         text = font(75).render("Main Menu", True, "#b68f40")
-        rect = text.get_rect(center=(500, 65))
+        rect = text.get_rect(center=(500, 45))
 
-        play = Button(image=pygame.image.load("assets/Play Rect.png"), pos=(500, 200),
+        play = Button(image=pygame.image.load("assets/Play Rect.png"), pos=(500, 150),
                       text_input="PLAY", font=font(55), base_color="#d7fcd4", hovering_color="White")
-        options = Button(image=pygame.image.load("assets/Options Rect.png"), pos=(500, 350),
+
+        multi_player = Button(image=pygame.image.load("assets/Options Rect.png"), pos=(500, 275),
+                      text_input="MULTI-PLAYER", font=font(45), base_color="#d7fcd4", hovering_color="White")
+
+        options = Button(image=pygame.image.load("assets/Options Rect.png"), pos=(500, 400),
                          text_input="OPTIONS", font=font(55), base_color="#d7fcd4", hovering_color="White")
-        quit = Button(image=pygame.image.load("assets/Quit Rect.png"), pos=(500, 500),
+        quit = Button(image=pygame.image.load("assets/Quit Rect.png"), pos=(500, 525),
                       text_input="QUIT", font=font(55), base_color="#d7fcd4", hovering_color="White")
 
         screen.blit(text, rect)
 
-        for button in [play, options, quit]:
+        for button in [play, options, quit,multi_player]:
             button.changeColor(mouse)
             button.update(screen)
 
@@ -458,6 +532,13 @@ def main_menu():
                 if play.checkForInput(mouse):
                     pygame.display.set_caption("Game")
                     game_loop()
+                if multi_player.checkForInput(mouse):
+                    pygame.display.set_caption("Multi Player")
+                    game_client = GameClient(1234)
+                    game_client.connect("192.168.0.111",1234,"m")
+                    print(game_client.player_id)
+                    game_client.socket.setblocking(False)
+                    multi_player_game_loop(game_client)
                 if options.checkForInput(mouse):
                     pygame.display.set_caption("Options")
                     opt()
