@@ -493,8 +493,8 @@ if __name__ == "__main__":
     menu_bg = pygame.image.load("assets/main_menu_bg.png").convert_alpha()
 
     # use mixer to load music and sounds
-    mixer.music.load("assets/main.mp3")
-    mixer.music.play(-1)
+    #mixer.music.load("assets/main.mp3")
+    #mixer.music.play(-1)
     mixer.music.set_volume(0.25)
     punch_fx = mixer.Sound("assets/punch.wav")
     projectile_fx = mixer.Sound("assets/proj.wav")
@@ -503,9 +503,21 @@ if __name__ == "__main__":
     projectile_fx.set_volume(0.5)
     hit_fx.set_volume(0.5)
 
+    #spritesheets
+    #wizardSheet = pygame.image.load("assets/wizard_spritesheet.png").convert_alpha()
+    wizardSheet = pygame.image.load("assets/wizard pack/Idle.png").convert_alpha()
+
+    #wizardAnimationSteps = [5, 7, 7, 6, 7, 1, 1, 3]
+    wizardAnimationSteps = [5]
+    # define fighter variables
+    wizardSheetX = 231
+    wizardSheetY = 190
+    wizardData = [wizardSheetX,wizardSheetY]
+
+
     # create fighters
-    fighter_1 = Fighter(1, 200, 310, 40, 100, False, punch_fx, projectile_fx, hit_fx)
-    fighter_2 = Fighter(2, 700, 310, 40, 100, True, punch_fx, projectile_fx, hit_fx)
+    fighter_1 = Fighter(1, 200, 310, 40, 100, False, punch_fx, projectile_fx, hit_fx, wizardData, wizardSheet, wizardAnimationSteps)
+    fighter_2 = Fighter(2, 700, 310, 40, 100, True, punch_fx, projectile_fx, hit_fx, wizardData,wizardSheet, wizardAnimationSteps)
 
     # create obstacles
     obstacle_1 = Obstacle(400, 300, 100, 300)

@@ -2,7 +2,14 @@ import pygame
 from projectile import Projectile
 
 class Fighter():
-    def __init__(self, player, x, y, width, height, flip, punch_sound, projectile_sound, hit_sound):
+    wizardData = ["assets/wizard pack/", 231, 190, 7]
+    def __init__(self, player, x, y, width, height, flip, punch_sound, projectile_sound, hit_sound, data, spriteSheet, animationSteps):
+        self.sizeX = data[0]
+        self.sizeY = data[1]
+        self.animationList = self.loadImages(spriteSheet, animationSteps)
+        self.action = 0# 0=idle, 1=attack1, 2=attack2, 3=dying, 4=running, 5=jumping, 6=falling, 7=hit
+        self.frame = 0
+        self.img = self.animationList[self.action][self.frame]
         self.player = player
         self.flip = flip
         self.rect = pygame.Rect((x, y, width, height))
@@ -23,6 +30,19 @@ class Fighter():
         self.hit_sound = hit_sound
         self.player1_controls = {"left" : pygame.K_a, "right" : pygame.K_d, "jump" : pygame.K_w, "attack1" : pygame.K_r, "attack2" : pygame.K_t, "block" : pygame.K_s}
         self.player2_controls = {"left" : pygame.K_LEFT, "right" : pygame.K_RIGHT, "jump" : pygame.K_UP, "attack1" : pygame.K_n, "attack2" : pygame.K_m, "block" : pygame.K_DOWN}
+
+    def loadImages(self, spriteSheet, animationSteps):
+        #extract images from sprite sheet
+        y = 0
+        animationList = []
+        for animation in animationSteps:
+            tempImageList = []
+            for x in range(animation):
+                tempImage = spriteSheet.subsurface(x * self.sizeX, y * self.sizeY, self.sizeX, self.sizeY)
+                tempImageList.append(tempImage)
+            animationList.append(tempImageList)
+            y += 1
+        return animationList
 
 
     def move(self, screen_width, screen_height, surface, target, obstacles):
@@ -52,7 +72,7 @@ class Fighter():
         #count projectile cooldown
         if self.projectile_cooldown > 0:
             self.projectile_cooldown -=1
-        
+
 
         self.feet(surface, obstacles)
 
@@ -65,8 +85,8 @@ class Fighter():
                 if not projectile.exists:
                     self.projectiles.remove(projectile)
 
-        
-            
+
+
 
     def attack(self, surface, target):
             # self.attacking = True
@@ -92,6 +112,10 @@ class Fighter():
     def draw(self, surface):
         pygame.draw.rect(surface, self.color, self.rect)
         self.color = (255,0,0)
+        surface.blit(self.img, (self.rect.x, self.rect.y))
+
+    def loadSprites(self):
+        pass
 
     def take_hit(self, damage, target):
         self.hit_sound.play()
@@ -166,7 +190,7 @@ class Fighter():
             if y_collision_check.colliderect(obstacle.rect):
                 updatey = False
                 self.vel_y = 0
-                
+
             if standing_on_platform_check.colliderect(obstacle.rect):
                 self.jump = False
 
@@ -190,4 +214,9 @@ class Fighter():
             self.vel_y = 0
             self.dy = screen_height - 100 - self.rect.bottom
             self.jump = False
+
+
+
+
+
 
