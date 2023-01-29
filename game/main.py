@@ -512,7 +512,9 @@ if __name__ == "__main__":
     # define fighter variables
     wizardSheetX = 231
     wizardSheetY = 190
-    wizardData = [wizardSheetX,wizardSheetY]
+    wizardScale = 1.2
+    wizardOffset = [115, 70]
+    wizardData = [wizardSheetX,wizardSheetY,wizardScale, wizardOffset]
 
 
     # create fighters

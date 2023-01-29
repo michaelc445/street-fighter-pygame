@@ -6,7 +6,10 @@ class Fighter():
     def __init__(self, player, x, y, width, height, flip, punch_sound, projectile_sound, hit_sound, data, spriteSheet, animationSteps):
         self.sizeX = data[0]
         self.sizeY = data[1]
+        self.scale = data[2]
+        self.offset = data[3]
         self.animationList = self.loadImages(spriteSheet, animationSteps)
+        self.updateFrame = pygame.time.get_ticks()
         self.action = 0# 0=idle, 1=attack1, 2=attack2, 3=dying, 4=running, 5=jumping, 6=falling, 7=hit
         self.frame = 0
         self.img = self.animationList[self.action][self.frame]
@@ -39,6 +42,7 @@ class Fighter():
             tempImageList = []
             for x in range(animation):
                 tempImage = spriteSheet.subsurface(x * self.sizeX, y * self.sizeY, self.sizeX, self.sizeY)
+                tempImage = pygame.transform.scale(tempImage, (self.sizeX * self.scale, self.sizeY * self.scale))
                 tempImageList.append(tempImage)
             animationList.append(tempImageList)
             y += 1
@@ -86,8 +90,11 @@ class Fighter():
                     self.projectiles.remove(projectile)
 
 
+    def frameUpdate(self):
+        animationTime = 500
+        self.img = self.animationList[self.action][self.frame]
 
-
+        #if pygame.time.get_ticks() -
     def attack(self, surface, target):
             # self.attacking = True
             if self.attack_type == 1:
@@ -110,9 +117,11 @@ class Fighter():
 
 
     def draw(self, surface):
+        img = pygame.transform.flip(self.img, self.flip, False)
         pygame.draw.rect(surface, self.color, self.rect)
         self.color = (255,0,0)
-        surface.blit(self.img, (self.rect.x, self.rect.y))
+        surface.blit(img, (self.rect.x - self.offset[0], self.rect.y - self.offset[1]))
+
 
     def loadSprites(self):
         pass
