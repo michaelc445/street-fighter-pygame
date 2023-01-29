@@ -510,11 +510,11 @@ if __name__ == "__main__":
     hit_fx.set_volume(0.5)
 
     #spritesheets
-    #wizardSheet = pygame.image.load("assets/wizard_spritesheet.png").convert_alpha()
-    wizardSheet = pygame.image.load("assets/wizard pack/Idle.png").convert_alpha()
-
+    wizardSheet = pygame.image.load("assets/wizard_spritesheet.png").convert_alpha()
+    #wizardIdle = pygame.image.load("assets/wizard pack/Idle.png").convert_alpha()
+    #wizardSheet = [wizardIdle]
     wizardAnimationSteps = [5, 7, 7, 6, 7, 1, 1, 3]
-    wizardAnimationSteps = [5]
+    #wizardAnimationSteps = [5]
     # define fighter variables
     wizardSheetX = 231
     wizardSheetY = 190
