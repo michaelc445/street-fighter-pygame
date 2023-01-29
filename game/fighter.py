@@ -8,7 +8,9 @@ class Fighter():
         self.sizeY = data[1]
         self.scale = data[2]
         self.offset = data[3]
+        self.animationSteps = animationSteps
         self.animationList = self.loadImages(spriteSheet, animationSteps)
+        #self.animationList = self.loadImages(spriteSheet, 5)
         self.updateFrame = pygame.time.get_ticks()
         self.action = 0# 0=idle, 1=attack1, 2=attack2, 3=dying, 4=running, 5=jumping, 6=falling, 7=hit
         self.frame = 0
@@ -90,11 +92,21 @@ class Fighter():
                     self.projectiles.remove(projectile)
 
 
-    def frameUpdate(self):
-        animationTime = 500
-        self.img = self.animationList[self.action][self.frame]
 
-        #if pygame.time.get_ticks() -
+    def frameUpdate(self):
+        animationTime = 150
+        print(self.animationSteps[self.action])
+        if self.frame >= self.animationSteps[self.action]:
+            self.frame = 0
+        self.img = self.animationList[self.action][self.frame]
+        print("frame update run")
+        print(pygame.time.get_ticks()- self.updateFrame)
+        print(animationTime)
+
+        if pygame.time.get_ticks() - self.updateFrame > animationTime:
+            self.frame += 1
+            self.updateFrame = pygame.time.get_ticks()
+            print("frame updated")
     def attack(self, surface, target):
             # self.attacking = True
             if self.attack_type == 1:

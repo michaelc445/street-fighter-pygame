@@ -82,9 +82,15 @@ def game_loop():
         fighter_1.move(SCREEN_WIDTH, SCREEN_HEIGHT, screen, fighter_2, obstacles)
         fighter_2.move(SCREEN_WIDTH, SCREEN_HEIGHT, screen, fighter_1, obstacles)
 
+        # update frames
+        fighter_1.frameUpdate()
+        fighter_2.frameUpdate()
+
         # draw fighters
         fighter_1.draw(screen)
         fighter_2.draw(screen)
+
+
 
         # draw obstacles
         for obstacle in obstacles:
@@ -507,7 +513,7 @@ if __name__ == "__main__":
     #wizardSheet = pygame.image.load("assets/wizard_spritesheet.png").convert_alpha()
     wizardSheet = pygame.image.load("assets/wizard pack/Idle.png").convert_alpha()
 
-    #wizardAnimationSteps = [5, 7, 7, 6, 7, 1, 1, 3]
+    wizardAnimationSteps = [5, 7, 7, 6, 7, 1, 1, 3]
     wizardAnimationSteps = [5]
     # define fighter variables
     wizardSheetX = 231
@@ -517,10 +523,14 @@ if __name__ == "__main__":
     wizardData = [wizardSheetX,wizardSheetY,wizardScale, wizardOffset]
 
 
+
     # create fighters
     fighter_1 = Fighter(1, 200, 310, 40, 100, False, punch_fx, projectile_fx, hit_fx, wizardData, wizardSheet, wizardAnimationSteps)
     fighter_2 = Fighter(2, 700, 310, 40, 100, True, punch_fx, projectile_fx, hit_fx, wizardData,wizardSheet, wizardAnimationSteps)
 
+    # animate fighters
+    # fighter_1.frameUpdate()
+    # fighter_2.frameUpdate()
     # create obstacles
     obstacle_1 = Obstacle(400, 300, 100, 300)
     obstacle_2 = Obstacle(700, 200, 200, 50)
