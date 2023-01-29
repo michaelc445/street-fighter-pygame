@@ -101,7 +101,15 @@ class Fighter():
             self.actionUpdate(4)
         if self.jump:
             self.actionUpdate(5)
-        if False == self.running and self.jump == False:
+
+        if self.attacking:
+            if self.attack_type == 1:
+                animationTime = 10
+                self.actionUpdate(1)
+            else:
+                animationTime = 20
+                self.actionUpdate(2)
+        if not self.running and not self.jump and not self.attacking:
             self.actionUpdate(0)
         print(self.frame)
 
@@ -203,11 +211,11 @@ class Fighter():
                 # determine attack type
                 if key[player_controls["attack1"]]:
                     self.attack_type = 1
-                    self.actionUpdate(1)
-
+                    self.attacking = True
                 if key[player_controls["attack2"]]:
                     self.attack_type = 2
-                    self.actionUpdate(2)
+                    self.attacking = True
+
 
                 self.attack(surface, target)
 
