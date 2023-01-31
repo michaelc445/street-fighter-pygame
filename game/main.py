@@ -83,9 +83,15 @@ def game_loop():
         fighter_1.move(SCREEN_WIDTH, SCREEN_HEIGHT, screen, fighter_2, obstacles)
         fighter_2.move(SCREEN_WIDTH, SCREEN_HEIGHT, screen, fighter_1, obstacles)
 
+        # update frames
+        fighter_1.frameUpdate()
+        fighter_2.frameUpdate()
+
         # draw fighters
         fighter_1.draw(screen)
         fighter_2.draw(screen)
+
+
 
         # draw obstacles
         for obstacle in obstacles:
@@ -573,8 +579,8 @@ if __name__ == "__main__":
     menu_bg = pygame.image.load("assets/main_menu_bg.png").convert_alpha()
 
     # use mixer to load music and sounds
-    mixer.music.load("assets/main.mp3")
-    mixer.music.play(-1)
+    #mixer.music.load("assets/main.mp3")
+    #mixer.music.play(-1)
     mixer.music.set_volume(0.25)
     punch_fx = mixer.Sound("assets/punch.wav")
     projectile_fx = mixer.Sound("assets/proj.wav")
@@ -583,10 +589,28 @@ if __name__ == "__main__":
     projectile_fx.set_volume(0.5)
     hit_fx.set_volume(0.5)
 
-    # create fighters
-    fighter_1 = Fighter(1, 200, 310, 40, 100, False, punch_fx, projectile_fx, hit_fx)
-    fighter_2 = Fighter(2, 700, 310, 40, 100, True, punch_fx, projectile_fx, hit_fx)
+    #spritesheets
+    wizardSheet = pygame.image.load("assets/wizard_spritesheet.png").convert_alpha()
+    #wizardIdle = pygame.image.load("assets/wizard pack/Idle.png").convert_alpha()
+    #wizardSheet = [wizardIdle]
+    wizardAnimationSteps = [5, 7, 7, 6, 7, 1, 1, 3]
+    #wizardAnimationSteps = [5]
+    # define fighter variables
+    wizardSheetX = 231
+    wizardSheetY = 190
+    wizardScale = 1.2
+    wizardOffset = [115, 70]
+    wizardData = [wizardSheetX,wizardSheetY,wizardScale, wizardOffset]
 
+
+
+    # create fighters
+    fighter_1 = Fighter(1, 200, 310, 40, 100, False, punch_fx, projectile_fx, hit_fx, wizardData, wizardSheet, wizardAnimationSteps)
+    fighter_2 = Fighter(2, 700, 310, 40, 100, True, punch_fx, projectile_fx, hit_fx, wizardData,wizardSheet, wizardAnimationSteps)
+
+    # animate fighters
+    # fighter_1.frameUpdate()
+    # fighter_2.frameUpdate()
     # create obstacles
     obstacle_1 = Obstacle(400, 300, 100, 300)
     obstacle_2 = Obstacle(700, 200, 200, 50)

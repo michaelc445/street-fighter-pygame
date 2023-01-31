@@ -3,8 +3,23 @@ from projectile import Projectile
 from proto import game_pb2 as pb
 
 
+
 class Fighter(object):
-    def __init__(self, player, x, y, width, height, flip, punch_sound, projectile_sound, hit_sound):
+    wizardData = ["assets/wizard pack/", 231, 190, 7]
+
+    def __init__(self, player, x, y, width, height, flip, punch_sound, projectile_sound, hit_sound, data, spriteSheet,
+                 animationSteps):
+        self.sizeX = data[0]
+        self.sizeY = data[1]
+        self.scale = data[2]
+        self.offset = data[3]
+        self.animationSteps = animationSteps
+        self.animationList = self.loadImages(spriteSheet, animationSteps)
+        # self.animationList = self.loadImages(spriteSheet, 5)
+        self.updateFrame = pygame.time.get_ticks()
+        self.action = 0  # 0=idle, 1=attack1, 2=attack2, 3=dying, 4=running, 5=jumping, 6=falling, 7=hit
+        self.frame = 0
+        self.img = self.animationList[self.action][self.frame]
         self.player = player
         self.flip = flip
         self.rect = pygame.Rect((x, y, width, height))
@@ -13,6 +28,7 @@ class Fighter(object):
         self.dx = 0
         self.dy = 0
         self.jump = False
+        self.running = False
         self.attacking = False
         self.blocking = False
         self.shooting_projectile = False
@@ -25,10 +41,9 @@ class Fighter(object):
         self.punch_sound = punch_sound
         self.projectile_sound = projectile_sound
         self.hit_sound = hit_sound
-        self.player1_controls = {"left": pygame.K_a, "right": pygame.K_d, "jump": pygame.K_w, "attack1": pygame.K_r,
-                                 "attack2": pygame.K_t, "block": pygame.K_s}
-        self.player2_controls = {"left": pygame.K_LEFT, "right": pygame.K_RIGHT, "jump": pygame.K_UP,
-                                 "attack1": pygame.K_n, "attack2": pygame.K_m, "block": pygame.K_DOWN}
+        self.player1_controls = {"left" : pygame.K_a, "right" : pygame.K_d, "jump" : pygame.K_w, "attack1" : pygame.K_r, "attack2" : pygame.K_t, "block" : pygame.K_s}
+        self.player2_controls = {"left" : pygame.K_LEFT, "right" : pygame.K_RIGHT, "jump" : pygame.K_UP, "attack1" : pygame.K_n, "attack2" : pygame.K_m, "block" : pygame.K_DOWN}
+
 
     def move(self, screen_width, screen_height, surface, target, obstacles):
         SPEED = 10
@@ -68,6 +83,9 @@ class Fighter(object):
                 if not projectile.exists:
                     self.projectiles.remove(projectile)
 
+        
+            
+
     def attack(self, surface, target):
         # self.attacking = True
         if self.attack_type == 1:
@@ -92,8 +110,9 @@ class Fighter(object):
                 self.projectile_cooldown = 100
 
     def draw(self, surface):
+        img = pygame.transform.flip(self.img, self.flip, False)
         pygame.draw.rect(surface, self.color, self.rect)
-        self.color = (255, 0, 0)
+        self.color = (255,0,0)
 
     def take_hit(self, damage, target):
         self.hit_sound.play()
@@ -101,38 +120,47 @@ class Fighter(object):
         self.color = (255, 255, 255)
         self.vel_x += (damage - 2 * damage * target.flip)
         self.vel_y -= damage
+        self.action = 7
 
     def keybinds(self, player_controls, surface, target, speed):
         # get keypresses
         key = pygame.key.get_pressed()
+        self.running = False
+        #self.jump = False  # uncomment this to fly :)
+        self.attacking = False
 
         if not self.blocking:
             # face direction of other player
-            if target.rect.centerx > self.rect.centerx:
-                self.flip = False
-            else:
-                self.flip = True
+            # if target.rect.centerx > self.rect.centerx:
+            #     self.flip = False
+            # else:
+            #     self.flip = True
 
             # movement
             # move left
             if key[player_controls["left"]]:
                 self.dx = -speed
-            # move right
+            #move right
             if key[player_controls["right"]]:
                 self.dx = speed
+                #       self.actionUpdate(4)
+                self.running = True
+
+                self.flip = False
 
             # jump
             if key[player_controls["jump"]] and not self.jump:
                 self.vel_y = -30
                 self.jump = True
+                #self.actionUpdate(5)
 
             # attack
             if key[player_controls["attack1"]] or key[player_controls["attack2"]]:
                 # determine attack type
                 if key[player_controls["attack1"]]:
-                    self.attack_type = 1
+                        self.attack_type = 1
                 if key[player_controls["attack2"]]:
-                    self.attack_type = 2
+                        self.attack_type = 2
 
                 self.attack(surface, target)
 
@@ -191,123 +219,3 @@ class Fighter(object):
             self.dy = screen_height - 100 - self.rect.bottom
             self.jump = False
 
-
-class OnlineFighter(Fighter):
-
-    def __init__(self, player, x, y, width, height, flip, punch_sound, projectile_sound, hit_sound):
-        super().__init__(player, x, y, width, height, flip, punch_sound, projectile_sound, hit_sound)
-        self.game_client = None
-        self.game_keys = [pygame.K_a, pygame.K_d, pygame.K_w, pygame.K_r, pygame.K_t]
-
-    def move(self, screen_width, screen_height, surface, target, obstacles, game_client):
-        SPEED = 10
-        GRAVITY = 2
-        self.dx = 0
-        self.dy = 0
-        key = pygame.key.get_pressed()
-        t = {z: True for z in self.game_keys if key[z]}
-        message = pb.Update(keys=t)
-        message.health = self.health
-        message.enemyMove = 0
-        message.moving = False
-        message.enemyHealth = target.health
-        message.enemyAttack = 0
-        message.x = self.rect.x
-        message.y = self.rect.y
-        message.id = self.game_client.player_id
-        # check player 1 movement
-        keys = pygame.key.get_pressed()
-        self.keybinds(self.player1_controls, surface, target, SPEED, keys)
-        # apply gravity
-        self.grav(GRAVITY)
-
-        # keep player on screen
-        self.bounds(screen_width, screen_height)
-
-        # count attack cooldown
-        if self.attack_cooldown > 0:
-            self.attack_cooldown -= 1
-
-        # count projectile cooldown
-        if self.projectile_cooldown > 0:
-            self.projectile_cooldown -= 1
-
-        self.feet(surface, obstacles)
-        # update projectiles
-        if self.projectiles:
-            for projectile in self.projectiles:
-                projectile.move(target, screen_width)
-                projectile.draw(surface)
-                if not projectile.exists:
-                    self.projectiles.remove(projectile)
-
-        self.game_client.send_update(message)
-
-    def move_enemy(self, screen_width, screen_height, surface, target, obstacles, key):
-        speed = 10
-        gravity = 2
-        self.dx = 0
-        self.dy = 0
-
-        self.keybinds(self.player1_controls, surface, target, speed, key)
-
-        self.grav(gravity)
-
-        # keep player on screen
-        self.bounds(screen_width, screen_height)
-
-        # count attack cooldown
-        if self.attack_cooldown > 0:
-            self.attack_cooldown -= 1
-
-        # count projectile cooldown
-        if self.projectile_cooldown > 0:
-            self.projectile_cooldown -= 1
-
-        self.feet(surface, obstacles)
-        # update projectiles
-        if self.projectiles:
-            for projectile in self.projectiles:
-                projectile.move(target, screen_width)
-                projectile.draw(surface)
-                if not projectile.exists:
-                    self.projectiles.remove(projectile)
-
-    def keybinds(self, player_controls, surface, target, speed, key):
-        # get keypresses
-        if not self.blocking:
-            # face direction of other player
-            if target.rect.centerx > self.rect.centerx:
-                self.flip = False
-            else:
-                self.flip = True
-
-            # movement
-            # move left
-            if key[player_controls["left"]]:
-                self.dx = -speed
-            # move right
-            if key[player_controls["right"]]:
-                self.dx = speed
-
-            # jump
-            if key[player_controls["jump"]] and not self.jump:
-                self.vel_y = -30
-                self.jump = True
-
-            # attack
-            if key[player_controls["attack1"]] or key[player_controls["attack2"]]:
-                # determine attack type
-                if key[player_controls["attack1"]]:
-                    self.attack_type = 1
-                if key[player_controls["attack2"]]:
-                    self.attack_type = 2
-
-                self.attack(surface, target)
-
-        # block
-        if key[player_controls["block"]]:
-            self.color = (0, 0, 255)
-            self.blocking = True
-        else:
-            self.blocking = False
