@@ -1,10 +1,8 @@
 import pygame
 from projectile import Projectile
-from proto import game_pb2 as pb
+#from proto import game_pb2 as pb
 
-
-
-class Fighter(object):
+class Fighter():
     wizardData = ["assets/wizard pack/", 231, 190, 7]
 
     def __init__(self, player, x, y, width, height, flip, punch_sound, projectile_sound, hit_sound, data, spriteSheet,
@@ -25,8 +23,6 @@ class Fighter(object):
         self.rect = pygame.Rect((x, y, width, height))
         self.vel_y = 0
         self.vel_x = 0
-        self.dx = 0
-        self.dy = 0
         self.jump = False
         self.running = False
         self.attacking = False
@@ -41,9 +37,24 @@ class Fighter(object):
         self.punch_sound = punch_sound
         self.projectile_sound = projectile_sound
         self.hit_sound = hit_sound
-        self.player1_controls = {"left" : pygame.K_a, "right" : pygame.K_d, "jump" : pygame.K_w, "attack1" : pygame.K_r, "attack2" : pygame.K_t, "block" : pygame.K_s}
-        self.player2_controls = {"left" : pygame.K_LEFT, "right" : pygame.K_RIGHT, "jump" : pygame.K_UP, "attack1" : pygame.K_n, "attack2" : pygame.K_m, "block" : pygame.K_DOWN}
+        self.player1_controls = {"left": pygame.K_a, "right": pygame.K_d, "jump": pygame.K_w, "attack1": pygame.K_r,
+                                 "attack2": pygame.K_t, "block": pygame.K_s}
+        self.player2_controls = {"left": pygame.K_LEFT, "right": pygame.K_RIGHT, "jump": pygame.K_UP,
+                                 "attack1": pygame.K_n, "attack2": pygame.K_m, "block": pygame.K_DOWN}
 
+    def loadImages(self, spriteSheet, animationSteps):
+        # extract images from sprite sheet
+        y = 0
+        animationList = []
+        for animation in animationSteps:
+            tempImageList = []
+            for x in range(animation):
+                tempImage = spriteSheet.subsurface(x * self.sizeX, y * self.sizeY, self.sizeX, self.sizeY)
+                tempImage = pygame.transform.scale(tempImage, (self.sizeX * self.scale, self.sizeY * self.scale))
+                tempImageList.append(tempImage)
+            animationList.append(tempImageList)
+            y += 1
+        return animationList
 
     def move(self, screen_width, screen_height, surface, target, obstacles):
         SPEED = 10
@@ -83,8 +94,42 @@ class Fighter(object):
                 if not projectile.exists:
                     self.projectiles.remove(projectile)
 
-        
-            
+    def frameUpdate(self):
+        animationTime = 150
+        if self.running:
+            animationTime = 25
+            self.actionUpdate(4)
+        if self.jump:
+            self.actionUpdate(5)
+
+        if self.attacking:
+            if self.attack_type == 1:
+                animationTime = 10
+                self.actionUpdate(1)
+            else:
+                animationTime = 20
+                self.actionUpdate(2)
+        if not self.running and not self.jump and not self.attacking:
+            self.actionUpdate(0)
+        print(self.frame)
+
+        # if self.frame >= self.animationSteps[self.action]:
+        #     self.frame = 0
+        self.img = self.animationList[self.action][self.frame]
+
+        if pygame.time.get_ticks() - self.updateFrame > animationTime:
+            self.frame += 1
+            self.updateFrame = pygame.time.get_ticks()
+
+        if self.frame >= len(self.animationList[self.action]):
+            self.frame = 0
+
+    def actionUpdate(self, newAction):
+
+        if newAction != self.action:
+            self.frame = 0
+            self.action = newAction
+            self.updateFrame = pygame.time.get_ticks()
 
     def attack(self, surface, target):
         # self.attacking = True
@@ -111,8 +156,12 @@ class Fighter(object):
 
     def draw(self, surface):
         img = pygame.transform.flip(self.img, self.flip, False)
-        pygame.draw.rect(surface, self.color, self.rect)
-        self.color = (255,0,0)
+        #pygame.draw.rect(surface, self.color, self.rect)
+        #self.color = (255, 0, 0)
+        surface.blit(img, (self.rect.x - self.offset[0], self.rect.y - self.offset[1]))
+
+    def loadSprites(self):
+        pass
 
     def take_hit(self, damage, target):
         self.hit_sound.play()
@@ -140,7 +189,10 @@ class Fighter(object):
             # move left
             if key[player_controls["left"]]:
                 self.dx = -speed
-            #move right
+                #        self.actionUpdate(4)
+                self.running = True
+                self.flip = True
+            # move right
             if key[player_controls["right"]]:
                 self.dx = speed
                 #       self.actionUpdate(4)
@@ -158,9 +210,12 @@ class Fighter(object):
             if key[player_controls["attack1"]] or key[player_controls["attack2"]]:
                 # determine attack type
                 if key[player_controls["attack1"]]:
-                        self.attack_type = 1
+                    self.attack_type = 1
+                    self.attacking = True
                 if key[player_controls["attack2"]]:
-                        self.attack_type = 2
+                    self.attack_type = 2
+                    self.attacking = True
+
 
                 self.attack(surface, target)
 
@@ -218,4 +273,3 @@ class Fighter(object):
             self.vel_y = 0
             self.dy = screen_height - 100 - self.rect.bottom
             self.jump = False
-

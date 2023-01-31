@@ -1,9 +1,10 @@
 import pygame
 from pygame import mixer
-from fighter import Fighter,OnlineFighter
+from fighter import Fighter#, OnlineFighter
 from obstacle import Obstacle
 from button import Button
-from network.game_client import GameClient
+#from proto import game_pb2 as pb
+#from network.game_client import GameClient
 import sys
 
 

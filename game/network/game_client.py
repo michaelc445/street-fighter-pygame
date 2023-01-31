@@ -1,7 +1,6 @@
 import socket
 import sys
-
-from proto import game_pb2 as pb
+#from proto import game_pb2 as pb
 
 
 class GameClient(object):
