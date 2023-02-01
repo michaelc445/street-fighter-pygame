@@ -199,12 +199,7 @@ class OnlineFighter(Fighter):
         self.game_client = None
         self.game_keys = [pygame.K_a, pygame.K_d, pygame.K_w, pygame.K_r, pygame.K_t]
 
-    def move(self, screen_width, screen_height, surface, target, obstacles, game_client):
-        SPEED = 10
-        GRAVITY = 2
-        self.dx = 0
-        self.dy = 0
-        key = pygame.key.get_pressed()
+    def _create_update_message(self, key, target):
         t = {z: True for z in self.game_keys if key[z]}
         message = pb.Update(keys=t)
         message.health = self.health
@@ -214,9 +209,18 @@ class OnlineFighter(Fighter):
         message.enemyAttack = 0
         message.x = self.rect.x
         message.y = self.rect.y
+        message.id = self.game_client.player_id
+        return message
+
+    def move(self, screen_width, screen_height, surface, target, obstacles, game_client):
+        SPEED = 10
+        GRAVITY = 2
+        self.dx = 0
+        self.dy = 0
         # check player 1 movement
         keys = pygame.key.get_pressed()
         self.keybinds(self.player1_controls, surface, target, SPEED, keys)
+
         # apply gravity
         self.grav(GRAVITY)
 
@@ -239,7 +243,7 @@ class OnlineFighter(Fighter):
                 projectile.draw(surface)
                 if not projectile.exists:
                     self.projectiles.remove(projectile)
-        message.id = self.game_client.player_id
+        message = self._create_update_message(keys, target)
         self.game_client.send_update(message)
 
     def move_enemy(self, screen_width, screen_height, surface, target, obstacles, key,x,y):
