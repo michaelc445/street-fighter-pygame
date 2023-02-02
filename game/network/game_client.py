@@ -36,11 +36,10 @@ class GameClient(object):
         if self.enemy_address is None:
             raise ConnectionAbortedError
 
-    def join_game(self, ip_address, port):
+    def join_game(self, ip_address, port,name):
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.server_ip = ip_address
         self.server_port = port
-        name = input("enter your name")
         join_req = pb.JoinLobbyRequest(name=name)
         self.socket.sendto(join_req.SerializeToString(),(ip_address,port))
 
@@ -70,7 +69,9 @@ class GameClient(object):
             if char_resp.start:
                 break
 
-
+    def connect(self,ip,port,name):
+        self.join_game(ip,port,name)
+        self.character_select()
 
 
 
