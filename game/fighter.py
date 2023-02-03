@@ -20,6 +20,7 @@ class Fighter():
         self.running = False
         self.attacking = False
         self.blocking = False
+        self.hit = False
         self.shooting_projectile = False
         self.projectiles = []
         self.projectile_cooldown = 0
@@ -30,6 +31,7 @@ class Fighter():
         self.punch_sound = punch_sound
         self.projectile_sound = projectile_sound
         self.hit_sound = hit_sound
+        self.alive = True
         self.player1_controls = {"left": pygame.K_a, "right": pygame.K_d, "jump": pygame.K_w, "attack1": pygame.K_r,
                                  "attack2": pygame.K_t, "block": pygame.K_s}
         self.player2_controls = {"left": pygame.K_LEFT, "right": pygame.K_RIGHT, "jump": pygame.K_UP,
@@ -126,34 +128,49 @@ class Fighter():
                     self.projectiles.remove(projectile)
 
     def frameUpdate(self):
-        animationTime = 100
-        if self.running:
-            animationTime = 25
+        if self.health <= 0:
+            self.health = 0
+            self.alive = False
+            self.actionUpdate(3)
+        elif self.running:
             self.actionUpdate(4)
-        if self.jump:
+        elif self.jump:
             self.actionUpdate(5)
-
-        if self.attacking:
+        elif self.hit:
+            self.actionUpdate(7)
+        elif self.attacking:
             if self.attack_type == 1:
-                animationTime = 10
                 self.actionUpdate(1)
             else:
-                animationTime = 20
                 self.actionUpdate(2)
-        if not self.running and not self.jump and not self.attacking:
+        else:
             self.actionUpdate(0)
-        #print(self.frame)
 
-        # if self.frame >= self.animationSteps[self.action]:
-        #     self.frame = 0
+        animation_cooldown = 30
+        #update image
         self.img = self.animationList[self.action][self.frame]
-
-        if pygame.time.get_ticks() - self.updateFrame > animationTime:
+        #check if enough time has passed since the last update
+        if pygame.time.get_ticks() - self.updateFrame > animation_cooldown:
             self.frame += 1
             self.updateFrame = pygame.time.get_ticks()
-
+        #check if the animation has finished
         if self.frame >= len(self.animationList[self.action]):
-            self.frame = 0
+            #if the player is dead then end the animation
+            if self.alive == False:
+                self.frame = len(self.animationList[self.action]) - 1
+            else:
+                self.frame = 0
+                    #check if an attack was executed
+                if self.action == 1 or self.action == 2:
+                    self.attacking = False
+                    self.attack_cooldown = 20
+                #check if damage was taken
+                if self.action == 7:
+                    self.hit = False
+                        #if the player was in the middle of an attack, then the attack is stopped
+                    self.attacking = False
+                    self.attack_cooldown = 20
+                    self.frame = 0
 
     def actionUpdate(self, newAction):
 
@@ -174,6 +191,7 @@ class Fighter():
 
                 if attacking_rect.colliderect(target.rect) and not target.blocking:
                     target.take_hit(damage, self)
+                    #target.hit = True
 
                 pygame.draw.rect(surface, (0, 255, 0), attacking_rect)
 
@@ -203,14 +221,12 @@ class Fighter():
         self.color = (255, 255, 255)
         self.vel_x += (damage - 2 * damage * target.flip)
         self.vel_y -= damage
-        self.action = 7
 
     def keybinds(self, player_controls, surface, target, speed):
         # get keypresses
         key = pygame.key.get_pressed()
         self.running = False
         #self.jump = False  # uncomment this to fly :)
-        self.attacking = False
 
         if not self.blocking:
             # face direction of other player
