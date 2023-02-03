@@ -216,6 +216,7 @@ class Fighter():
         pass
 
     def take_hit(self, damage, target):
+        self.hit = True
         self.hit_sound.play()
         self.health -= damage
         self.color = (255, 255, 255)
