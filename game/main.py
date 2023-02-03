@@ -500,6 +500,52 @@ def audio():
         pygame.display.update()
 
 
+#new menu for when you click play, it should have a "local multiplayer" and a "singleplayer" button
+def menu_play():
+    while True:
+        menu_scaled = pygame.transform.scale(menu_bg, (SCREEN_WIDTH, SCREEN_HEIGHT))
+        screen.blit(menu_scaled, (0, 0))
+        mouse = pygame.mouse.get_pos()
+
+        text = font(75).render("Play Menu", True, "#b68f40")
+        rect = text.get_rect(center=(500, 45))
+
+        single_player = Button(image=pygame.image.load("assets/Options Rect.png"), pos=(500, 150),
+                      text_input="SINGLEPLAYER", font=font(35), base_color="#d7fcd4", hovering_color="White")
+
+        local = Button(image=pygame.image.load("assets/Options Rect.png"), pos=(500, 275),
+                      text_input="LOCAL MULTI", font=font(35), base_color="#d7fcd4", hovering_color="White")
+
+        back = Button(image=pygame.image.load("assets/Play Rect.png"), pos=(500, 400),
+                      text_input="BACK", font=font(35), base_color="#d7fcd4", hovering_color="White")
+
+        for button in [single_player, local, back]:
+            button.changeColor(mouse)
+            button.update(screen)
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    pygame.quit()
+                    sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if single_player.checkForInput(mouse):
+                    pygame.display.set_caption("Single Player")
+                    game_loop()
+                if local.checkForInput(mouse):
+                    pygame.display.set_caption("Local Multiplayer")
+                    game_loop()
+                if back.checkForInput(mouse):
+                    pygame.display.set_caption("Main Menu")
+                    main_menu()
+
+        pygame.display.update()
+
+
+
 # main menu
 def main_menu():
     while True:
@@ -538,7 +584,7 @@ def main_menu():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if play.checkForInput(mouse):
                     pygame.display.set_caption("Game")
-                    game_loop()
+                    menu_play()
                 if multi_player.checkForInput(mouse):
                     pygame.display.set_caption("Multi Player")
                     game_client = GameClient(1234)

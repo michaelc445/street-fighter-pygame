@@ -155,9 +155,12 @@ class Fighter():
                 self.projectile_cooldown = 100
 
     def draw(self, surface):
-        img = pygame.transform.flip(self.img, self.flip, False)
+        #draw hitbox of player
         #pygame.draw.rect(surface, self.color, self.rect)
         #self.color = (255, 0, 0)
+
+        #draw player
+        img = pygame.transform.flip(self.img, self.flip, False)
         surface.blit(img, (self.rect.x - self.offset[0], self.rect.y - self.offset[1]))
 
     def loadSprites(self):
