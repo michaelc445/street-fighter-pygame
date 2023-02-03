@@ -23,7 +23,7 @@ def draw_health_bar(health, x, y):
 
 # font size
 def font(size):
-    return pygame.font.Font("assets/font.ttf", size)
+    return pygame.font.Font("assets/menu/font.ttf", size)
 
 
 # when a button is pressed, it should change the key that is assigned to that action
@@ -195,13 +195,13 @@ def controls():
         screen.blit(controls_text, controls_rect)
 
         # make player 1 controls with a button
-        controls_player1 = Button(image=pygame.image.load("assets/Play Rect.png"), pos=(500, 175),
+        controls_player1 = Button(image=pygame.image.load("assets/menu/medium.png"), pos=(500, 175),
                                   text_input="Player 1", font=font(35), base_color="#d7fcd4", hovering_color="White")
 
-        controls_player2 = Button(image=pygame.image.load("assets/Play Rect.png"), pos=(500, 325),
+        controls_player2 = Button(image=pygame.image.load("assets/menu/medium.png"), pos=(500, 325),
                                   text_input="Player 2", font=font(35), base_color="#d7fcd4", hovering_color="White")
 
-        controls_back = Button(image=pygame.image.load("assets/Play Rect.png"), pos=(500, 475),
+        controls_back = Button(image=pygame.image.load("assets/menu/medium.png"), pos=(500, 475),
                                text_input="BACK", font=font(35), base_color="#d7fcd4", hovering_color="White")
 
         for button in [controls_back, controls_player1, controls_player2]:
@@ -265,7 +265,7 @@ def player1():
                                  text_input="Projectile : " + pygame.key.name(fighter_1.player1_controls["attack2"]),
                                  font=font(15), base_color="#d7fcd4", hovering_color="White")
 
-        player1_back = Button(image=pygame.image.load("assets/Play Rect.png"), pos=(500, 475),
+        player1_back = Button(image=pygame.image.load("assets/menu/medium.png"), pos=(500, 475),
                               text_input="BACK", font=font(35), base_color="#d7fcd4", hovering_color="White")
 
         for button in [player1_back, player1_up, player1_down, player1_left, player1_right, player1_attack1,
@@ -337,7 +337,7 @@ def player2():
                                  text_input="Projectile : " + pygame.key.name(fighter_2.player2_controls["attack2"]),
                                  font=font(15), base_color="#d7fcd4", hovering_color="White")
 
-        player2_back = Button(image=pygame.image.load("assets/Play Rect.png"), pos=(500, 475),
+        player2_back = Button(image=pygame.image.load("assets/menu/medium.png"), pos=(500, 475),
                               text_input="BACK", font=font(35), base_color="#d7fcd4", hovering_color="White")
 
         for button in [player2_back, player2_up, player2_down, player2_left, player2_right, player2_attack1,
@@ -384,11 +384,11 @@ def opt():
         opt_rect = opt_text.get_rect(center=(500, 65))
         screen.blit(opt_text, opt_rect)
 
-        opt_controls = Button(image=pygame.image.load("assets/Play Rect.png"), pos=(500, 175),
+        opt_controls = Button(image=pygame.image.load("assets/menu/medium.png"), pos=(500, 175),
                               text_input="CONTROLS", font=font(35), base_color="#d7fcd4", hovering_color="White")
-        opt_audio = Button(image=pygame.image.load("assets/Play Rect.png"), pos=(500, 325),
+        opt_audio = Button(image=pygame.image.load("assets/menu/medium.png"), pos=(500, 325),
                            text_input="AUDIO", font=font(35), base_color="#d7fcd4", hovering_color="White")
-        opt_back = Button(image=pygame.image.load("assets/Play Rect.png"), pos=(500, 475),
+        opt_back = Button(image=pygame.image.load("assets/menu/medium.png"), pos=(500, 475),
                           text_input="BACK", font=font(35), base_color="#d7fcd4", hovering_color="White")
 
         for button in [opt_controls, opt_audio, opt_back]:
@@ -431,7 +431,7 @@ def audio():
         music_text = font(40).render("MUSIC", True, "#b68f40")
         music_rect = music_text.get_rect(center=(200, 175))
         screen.blit(music_text, music_rect)
-        audio_back = Button(image=pygame.image.load("assets/Play Rect.png"), pos=(500, 475),
+        audio_back = Button(image=pygame.image.load("assets/menu/medium.png"), pos=(500, 475),
                             text_input="BACK", font=font(35), base_color="#d7fcd4", hovering_color="White")
         # make 4 buttons for music volume, 1 for each quarter
         music_0 = Button(image=None, pos=(400, 175),
@@ -507,19 +507,20 @@ def menu_play():
         screen.blit(menu_scaled, (0, 0))
         mouse = pygame.mouse.get_pos()
 
-        text = font(75).render("Play Menu", True, "#b68f40")
-        rect = text.get_rect(center=(500, 45))
+        text = font(70).render("GAME MODE", True, "#b68f40")
+        rect = text.get_rect(center=(500, 50))
+        screen.blit(text, rect)
 
-        single_player = Button(image=pygame.image.load("assets/Options Rect.png"), pos=(500, 100),
+        single_player = Button(image=pygame.image.load("assets/menu/long.png"), pos=(500, 150),
                       text_input="SINGLEPLAYER", font=font(35), base_color="#d7fcd4", hovering_color="White")
 
-        local = Button(image=pygame.image.load("assets/Options Rect.png"), pos=(500, 225),
+        local = Button(image=pygame.image.load("assets/menu/long.png"), pos=(500, 275),
                       text_input="LOCAL MULTI", font=font(35), base_color="#d7fcd4", hovering_color="White")
         #add multiplayer button here
-        multiplayer = Button(image=pygame.image.load("assets/Options Rect.png"), pos=(500, 350),
+        multiplayer = Button(image=pygame.image.load("assets/menu/long.png"), pos=(500, 400),
                       text_input="MULTIPLAYER", font=font(35), base_color="#d7fcd4", hovering_color="White")
 
-        back = Button(image=pygame.image.load("assets/Play Rect.png"), pos=(500, 475),
+        back = Button(image=pygame.image.load("assets/menu/medium.png"), pos=(500, 525),
                       text_input="BACK", font=font(35), base_color="#d7fcd4", hovering_color="White")
 
         for button in [single_player, local, multiplayer, back]:
@@ -566,15 +567,15 @@ def main_menu():
         text = font(75).render("Main Menu", True, "#b68f40")
         rect = text.get_rect(center=(500, 50))
 
-        play = Button(image=pygame.image.load("assets/Play Rect.png"), pos=(500, 180),
+        play = Button(image=pygame.image.load("assets/menu/long.png"), pos=(500, 180),
                       text_input="PLAY", font=font(55), base_color="#d7fcd4", hovering_color="White")
 
         #multi_player = Button(image=pygame.image.load("assets/Options Rect.png"), pos=(500, 275),
                       #text_input="MULTI-PLAYER", font=font(45), base_color="#d7fcd4", hovering_color="White")
 
-        options = Button(image=pygame.image.load("assets/Options Rect.png"), pos=(500, 325),
+        options = Button(image=pygame.image.load("assets/menu/long.png"), pos=(500, 325),
                          text_input="OPTIONS", font=font(55), base_color="#d7fcd4", hovering_color="White")
-        quit = Button(image=pygame.image.load("assets/Quit Rect.png"), pos=(500, 470),
+        quit = Button(image=pygame.image.load("assets/menu/medium.png"), pos=(500, 470),
                       text_input="QUIT", font=font(55), base_color="#d7fcd4", hovering_color="White")
 
         screen.blit(text, rect)
@@ -593,7 +594,7 @@ def main_menu():
                     sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if play.checkForInput(mouse):
-                    pygame.display.set_caption("Game")
+                    pygame.display.set_caption("Game Mode")
                     menu_play()
                 if options.checkForInput(mouse):
                     pygame.display.set_caption("Options")
@@ -626,22 +627,22 @@ if __name__ == "__main__":
     WHITE = (255, 255, 255)
 
     # load bg image
-    bg_image = pygame.image.load("assets/background.png").convert_alpha()
-    menu_bg = pygame.image.load("assets/main_menu_bg.png").convert_alpha()
+    bg_image = pygame.image.load("assets/maps/background.png").convert_alpha()
+    menu_bg = pygame.image.load("assets/menu/main_menu_bg.png").convert_alpha()
 
     # use mixer to load music and sounds
-    #mixer.music.load("assets/main.mp3")
-    #mixer.music.play(-1)
-    mixer.music.set_volume(0.25)
-    punch_fx = mixer.Sound("assets/punch.wav")
-    projectile_fx = mixer.Sound("assets/proj.wav")
-    hit_fx = mixer.Sound("assets/hit.wav")
+    mixer.music.load("assets/audio/main.mp3")
+    mixer.music.play(-1)
+    mixer.music.set_volume(0)
+    punch_fx = mixer.Sound("assets/audio/punch.wav")
+    projectile_fx = mixer.Sound("assets/audio/proj.wav")
+    hit_fx = mixer.Sound("assets/audio/hit.wav")
     punch_fx.set_volume(0.15)
     projectile_fx.set_volume(0.5)
     hit_fx.set_volume(0.5)
 
     #spritesheets
-    wizardSheet = pygame.image.load("assets/wizard_spritesheet.png").convert_alpha()
+    wizardSheet = pygame.image.load("assets/wizard/wizard_spritesheet.png").convert_alpha()
     #wizardIdle = pygame.image.load("assets/wizard pack/Idle.png").convert_alpha()
     #wizardSheet = [wizardIdle]
     wizardAnimationSteps = [5, 7, 7, 6, 7, 1, 1, 3]
