@@ -125,7 +125,7 @@ def multi_player_game_loop(game_client):
     # create fighters
 
     f1 = OnlineFighter(1, 200, 310, 40, 100, False, punch_fx, projectile_fx, hit_fx)
-    f2 = OnlineFighter(2, 700, 310, 40, 100, True, punch_fx, projectile_fx, hit_fx)
+    f2 = OnlineFighter(1, 700, 310, 40, 100, True, punch_fx, projectile_fx, hit_fx)
     fighters = [f1, f2]
     pick = int(game_client.player_id)
 
@@ -158,7 +158,7 @@ def multi_player_game_loop(game_client):
         for message in game_client.get_updates():
             local_player.health = message.enemyHealth
             enemy_character.move_enemy(SCREEN_WIDTH, SCREEN_HEIGHT, screen, local_player, obstacles,
-                                        message.keys)
+                                        message.keys,message.x,message.y)
 
         # draw fighters
         local_player.draw(screen)
@@ -589,6 +589,7 @@ def main_menu():
                     pygame.display.set_caption("Multi Player")
                     game_client = GameClient(1234)
                     game_client.connect("192.168.0.111",1234,"m")
+                    print(game_client.player_id)
                     game_client.socket.setblocking(False)
                     multi_player_game_loop(game_client)
                 if options.checkForInput(mouse):

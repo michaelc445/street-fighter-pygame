@@ -3,11 +3,12 @@ import socket
 
 class Player(object):
 
-    def __init__(self, name, ip, port):
+    def __init__(self, name, ip, port,id):
         self.name = name
         self.ip = ip
         self.port = port
         self.character = None
+        self.id = id
 
 
 class GameServer(object):
@@ -41,7 +42,7 @@ class GameServer(object):
                     self.socket.sendto(resp.SerializeToString(), address)
                     raise ValueError
 
-                self.connections.append(Player(join_req.name, address[0], address[1]))
+                self.connections.append(Player(join_req.name, address[0], address[1],len(self.connections)))
 
             except:
                 continue
@@ -74,7 +75,7 @@ class GameServer(object):
             self.get_connection()
         # tell clients character select is ready
         for i, person in enumerate(self.connections):
-            resp = pb.JoinLobbyResponse(ok=1, playerId=len(self.connections), start=1)
+            resp = pb.JoinLobbyResponse(ok=1, playerId=person.id, start=1)
             self.socket.sendto(resp.SerializeToString(), (person.ip, person.port))
 
         locked = 0
@@ -87,7 +88,7 @@ class GameServer(object):
             resp = pb.CharacterSelectResponse(playerId=i,
                                               ok=1,
                                               start=1,
-                                              enemyCharacter=self.connections[enemy].character)
+                                              enemyCharacter=0)
             p = self.connections[i]
             self.socket.sendto(resp.SerializeToString(), (p.ip, p.port))
         # start listening for game updates
