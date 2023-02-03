@@ -510,16 +510,19 @@ def menu_play():
         text = font(75).render("Play Menu", True, "#b68f40")
         rect = text.get_rect(center=(500, 45))
 
-        single_player = Button(image=pygame.image.load("assets/Options Rect.png"), pos=(500, 150),
+        single_player = Button(image=pygame.image.load("assets/Options Rect.png"), pos=(500, 100),
                       text_input="SINGLEPLAYER", font=font(35), base_color="#d7fcd4", hovering_color="White")
 
-        local = Button(image=pygame.image.load("assets/Options Rect.png"), pos=(500, 275),
+        local = Button(image=pygame.image.load("assets/Options Rect.png"), pos=(500, 225),
                       text_input="LOCAL MULTI", font=font(35), base_color="#d7fcd4", hovering_color="White")
+        #add multiplayer button here
+        multiplayer = Button(image=pygame.image.load("assets/Options Rect.png"), pos=(500, 350),
+                      text_input="MULTIPLAYER", font=font(35), base_color="#d7fcd4", hovering_color="White")
 
-        back = Button(image=pygame.image.load("assets/Play Rect.png"), pos=(500, 400),
+        back = Button(image=pygame.image.load("assets/Play Rect.png"), pos=(500, 475),
                       text_input="BACK", font=font(35), base_color="#d7fcd4", hovering_color="White")
 
-        for button in [single_player, local, back]:
+        for button in [single_player, local, multiplayer, back]:
             button.changeColor(mouse)
             button.update(screen)
 
@@ -538,6 +541,13 @@ def menu_play():
                 if local.checkForInput(mouse):
                     pygame.display.set_caption("Local Multiplayer")
                     game_loop()
+                if multiplayer.checkForInput(mouse):
+                    pygame.display.set_caption("Multi Player")
+                    game_client = GameClient(1234)
+                    game_client.connect("192.168.0.111",1234,"m")
+                    print(game_client.player_id)
+                    game_client.socket.setblocking(False)
+                    multi_player_game_loop(game_client)
                 if back.checkForInput(mouse):
                     pygame.display.set_caption("Main Menu")
                     main_menu()
@@ -554,22 +564,22 @@ def main_menu():
         mouse = pygame.mouse.get_pos()
 
         text = font(75).render("Main Menu", True, "#b68f40")
-        rect = text.get_rect(center=(500, 45))
+        rect = text.get_rect(center=(500, 50))
 
-        play = Button(image=pygame.image.load("assets/Play Rect.png"), pos=(500, 150),
+        play = Button(image=pygame.image.load("assets/Play Rect.png"), pos=(500, 180),
                       text_input="PLAY", font=font(55), base_color="#d7fcd4", hovering_color="White")
 
-        multi_player = Button(image=pygame.image.load("assets/Options Rect.png"), pos=(500, 275),
-                      text_input="MULTI-PLAYER", font=font(45), base_color="#d7fcd4", hovering_color="White")
+        #multi_player = Button(image=pygame.image.load("assets/Options Rect.png"), pos=(500, 275),
+                      #text_input="MULTI-PLAYER", font=font(45), base_color="#d7fcd4", hovering_color="White")
 
-        options = Button(image=pygame.image.load("assets/Options Rect.png"), pos=(500, 400),
+        options = Button(image=pygame.image.load("assets/Options Rect.png"), pos=(500, 325),
                          text_input="OPTIONS", font=font(55), base_color="#d7fcd4", hovering_color="White")
-        quit = Button(image=pygame.image.load("assets/Quit Rect.png"), pos=(500, 525),
+        quit = Button(image=pygame.image.load("assets/Quit Rect.png"), pos=(500, 470),
                       text_input="QUIT", font=font(55), base_color="#d7fcd4", hovering_color="White")
 
         screen.blit(text, rect)
 
-        for button in [play, options, quit,multi_player]:
+        for button in [play, options, quit]:
             button.changeColor(mouse)
             button.update(screen)
 
@@ -585,13 +595,6 @@ def main_menu():
                 if play.checkForInput(mouse):
                     pygame.display.set_caption("Game")
                     menu_play()
-                if multi_player.checkForInput(mouse):
-                    pygame.display.set_caption("Multi Player")
-                    game_client = GameClient(1234)
-                    game_client.connect("192.168.0.111",1234,"m")
-                    print(game_client.player_id)
-                    game_client.socket.setblocking(False)
-                    multi_player_game_loop(game_client)
                 if options.checkForInput(mouse):
                     pygame.display.set_caption("Options")
                     opt()
