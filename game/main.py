@@ -697,8 +697,8 @@ if __name__ == "__main__":
     # fighter_1.frameUpdate()
     # fighter_2.frameUpdate()
     # create obstacles
-    obstacle_1 = Obstacle(400, 300, 100, 300)
+    #obstacle_1 = Obstacle(400, 300, 100, 300)
     obstacle_2 = Obstacle(700, 200, 200, 50)
     obstacle_3 = Obstacle(100, 300, 100, 50)
-    obstacles = [obstacle_1, obstacle_2, obstacle_3]
+    obstacles = [obstacle_2, obstacle_3]
     main_menu()
