@@ -557,6 +557,14 @@ def menu_play():
 
 #character select menu
 def menu_char():
+    p1_color_wizard= "#d7fcd4"
+    p1_color_warrior= "#d7fcd4"
+    p1_color_nomad= "#d7fcd4"
+
+    p2_color_wizard= "#d7fcd4"
+    p2_color_warrior= "#d7fcd4"
+    p2_color_nomad= "#d7fcd4"
+
     while True:
         menu_scaled = pygame.transform.scale(menu_bg, (SCREEN_WIDTH, SCREEN_HEIGHT))
         screen.blit(menu_scaled, (0, 0))
@@ -565,19 +573,38 @@ def menu_char():
         text = font(35).render("CHARACTER SELECT", True, "#b68f40")
         rect = text.get_rect(center=(500, 50))
         screen.blit(text, rect)
-        play = Button(image=pygame.image.load("assets/menu/medium.png"), pos=(300, 525),
-                        text_input="PLAY", font=font(35), base_color="#d7fcd4", hovering_color="White")
-        wizard = Button(image=pygame.image.load("assets/menu/medium.png"), pos=(500, 275),
-                        text_input="wizard", font=font(35), base_color="#d7fcd4", hovering_color="White")
-        warrior = Button(image=pygame.image.load("assets/menu/medium.png"), pos=(500, 400),
-                        text_input="warrior", font=font(35), base_color="#d7fcd4", hovering_color="White")
-        nomad = Button(image=pygame.image.load("assets/menu/medium.png"), pos=(500, 150),
-                        text_input="nomad", font=font(35), base_color="#d7fcd4", hovering_color="White")
 
-        back = Button(image=pygame.image.load("assets/menu/medium.png"), pos=(700, 525),
-                      text_input="BACK", font=font(35), base_color="#d7fcd4", hovering_color="White")
+        #player 1
+        text = font(15).render("PLAYER 1", True, "#b68f40")
+        rect = text.get_rect(center=(300, 100))
+        screen.blit(text, rect)
 
-        for button in [back, play, wizard, warrior, nomad]:
+        #player 2
+        text = font(15).render("PLAYER 2", True, "#b68f40")
+        rect = text.get_rect(center=(700, 100))
+        screen.blit(text, rect)
+
+        play = Button(image=pygame.image.load("assets/menu/medium.png"), pos=(700, 525),
+                        text_input="PLAY", font=font(35), base_color="Black", hovering_color="Yellow")
+        #character select buttons for player 1
+        p1_wizard = Button(image=None, pos=(300, 275),
+                        text_input="wizard", font=font(25), base_color=p1_color_wizard, hovering_color="Yellow")
+        p1_warrior = Button(image=None, pos=(300, 400),
+                        text_input="warrior", font=font(25), base_color=p1_color_warrior, hovering_color="Yellow")
+        p1_nomad = Button(image=None, pos=(300, 150),
+                        text_input="nomad", font=font(25), base_color=p1_color_nomad, hovering_color="Yellow")
+        #character select buttons for player 2
+        p2_wizard = Button(image=None, pos=(700, 275),
+                        text_input="wizard", font=font(25), base_color=p2_color_wizard, hovering_color="Blue")
+        p2_warrior = Button(image=None, pos=(700, 400),
+                        text_input="warrior", font=font(25), base_color=p2_color_warrior, hovering_color="Blue")
+        p2_nomad = Button(image=None, pos=(700, 150),
+                        text_input="nomad", font=font(25), base_color=p2_color_nomad, hovering_color="Blue")
+
+        back = Button(image=pygame.image.load("assets/menu/medium.png"), pos=(300, 525),
+                      text_input="BACK", font=font(35), base_color="Black", hovering_color="Yellow")
+
+        for button in [back, play, p1_wizard, p1_warrior, p1_nomad, p2_wizard, p2_warrior, p2_nomad]:
             button.changeColor(mouse)
             button.update(screen)
 
@@ -597,12 +624,37 @@ def menu_char():
                 if back.checkForInput(mouse):
                     pygame.display.set_caption("Main Menu")
                     main_menu()
-                if wizard.checkForInput(mouse):
+                if p1_wizard.checkForInput(mouse):
+                    p1_color_wizard = "Yellow"
+                    p1_color_warrior = "#d7fcd4"
+                    p1_color_nomad = "#d7fcd4"
                     fighter_1.change("wizard")
-                if warrior.checkForInput(mouse):
+                if p1_warrior.checkForInput(mouse):
                     fighter_1.change("warrior")
-                if nomad.checkForInput(mouse):
+                    p1_color_warrior = "Yellow"
+                    p1_color_wizard = "#d7fcd4"
+                    p1_color_nomad = "#d7fcd4"
+                if p1_nomad.checkForInput(mouse):
                     fighter_1.change("nomad")
+                    p1_color_nomad = "Yellow"
+                    p1_color_wizard = "#d7fcd4"
+                    p1_color_warrior = "#d7fcd4"
+                if p2_wizard.checkForInput(mouse):
+                    fighter_2.change("wizard")
+                    p2_color_wizard = "Blue"
+                    p2_color_warrior = "#d7fcd4"
+                    p2_color_nomad = "#d7fcd4"
+                if p2_warrior.checkForInput(mouse):
+                    fighter_2.change("warrior")
+                    p2_color_warrior = "Blue"
+                    p2_color_nomad = "#d7fcd4"
+                    p2_color_wizard = "#d7fcd4"
+                if p2_nomad.checkForInput(mouse):
+                    fighter_2.change("nomad")
+                    p2_color_nomad = "Blue"
+                    p2_color_wizard = "#d7fcd4"
+                    p2_color_warrior = "#d7fcd4"
+                
                     
         pygame.display.update()
 
