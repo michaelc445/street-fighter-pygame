@@ -3,21 +3,14 @@ from projectile import Projectile
 #from proto import game_pb2 as pb
 
 class Fighter():
-    wizardData = ["assets/wizard pack/", 231, 190, 7]
+    #wizardData = ["assets/wizard/", 231, 190, 7]
 
-    def __init__(self, player, x, y, width, height, flip, punch_sound, projectile_sound, hit_sound, data, spriteSheet,
-                 animationSteps):
-        self.sizeX = data[0]
-        self.sizeY = data[1]
-        self.scale = data[2]
-        self.offset = data[3]
-        self.animationSteps = animationSteps
-        self.animationList = self.loadImages(spriteSheet, animationSteps)
+    def __init__(self, player, x, y, width, height, flip, punch_sound, projectile_sound, hit_sound, state):
         # self.animationList = self.loadImages(spriteSheet, 5)
         self.updateFrame = pygame.time.get_ticks()
         self.action = 0  # 0=idle, 1=attack1, 2=attack2, 3=dying, 4=running, 5=jumping, 6=falling, 7=hit
         self.frame = 0
-        self.img = self.animationList[self.action][self.frame]
+        self.state = state
         self.player = player
         self.flip = flip
         self.rect = pygame.Rect((x, y, width, height))
@@ -41,6 +34,44 @@ class Fighter():
                                  "attack2": pygame.K_t, "block": pygame.K_s}
         self.player2_controls = {"left": pygame.K_LEFT, "right": pygame.K_RIGHT, "jump": pygame.K_UP,
                                  "attack1": pygame.K_n, "attack2": pygame.K_m, "block": pygame.K_DOWN}
+
+
+        #load wizard sheet
+        self.wizardSheet = pygame.image.load("assets/wizard/wizard_spritesheet.png")
+        #load nomad sheet
+        self.nomadSheet = pygame.image.load("assets/nomad/nomad_spritesheet.png")
+        #load warrior sheet
+        self.warriorSheet = pygame.image.load("assets/warrior/warrior_spritesheet.png")
+
+
+        if self.state == 0:
+            self.spriteSheet = self.wizardSheet
+            self.sizeX = self.wizardSheetX = 231
+            self.sizeY = self.wizardSheetY = 190
+            self.scale = self.wizardScale = 1.2
+            self.offset = [100, 55]
+            self.animationSteps = [5, 7, 7, 6, 7, 1, 1, 3]
+            self.animationList = self.loadImages(self.wizardSheet, self.animationSteps)
+            self.img = self.animationList[self.action][self.frame]
+        elif self.state == 1:
+            self.spriteSheet = self.nomadSheet
+            self.sizeX = self.nomadSheetX = 126
+            self.sizeY = self.nomadSheetY = 126
+            self.scale = self.nomadScale = 2.2
+            self.offset = [55, 35]
+            self.animationSteps = [10, 7, 6, 11, 8, 3, 3, 3]
+            self.animationList = self.loadImages(self.nomadSheet, self.animationSteps)
+            self.img = self.animationList[self.action][self.frame]
+        elif self.state == 2:
+            self.spriteSheet = self.warriorSheet
+            self.sizeX = self.warriorSheetX = 135
+            self.sizeY = self.warriorSheetY = 135
+            self.scale = self.warriorScale = 2.4
+            self.offset = [55, 45]
+            self.animationSteps = [10, 4, 4, 9, 6, 2, 2, 3]
+            self.animationList = self.loadImages(self.warriorSheet, self.animationSteps)
+            self.img = self.animationList[self.action][self.frame]
+
 
     def loadImages(self, spriteSheet, animationSteps):
         # extract images from sprite sheet
@@ -95,7 +126,7 @@ class Fighter():
                     self.projectiles.remove(projectile)
 
     def frameUpdate(self):
-        animationTime = 150
+        animationTime = 100
         if self.running:
             animationTime = 25
             self.actionUpdate(4)
@@ -111,7 +142,7 @@ class Fighter():
                 self.actionUpdate(2)
         if not self.running and not self.jump and not self.attacking:
             self.actionUpdate(0)
-        print(self.frame)
+        #print(self.frame)
 
         # if self.frame >= self.animationSteps[self.action]:
         #     self.frame = 0
@@ -161,7 +192,7 @@ class Fighter():
 
         #draw player
         img = pygame.transform.flip(self.img, self.flip, False)
-        surface.blit(img, (self.rect.x - self.offset[0], self.rect.y - self.offset[1]))
+        surface.blit(img, (self.rect.x - self.offset[0] * self.scale, self.rect.y - self.offset[1] * self.scale))
 
     def loadSprites(self):
         pass
@@ -277,6 +308,34 @@ class Fighter():
             self.dy = screen_height - 100 - self.rect.bottom
             self.jump = False
 
+    def change(self, state):
+        if state == "wizard":
+            self.spriteSheet = self.wizardSheet
+            self.sizeX = self.wizardSheetX = 231
+            self.sizeY = self.wizardSheetY = 190
+            self.scale = self.wizardScale = 1.2
+            self.offset = [100, 55]
+            self.animationSteps = [5, 7, 7, 6, 7, 1, 1, 3]
+            self.animationList = self.loadImages(self.wizardSheet, self.animationSteps)
+            self.img = self.animationList[self.action][self.frame]
+        elif state == "nomad":
+            self.spriteSheet = self.nomadSheet
+            self.sizeX = self.nomadSheetX = 126
+            self.sizeY = self.nomadSheetY = 126
+            self.scale = self.nomadScale = 2.2
+            self.offset = [55, 35]
+            self.animationSteps = [10, 7, 6, 11, 8, 3, 3, 3]
+            self.animationList = self.loadImages(self.nomadSheet, self.animationSteps)
+            self.img = self.animationList[self.action][self.frame]
+        elif state == "warrior":
+            self.spriteSheet = self.warriorSheet
+            self.sizeX = self.warriorSheetX = 135
+            self.sizeY = self.warriorSheetY = 135
+            self.scale = self.warriorScale = 2.4
+            self.offset = [55, 45]
+            self.animationSteps = [10, 4, 4, 9, 6, 2, 2, 3]
+            self.animationList = self.loadImages(self.warriorSheet, self.animationSteps)
+            self.img = self.animationList[self.action][self.frame]
 
 class OnlineFighter(Fighter):
 

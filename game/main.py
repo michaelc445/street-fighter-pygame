@@ -538,7 +538,7 @@ def menu_play():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if single_player.checkForInput(mouse):
                     pygame.display.set_caption("Single Player")
-                    game_loop()
+                    menu_char()
                 if local.checkForInput(mouse):
                     pygame.display.set_caption("Local Multiplayer")
                     game_loop()
@@ -555,7 +555,56 @@ def menu_play():
 
         pygame.display.update()
 
+#character select menu
+def menu_char():
+    while True:
+        menu_scaled = pygame.transform.scale(menu_bg, (SCREEN_WIDTH, SCREEN_HEIGHT))
+        screen.blit(menu_scaled, (0, 0))
+        mouse = pygame.mouse.get_pos()
 
+        text = font(35).render("CHARACTER SELECT", True, "#b68f40")
+        rect = text.get_rect(center=(500, 50))
+        screen.blit(text, rect)
+        play = Button(image=pygame.image.load("assets/menu/medium.png"), pos=(300, 525),
+                        text_input="PLAY", font=font(35), base_color="#d7fcd4", hovering_color="White")
+        wizard = Button(image=pygame.image.load("assets/menu/medium.png"), pos=(500, 275),
+                        text_input="wizard", font=font(35), base_color="#d7fcd4", hovering_color="White")
+        warrior = Button(image=pygame.image.load("assets/menu/medium.png"), pos=(500, 400),
+                        text_input="warrior", font=font(35), base_color="#d7fcd4", hovering_color="White")
+        nomad = Button(image=pygame.image.load("assets/menu/medium.png"), pos=(500, 150),
+                        text_input="nomad", font=font(35), base_color="#d7fcd4", hovering_color="White")
+
+        back = Button(image=pygame.image.load("assets/menu/medium.png"), pos=(700, 525),
+                      text_input="BACK", font=font(35), base_color="#d7fcd4", hovering_color="White")
+
+        for button in [back, play, wizard, warrior, nomad]:
+            button.changeColor(mouse)
+            button.update(screen)
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    pygame.quit()
+                    sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                #make it so that when you click play, it goes to the game loop
+                if play.checkForInput(mouse):
+                    pygame.display.set_caption("Game")
+                    game_loop()
+                if back.checkForInput(mouse):
+                    pygame.display.set_caption("Main Menu")
+                    main_menu()
+                if wizard.checkForInput(mouse):
+                    fighter_1.change("wizard")
+                if warrior.checkForInput(mouse):
+                    fighter_1.change("warrior")
+                if nomad.checkForInput(mouse):
+                    fighter_1.change("nomad")
+                    
+        pygame.display.update()
 
 # main menu
 def main_menu():
@@ -609,7 +658,7 @@ def main_menu():
 if __name__ == "__main__":
     mixer.init
     pygame.init()
-
+    fighter_1 = None
     # create game window
     SCREEN_WIDTH = 1000
     SCREEN_HEIGHT = 600
@@ -641,24 +690,8 @@ if __name__ == "__main__":
     projectile_fx.set_volume(0.5)
     hit_fx.set_volume(0.5)
 
-    #spritesheets
-    wizardSheet = pygame.image.load("assets/wizard/wizard_spritesheet.png").convert_alpha()
-    #wizardIdle = pygame.image.load("assets/wizard pack/Idle.png").convert_alpha()
-    #wizardSheet = [wizardIdle]
-    wizardAnimationSteps = [5, 7, 7, 6, 7, 1, 1, 3]
-    #wizardAnimationSteps = [5]
-    # define fighter variables
-    wizardSheetX = 231
-    wizardSheetY = 190
-    wizardScale = 1.2
-    wizardOffset = [115, 70]
-    wizardData = [wizardSheetX,wizardSheetY,wizardScale, wizardOffset]
-
-
-
-    # create fighters
-    fighter_1 = Fighter(1, 200, 310, 40, 100, False, punch_fx, projectile_fx, hit_fx, wizardData, wizardSheet, wizardAnimationSteps)
-    fighter_2 = Fighter(2, 700, 310, 40, 100, True, punch_fx, projectile_fx, hit_fx, wizardData,wizardSheet, wizardAnimationSteps)
+    fighter_1 = Fighter(1, 200, 310, 40, 100, False, punch_fx, projectile_fx, hit_fx, 0)
+    fighter_2 = Fighter(2, 700, 310, 40, 100, True, punch_fx, projectile_fx, hit_fx, 2)
 
     # animate fighters
     # fighter_1.frameUpdate()
