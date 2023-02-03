@@ -9,12 +9,13 @@ class GameClient(object):
         # find local ip, get host by name returns "127.0.0.1" not good for testing on one network
         self.server_ip = None
         self.player_id = None
-        self.server_port= None
+        self.server_port = None
         self.local_port = local_port
         self.BUFFER_SIZE = 1024
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.socket.connect(("8.8.8.8", 80))
         self.local_ip = self.socket.getsockname()[0]
+        self.messages= []
         self.socket.close()
 
     def host_game(self):
@@ -36,12 +37,12 @@ class GameClient(object):
         if self.enemy_address is None:
             raise ConnectionAbortedError
 
-    def join_game(self, ip_address, port,name):
+    def join_game(self, ip_address, port, name):
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.server_ip = ip_address
         self.server_port = port
         join_req = pb.JoinLobbyRequest(name=name)
-        self.socket.sendto(join_req.SerializeToString(),(ip_address,port))
+        self.socket.sendto(join_req.SerializeToString(), (ip_address, port))
 
         join_resp = pb.JoinLobbyResponse()
         while True:
@@ -54,7 +55,6 @@ class GameClient(object):
 
             self.player_id = join_resp.playerId
             if join_resp.start:
-
                 break
 
     def character_select(self):
@@ -69,17 +69,20 @@ class GameClient(object):
             if char_resp.start:
                 break
 
-    def connect(self,ip,port,name):
-        self.join_game(ip,port,name)
+    def connect(self, ip, port, name):
+        self.join_game(ip, port, name)
         self.character_select()
 
-
-
-
-    def send_update(self, update_message: pb.Update):
+    async def send_update(self, update_message: pb.Update):
         self.socket.sendto(update_message.SerializeToString(), (self.server_ip, self.server_port))
 
-    def get_updates(self) -> list[pb.Update]:
+    async def get_updates(self, local_player, enemy_character, SCREEN_WIDTH, SCREEN_HEIGHT, screen, obstacles):
+        for message in self.get_update():
+            local_player.health = message.enemyHealth
+            enemy_character.move_enemy(SCREEN_WIDTH, SCREEN_HEIGHT, screen, local_player, obstacles, message.keys,
+                                       message.x, message.y)
+
+    async def get_update(self) -> list[pb.Update]:
         result: list[pb.Update] = []
         data = 1
 
@@ -93,6 +96,7 @@ class GameClient(object):
                 result.append(message)
             except:
                 break
+        self.messages = result
         return result
 
 

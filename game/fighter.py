@@ -243,8 +243,8 @@ class OnlineFighter(Fighter):
                 projectile.draw(surface)
                 if not projectile.exists:
                     self.projectiles.remove(projectile)
-        message = self._create_update_message(keys, target)
-        self.game_client.send_update(message)
+        return self._create_update_message(keys, target)
+
 
     def move_enemy(self, screen_width, screen_height, surface, target, obstacles, key,x,y):
         speed = 10
@@ -268,16 +268,18 @@ class OnlineFighter(Fighter):
         if self.projectile_cooldown > 0:
             self.projectile_cooldown -= 1
 
-        self.feet(surface, obstacles)
+
         # update projectiles
+
+
+    def draw_projectile(self,target,screen_width,surface):
+
         if self.projectiles:
             for projectile in self.projectiles:
                 projectile.move(target, screen_width)
                 projectile.draw(surface)
                 if not projectile.exists:
                     self.projectiles.remove(projectile)
-
-
     def keybinds(self, player_controls, surface, target, speed, key):
         # get keypresses
         if not self.blocking:

@@ -1,4 +1,6 @@
-import pygame
+import asyncio
+
+import pygame, asyncio
 from pygame import mixer
 from fighter import Fighter,OnlineFighter
 from obstacle import Obstacle
@@ -104,6 +106,15 @@ def game_loop():
         pygame.display.update()
     pygame.quit()
     sys.exit()
+async def update_enemy(game_client,local_player,enemy_character):
+    for message in game_client.get_updates():
+        local_player.health = message.enemyHealth
+        enemy_character.move_enemy(SCREEN_WIDTH, SCREEN_HEIGHT, screen, local_player, obstacles,
+
+                                   message.keys, message.x, message.y)
+def run_once(loop):
+    loop.call_soon(loop.stop)
+    loop.run_forever()
 
 def multi_player_game_loop(game_client):
     gameKeys = [pygame.K_a, pygame.K_d, pygame.K_w, pygame.K_r, pygame.K_t]
@@ -132,7 +143,7 @@ def multi_player_game_loop(game_client):
     run = True
     clock = pygame.time.Clock()
     FPS = 60
-
+    loop = asyncio.get_event_loop()
     while run:
 
         # cap frame rate
@@ -147,12 +158,16 @@ def multi_player_game_loop(game_client):
         draw_health_bar(fighters[1].health, 580, 20)
 
         # move fighters
-        local_player.move(SCREEN_WIDTH, SCREEN_HEIGHT, screen, enemy_character, obstacles, game_client)
-        for message in game_client.get_updates():
-            local_player.health = message.enemyHealth
-            enemy_character.move_enemy(SCREEN_WIDTH, SCREEN_HEIGHT, screen, local_player, obstacles,
-                                        message.keys,message.x,message.y)
+        message = local_player.move(SCREEN_WIDTH, SCREEN_HEIGHT, screen, enemy_character, obstacles, game_client)
+        loop.create_task(local_player.game_client.send_update(message))
+        loop.create_task(game_client.get_update())
 
+        for message in game_client.messages:
+            local_player.health = message.enemyHealth
+            enemy_character.move_enemy(SCREEN_WIDTH,SCREEN_HEIGHT,screen,local_player,obstacles,message.keys,message.x,message.y)
+            enemy_character.feet(screen, obstacles)
+
+        enemy_character.draw_projectile(local_player,screen.get_width(),screen)
         # draw fighters
         local_player.draw(screen)
         enemy_character.draw(screen)
@@ -171,7 +186,9 @@ def multi_player_game_loop(game_client):
         # if fighter 1 or 2 punches, play the punch.wav sound effect
 
         # update display
+
         pygame.display.update()
+        run_once(loop)
     pygame.quit()
     sys.exit()
 
