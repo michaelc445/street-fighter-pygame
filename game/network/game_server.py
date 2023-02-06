@@ -1,10 +1,11 @@
 import socket
 from proto import game_pb2 as pb
+from threading import Thread
 
 
 class Player(object):
 
-    def __init__(self, name, ip, port,id):
+    def __init__(self, name, ip, port, id):
         self.name = name
         self.ip = ip
         self.port = port
@@ -43,7 +44,7 @@ class GameServer(object):
                     self.socket.sendto(resp.SerializeToString(), address)
                     raise ValueError
 
-                self.connections.append(Player(join_req.name, address[0], address[1],len(self.connections)))
+                self.connections.append(Player(join_req.name, address[0], address[1], len(self.connections)))
 
             except:
                 continue
@@ -112,6 +113,71 @@ class GameServer(object):
         self.socket.close()
 
 
+# server listens for game requests and then creates a server on an unused port for the game
+class MatchServer(object):
+
+    def __init__(self, local_port):
+        self.BUFFER_SIZE = 1024
+        self.port = local_port
+        self.free_ports = [i for i in range(1235, 1245)]
+        self.threads = []
+        self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        self.socket.bind((self._get_local_address(), self.port))
+        self.lobby_codes = {}
+
+    def _get_local_address(self):
+        sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        sock.connect(("8.8.8.8", 80))
+        local_ip = sock.getsockname()[0]
+        sock.close()
+        return local_ip
+
+    def start(self):
+
+        data, address, join_req = None, None, None
+        while data is None:
+            try:
+                self.free_threads()
+                data, address = self.socket.recvfrom(self.BUFFER_SIZE)
+                lobby_req = pb.CreateLobbyRequest()
+                lobby_req.ParseFromString(data)
+                game_port = self.free_ports.pop(0)
+                response = pb.CreateLobbyResponse(ok=True, port=game_port, start=True)
+                print("lobby code: "+lobby_req.lobbyCode)
+                if lobby_req.lobbyCode not in self.lobby_codes:
+                    self.lobby_codes[lobby_req.lobbyCode] = address
+                    response.start = False
+                    self.socket.sendto(response.SerializeToString(), address)
+                    continue
+
+                self.socket.sendto(response.SerializeToString(), address)
+                self.socket.sendto(response.SerializeToString(), self.lobby_codes[lobby_req.lobbyCode])
+                del self.lobby_codes[lobby_req.lobbyCode]
+
+                game_thread = GameThread(game_port, self.free_ports)
+                self.threads.append(game_thread)
+                game_thread.start()
+
+            except:
+                continue
+
+    def free_threads(self):
+        for i in range(len(self.threads)-1,-1,-1):
+            if not self.threads[i].is_alive():
+                self.threads.pop(i)
+
+class GameThread(Thread):
+    def __init__(self, local_port, free_ports):
+        super().__init__()
+        self.local_port = local_port
+        # shared list for threads to append to when finished
+        self.ports = free_ports
+
+    def run(self):
+        GameServer(self.local_port).create_lobby()
+        self.ports.append(self.local_port)
+
+
 if __name__ == "__main__":
-    game = GameServer(1234)
-    game.create_lobby()
+    MatchServer(1234).start()
+    ##GameServer(1234).create_lobby()
