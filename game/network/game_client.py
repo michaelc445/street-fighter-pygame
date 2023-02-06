@@ -1,6 +1,6 @@
 import socket
 import sys
-
+import time
 from proto import game_pb2 as pb
 
 
@@ -56,7 +56,7 @@ class GameClient(object):
 
     def join_game(self, ip_address, port, name):
         self.server_ip = ip_address
-        self.server_port = port
+        self.game_port = port
         join_req = pb.JoinLobbyRequest(name=name)
         self.socket.sendto(join_req.SerializeToString(), (ip_address, port))
 
@@ -76,7 +76,7 @@ class GameClient(object):
     def character_select(self):
         char_req = pb.CharacterSelectRequest(id=self.player_id, character=0, lockedIn=True)
 
-        self.socket.sendto(char_req.SerializeToString(), (self.server_ip, self.server_port))
+        self.socket.sendto(char_req.SerializeToString(), (self.server_ip, self.game_port))
         char_resp = pb.CharacterSelectResponse()
         while True:
             data, address = self.socket.recvfrom(self.BUFFER_SIZE)
@@ -87,11 +87,16 @@ class GameClient(object):
 
     def connect(self, ip, port, name):
         self.join_lobby(ip,port,"")
+        print("koin lobby done")
+        print(self.game_port)
+        time.sleep(2)
         self.join_game(ip, self.game_port, name)
+        print("join game done")
         self.character_select()
+        print("char select done")
 
     async def send_update(self, update_message: pb.Update):
-        self.socket.sendto(update_message.SerializeToString(), (self.server_ip, self.server_port))
+        self.socket.sendto(update_message.SerializeToString(), (self.server_ip, self.game_port))
 
     async def get_updates(self, local_player, enemy_character, SCREEN_WIDTH, SCREEN_HEIGHT, screen, obstacles):
         for message in self.get_update():
