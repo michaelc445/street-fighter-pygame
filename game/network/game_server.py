@@ -134,8 +134,8 @@ class MatchServer(object):
 
     def start(self):
 
-        data, address, join_req = None, None, None
-        while data is None:
+
+        while True:
             try:
                 self.free_threads()
                 data, address = self.socket.recvfrom(self.BUFFER_SIZE)
