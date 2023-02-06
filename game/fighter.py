@@ -210,6 +210,7 @@ class OnlineFighter(Fighter):
         message.x = self.rect.x
         message.y = self.rect.y
         message.id = self.game_client.player_id
+        message.quit=False
         return message
 
     def move(self, screen_width, screen_height, surface, target, obstacles, game_client):
