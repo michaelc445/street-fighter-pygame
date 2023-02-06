@@ -7,19 +7,18 @@ from proto import game_pb2 as pb
 class GameClient(object):
     def __init__(self, local_port):
         # find local ip, get host by name returns "127.0.0.1" not good for testing on one network
+        self.game_port = None
+        self.mm_port = None
         self.server_ip = None
         self.player_id = None
         self.server_port = None
         self.local_port = local_port
         self.BUFFER_SIZE = 1024
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        self.socket.connect(("8.8.8.8", 80))
-        self.local_ip = self.socket.getsockname()[0]
+
         self.messages= []
-        self.socket.close()
 
     def host_game(self):
-        self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.socket.bind((self.local_ip, self.local_port))
         self.socket.setblocking(False)
         # check for requests to join
@@ -36,9 +35,26 @@ class GameClient(object):
         print(self.enemy_address)
         if self.enemy_address is None:
             raise ConnectionAbortedError
+    def join_lobby(self,ip_address,port,lobby_code):
+        self.server_ip = ip_address
+        self.mm_port = port
+        lobby_req = pb.CreateLobbyRequest(lobbyCode=lobby_code)
+        self.socket.sendto(lobby_req.SerializeToString(), (ip_address, port))
+
+        lobby_resp = pb.CreateLobbyResponse()
+        while True:
+            data, address = self.socket.recvfrom(self.BUFFER_SIZE)
+            lobby_resp.ParseFromString(data)
+            if not lobby_resp.ok:
+                print("failed to join lobby")
+                self.socket.close()
+                sys.exit(1)
+
+            self.game_port = lobby_resp.port
+            if lobby_resp.start:
+                break
 
     def join_game(self, ip_address, port, name):
-        self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.server_ip = ip_address
         self.server_port = port
         join_req = pb.JoinLobbyRequest(name=name)
@@ -70,7 +86,8 @@ class GameClient(object):
                 break
 
     def connect(self, ip, port, name):
-        self.join_game(ip, port, name)
+        self.join_lobby(ip,port,"")
+        self.join_game(ip, self.game_port, name)
         self.character_select()
 
     async def send_update(self, update_message: pb.Update):

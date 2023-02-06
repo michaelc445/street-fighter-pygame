@@ -26,6 +26,15 @@ message JoinLobbyRequest{
   required string name =1;
 
 }
+message CreateLobbyRequest{
+  required string lobbyCode = 1;
+}
+message CreateLobbyResponse{
+  required bool ok = 1;
+  required int32 port = 2;
+  required bool start = 3;
+
+}
 message JoinLobbyResponse{
   //success
   required bool ok = 1;
