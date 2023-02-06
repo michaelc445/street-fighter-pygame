@@ -1,6 +1,7 @@
 import socket
 from proto import game_pb2 as pb
 from threading import Thread
+from datetime import datetime
 
 
 class Player(object):
@@ -94,22 +95,37 @@ class GameServer(object):
             p = self.connections[i]
             self.socket.sendto(resp.SerializeToString(), (p.ip, p.port))
         # start listening for game updates
+
         self.start_game()
+    def player_timeout(self, times):
+        check = datetime.now()
+        for t in times:
+            diff = check - t
+            if diff.total_seconds() > 10:
+                return True
+
+        return False
 
     def start_game(self):
+        t = [datetime.now(),datetime.now()]
 
         while True:
             try:
+                if self.player_timeout(t):
+                    break
                 data, address = self.socket.recvfrom(self.BUFFER_SIZE)
                 game_update = pb.Update()
                 game_update.ParseFromString(data)
+
+                t[int(game_update.id)] = datetime.now()
                 enemy = (game_update.id + 1) % 2
                 p = self.connections[enemy]
                 self.socket.sendto(game_update.SerializeToString(), (p.ip, p.port))
-
+                if game_update.quit:
+                    break
             except:
                 continue
-
+        print("closing socket")
         self.socket.close()
 
 
@@ -138,18 +154,21 @@ class MatchServer(object):
         while True:
             try:
                 self.free_threads()
+
                 data, address = self.socket.recvfrom(self.BUFFER_SIZE)
                 lobby_req = pb.CreateLobbyRequest()
                 lobby_req.ParseFromString(data)
-                game_port = self.free_ports.pop(0)
-                response = pb.CreateLobbyResponse(ok=True, port=game_port, start=True)
+                print(self.free_ports)
+                print(self.threads)
+                response = pb.CreateLobbyResponse(ok=True, port=0, start=True)
                 print("lobby code: "+lobby_req.lobbyCode)
                 if lobby_req.lobbyCode not in self.lobby_codes:
                     self.lobby_codes[lobby_req.lobbyCode] = address
                     response.start = False
                     self.socket.sendto(response.SerializeToString(), address)
                     continue
-
+                game_port = self.free_ports.pop(0)
+                response.port = game_port
                 self.socket.sendto(response.SerializeToString(), address)
                 self.socket.sendto(response.SerializeToString(), self.lobby_codes[lobby_req.lobbyCode])
                 del self.lobby_codes[lobby_req.lobbyCode]

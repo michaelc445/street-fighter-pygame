@@ -84,7 +84,19 @@ class GameClient(object):
 
             if char_resp.start:
                 break
-
+    def quit_game(self):
+        message = pb.Update(health=0,
+                            enemyMove=0,
+                            moving=False,
+                            enemyHealth=0,
+                            enemyAttack=0,
+                            x=0,
+                            y=0,
+                            keys={},
+                            id=self.player_id,
+                            quit=True
+                            )
+        self.socket.sendto(message.SerializeToString(),(self.server_ip,self.game_port))
     def connect(self, ip, port, name):
         self.join_lobby(ip,port,"")
         print("koin lobby done")
