@@ -108,7 +108,6 @@ class GameServer(object):
 
     def start_game(self):
         t = [datetime.now(),datetime.now()]
-
         while True:
             try:
                 if self.player_timeout(t):
@@ -116,7 +115,6 @@ class GameServer(object):
                 data, address = self.socket.recvfrom(self.BUFFER_SIZE)
                 game_update = pb.Update()
                 game_update.ParseFromString(data)
-
                 t[int(game_update.id)] = datetime.now()
                 enemy = (game_update.id + 1) % 2
                 p = self.connections[enemy]
@@ -125,7 +123,7 @@ class GameServer(object):
                     break
             except:
                 continue
-        print("closing socket")
+
         self.socket.close()
 
 
@@ -158,10 +156,7 @@ class MatchServer(object):
                 data, address = self.socket.recvfrom(self.BUFFER_SIZE)
                 lobby_req = pb.CreateLobbyRequest()
                 lobby_req.ParseFromString(data)
-                print(self.free_ports)
-                print(self.threads)
                 response = pb.CreateLobbyResponse(ok=True, port=0, start=True)
-                print("lobby code: "+lobby_req.lobbyCode)
                 if lobby_req.lobbyCode not in self.lobby_codes:
                     self.lobby_codes[lobby_req.lobbyCode] = address
                     response.start = False
@@ -199,4 +194,4 @@ class GameThread(Thread):
 
 if __name__ == "__main__":
     MatchServer(1234).start()
-    ##GameServer(1234).create_lobby()
+

@@ -163,6 +163,8 @@ def multi_player_game_loop(game_client):
         loop.create_task(game_client.get_update())
 
         for message in game_client.messages:
+            if message.quit:
+                run = False
             local_player.health = message.enemyHealth
             enemy_character.move_enemy(SCREEN_WIDTH,SCREEN_HEIGHT,screen,local_player,obstacles,message.keys,message.x,message.y)
             enemy_character.feet(screen, obstacles)
