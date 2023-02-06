@@ -732,8 +732,8 @@ if __name__ == "__main__":
     menu_bg = pygame.image.load("assets/menu/main_menu_bg.png").convert_alpha()
 
     # use mixer to load music and sounds
-    mixer.music.load("assets/audio/main.mp3")
-    mixer.music.play(-1)
+    #mixer.music.load("assets/audio/main.mp3")
+    #mixer.music.play(-1)
     mixer.music.set_volume(0)
     punch_fx = mixer.Sound("assets/audio/punch.wav")
     projectile_fx = mixer.Sound("assets/audio/proj.wav")

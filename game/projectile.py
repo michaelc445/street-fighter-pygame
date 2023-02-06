@@ -21,7 +21,7 @@ class Projectile():
         self.rect.x += self.dx
         if self.rect.colliderect(target.rect):
             if not target.blocking:
-                target.take_hit(self.damage, self.owner)
+                target.take_hit(self.damage, self.owner.flip)
             self.exists = False
 
 

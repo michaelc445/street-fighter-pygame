@@ -190,7 +190,7 @@ class Fighter():
                 self.attack_cooldown = 20
 
                 if attacking_rect.colliderect(target.rect) and not target.blocking:
-                    target.take_hit(damage, self)
+                    target.take_hit(damage, self.flip)
                     #target.hit = True
 
                 pygame.draw.rect(surface, (0, 255, 0), attacking_rect)
@@ -215,12 +215,12 @@ class Fighter():
     def loadSprites(self):
         pass
 
-    def take_hit(self, damage, target):
+    def take_hit(self, damage, direction):
         self.hit = True
         self.hit_sound.play()
         self.health -= damage
         self.color = (255, 255, 255)
-        self.vel_x += (damage - 2 * damage * target.flip)
+        self.vel_x += (damage - 2 * damage * direction)
         self.vel_y -= damage
 
     def keybinds(self, player_controls, surface, target, speed):
@@ -279,8 +279,10 @@ class Fighter():
 
     def grav(self, gravity):
         self.vel_y += gravity
-        if self.vel_x != 0:
-            self.vel_x += (0.5 - (1 * self.flip))
+        if self.vel_x > 0:
+            self.vel_x -= 0.5
+        if self.vel_x < 0:
+            self.vel_x += 0.5
         self.dy += self.vel_y
         self.dx += self.vel_x
 
