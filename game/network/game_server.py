@@ -97,6 +97,7 @@ class GameServer(object):
         # start listening for game updates
 
         self.start_game()
+
     def player_timeout(self, times):
         check = datetime.now()
         for t in times:
@@ -107,7 +108,7 @@ class GameServer(object):
         return False
 
     def start_game(self):
-        t = [datetime.now(),datetime.now()]
+        t = [datetime.now(), datetime.now()]
         while True:
             try:
                 if self.player_timeout(t):
@@ -133,16 +134,16 @@ class MatchServer(object):
     def __init__(self, local_port):
         self.BUFFER_SIZE = 1024
         self.port = local_port
-        self.port_mappings = {16559: 1235,
-                              16670: 1236,
-                              16405: 1237,
-                              16958: 1238,
-                              16961: 1239,
-                              17071: 1240,
-                              16857: 1241,
-                              17241: 1242,
-                              16962: 1243,
-                              16417: 1244
+        self.port_mappings = {1235: 16559,
+                              1236: 16670,
+                              1237: 16405,
+                              1238: 16958,
+                              1239: 16961,
+                              1240: 17071,
+                              1241: 16857,
+                              1242: 17241,
+                              1243: 16962,
+                              1244: 16417
                               }
         self.free_ports = [i for i in range(1235, 1245)]
         self.threads = []
@@ -159,7 +160,6 @@ class MatchServer(object):
 
     def start(self):
 
-
         while True:
             try:
                 self.free_threads()
@@ -174,6 +174,7 @@ class MatchServer(object):
                     self.socket.sendto(response.SerializeToString(), address)
                     continue
                 game_port = self.free_ports.pop(0)
+                print(game_port)
                 response.port = self.port_mappings[game_port]
                 self.socket.sendto(response.SerializeToString(), address)
                 self.socket.sendto(response.SerializeToString(), self.lobby_codes[lobby_req.lobbyCode])
@@ -187,9 +188,10 @@ class MatchServer(object):
                 continue
 
     def free_threads(self):
-        for i in range(len(self.threads)-1,-1,-1):
+        for i in range(len(self.threads) - 1, -1, -1):
             if not self.threads[i].is_alive():
                 self.threads.pop(i)
+
 
 class GameThread(Thread):
     def __init__(self, local_port, free_ports):
@@ -205,4 +207,3 @@ class GameThread(Thread):
 
 if __name__ == "__main__":
     MatchServer(1234).start()
-
