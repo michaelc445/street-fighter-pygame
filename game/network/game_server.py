@@ -133,7 +133,18 @@ class MatchServer(object):
     def __init__(self, local_port):
         self.BUFFER_SIZE = 1024
         self.port = local_port
-        self.free_ports = [16559,16670,16405,16958,16961,17071,16857,17241,16962,16417]
+        self.port_mappings = {16559: 1235,
+                              16670: 1236,
+                              16405: 1237,
+                              16958: 1238,
+                              16961: 1239,
+                              17071: 1240,
+                              16857: 1241,
+                              17241: 1242,
+                              16962: 1243,
+                              16417: 1244
+                              }
+        self.free_ports = [i for i in range(1235, 1245)]
         self.threads = []
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.socket.bind((self._get_local_address(), self.port))
@@ -163,7 +174,7 @@ class MatchServer(object):
                     self.socket.sendto(response.SerializeToString(), address)
                     continue
                 game_port = self.free_ports.pop(0)
-                response.port = game_port
+                response.port = self.port_mappings[game_port]
                 self.socket.sendto(response.SerializeToString(), address)
                 self.socket.sendto(response.SerializeToString(), self.lobby_codes[lobby_req.lobbyCode])
                 del self.lobby_codes[lobby_req.lobbyCode]
