@@ -78,22 +78,22 @@ def sfx_change(level):
 def game_loop():
 
     if p1 == "wizard":
-        fighter_1 = Wizard(1, 200, 310, 40, 100, False, punch_fx, projectile_fx, hit_fx, player1_controls, player2_controls)
+        fighter_1 = Wizard(1, 200, 310, False, punch_fx, projectile_fx, hit_fx, player1_controls, player2_controls)
 
     elif p1 == "nomad":
-        fighter_1 = Nomad(1, 200, 310, 40, 100, False, punch_fx, projectile_fx, hit_fx, player1_controls, player2_controls)
+        fighter_1 = Nomad(1, 200, 310, False, punch_fx, projectile_fx, hit_fx, player1_controls, player2_controls)
 
     elif p1 == "warrior":
-        fighter_1 = Warrior(1, 200, 310, 40, 100, False, punch_fx, projectile_fx, hit_fx, player1_controls, player2_controls)
+        fighter_1 = Warrior(1, 200, 310, False, punch_fx, projectile_fx, hit_fx, player1_controls, player2_controls)
 
     if p2 == "wizard":
-        fighter_2 = Wizard(2, 700, 310, 40, 100, True, punch_fx, projectile_fx, hit_fx, player1_controls, player2_controls)
+        fighter_2 = Wizard(2, 700, 310, True, punch_fx, projectile_fx, hit_fx, player1_controls, player2_controls)
 
     elif p2 == "nomad":
-        fighter_2 = Nomad(2, 700, 310, 40, 100, True, punch_fx, projectile_fx, hit_fx, player1_controls, player2_controls)
+        fighter_2 = Nomad(2, 700, 310, True, punch_fx, projectile_fx, hit_fx, player1_controls, player2_controls)
 
     elif p2 == "warrior":
-        fighter_2 = Warrior(2, 700, 310, 40, 100, True, punch_fx, projectile_fx, hit_fx, player1_controls, player2_controls)
+        fighter_2 = Warrior(2, 700, 310, True, punch_fx, projectile_fx, hit_fx, player1_controls, player2_controls)
 
     run = True
     while run:

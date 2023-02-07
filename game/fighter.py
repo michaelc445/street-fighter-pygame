@@ -5,14 +5,13 @@ from proto import game_pb2 as pb
 class Fighter():
     #wizardData = ["game/assets/wizard/", 231, 190, 7]
 
-    def __init__(self, player, x, y, width, height, flip, punch_sound, projectile_sound, hit_sound, player1_controls, player2_controls):
+    def __init__(self, player, x, y, flip, punch_sound, projectile_sound, hit_sound, player1_controls, player2_controls):
         # self.animationList = self.loadImages(spriteSheet, 5)
         self.updateFrame = pygame.time.get_ticks()
         self.action = 0  # 0=idle, 1=attack1, 2=attack2, 3=dying, 4=running, 5=jumping, 6=falling, 7=hit
         self.frame = 0
         self.player = player
         self.flip = flip
-        self.rect = pygame.Rect((x, y, width, height))
         self.vel_y = 0
         self.vel_x = 0
         self.jump = False

@@ -3,8 +3,14 @@ from game.fighter import Fighter
 from game.projectile import Projectile
 
 class Warrior(Fighter):
-    def __init__(self, player, x, y, width, height, flip, punch_sound, projectile_sound, hit_sound, player1_controls, player2_controls):
-        super().__init__(player, x, y, width, height, flip, punch_sound, projectile_sound, hit_sound, player1_controls, player2_controls)
+    def __init__(self, player, x, y, flip, punch_sound, projectile_sound, hit_sound, player1_controls, player2_controls):
+        super().__init__(player, x, y, flip, punch_sound, projectile_sound, hit_sound, player1_controls, player2_controls)
+
+
+        height = 100
+        width = 60
+        self.rect = pygame.Rect((x, y, width, height))
+
 
         #load warrior sheet
         self.warriorSheet = pygame.image.load("game/assets/warrior/warrior_spritesheet.png")

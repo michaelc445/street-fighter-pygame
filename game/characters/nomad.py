@@ -3,10 +3,15 @@ from game.fighter import Fighter
 from game.projectile import Projectile
 
 class Nomad(Fighter):
-    def __init__(self, player, x, y, width, height, flip, punch_sound, projectile_sound, hit_sound, player1_controls, player2_controls):
-        super().__init__(player, x, y, width, height, flip, punch_sound, projectile_sound, hit_sound, player1_controls, player2_controls)
+    def __init__(self, player, x, y, flip, punch_sound, projectile_sound, hit_sound, player1_controls, player2_controls):
+        super().__init__(player, x, y, flip, punch_sound, projectile_sound, hit_sound, player1_controls, player2_controls)
 
             
+        #hitbox
+        height = 100
+        width = 70
+        self.rect = pygame.Rect((x, y, width, height))
+
         #load nomad sheet
         self.nomadSheet = pygame.image.load("game/assets/nomad/nomad_spritesheet.png")
 
