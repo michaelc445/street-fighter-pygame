@@ -12,6 +12,8 @@ def draw_bg():
     screen.blit(scaled_bg, (0, 0))
 
 
+
+
 # draw health bars
 def draw_health_bar(health, x, y):
     ratio = health / 100
@@ -727,7 +729,9 @@ if __name__ == "__main__":
     WHITE = (255, 255, 255)
 
     # load bg image
-    bg_image = pygame.image.load("game/assets/maps/background.png").convert_alpha()
+    bg_image = pygame.image.load("game/assets/maps/cliffsv2.png").convert_alpha()
+    #bg_image = pygame.image.load("game/assets/maps/Enjl-Dream Ship Tileset/background_1.png").convert_alpha()
+
     menu_bg = pygame.image.load("game/assets/menu/main_menu_bg.png").convert_alpha()
 
     # use mixer to load music and sounds
@@ -748,8 +752,18 @@ if __name__ == "__main__":
     # fighter_1.frameUpdate()
     # fighter_2.frameUpdate()
     # create obstacles
-    #obstacle_1 = Obstacle(400, 300, 100, 300)
-    obstacle_2 = Obstacle(700, 200, 200, 50)
-    obstacle_3 = Obstacle(100, 300, 100, 50)
-    obstacles = [obstacle_2, obstacle_3]
+    obstacle_1 = Obstacle(107, 355, 90, 20)
+    obstacle_2 = Obstacle(120, 355, 60, 45)
+
+    obstacle_3 = Obstacle(325, 275, 400, 25)
+    obstacle_4 = Obstacle(350, 295, 350, 27)
+
+    obstacle_5 = Obstacle(797, 145, 300, 50)
+    obstacle_6 = Obstacle(810, 195, 200, 40)
+    obstacle_7 = Obstacle(830, 235, 200, 35)
+    obstacle_8 = Obstacle(850, 265, 200, 35)
+    obstacle_9 = Obstacle(870, 285, 200, 35)
+
+
+    obstacles = [obstacle_1, obstacle_2, obstacle_3, obstacle_4, obstacle_5, obstacle_6, obstacle_7, obstacle_8, obstacle_9]
     main_menu()
