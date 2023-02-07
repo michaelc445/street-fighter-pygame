@@ -212,8 +212,6 @@ def multi_player_game_loop(game_client):
 
 # controls
 def controls():
-    global player1_controls
-    global player2_controls
     while True:
         controls_mouse = pygame.mouse.get_pos()
 
@@ -250,17 +248,16 @@ def controls():
                 if controls_back.checkForInput(controls_mouse):
                     opt()
                 if controls_player1.checkForInput(controls_mouse):
-                    #player1()
-                    pass
+                    player1()
                 if controls_player2.checkForInput(controls_mouse):
-                    #player2()
-                    pass
+                    player2()
 
         pygame.display.update()
 
 
 # fighter1 controls displayed and mutable
 def player1():
+    global player1_controls
     # player1_keys = {"left": "a", "right": "d", "jump": "w", "block": "s", "attack1": "r", "attack2": "t"}
     while True:
         player1_mouse = pygame.mouse.get_pos()
@@ -334,6 +331,7 @@ def player1():
 
 # fighter2 controls displayed and mutable
 def player2():
+    global player2_controls
     while True:
         player2_mouse = pygame.mouse.get_pos()
 
@@ -366,7 +364,7 @@ def player2():
                                  font=font(15), base_color="#d7fcd4", hovering_color="White")
 
         player2_attack2 = Button(image=None, pos=(500, 400),
-                                 text_input="Projectile : " + pygame.key.name(fighter_2.player2_controls["attack2"]),
+                                 text_input="Projectile : " + pygame.key.name(player2_controls["attack2"]),
                                  font=font(15), base_color="#d7fcd4", hovering_color="White")
 
         player2_back = Button(image=pygame.image.load("game/assets/menu/medium.png"), pos=(500, 475),
