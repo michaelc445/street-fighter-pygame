@@ -5,12 +5,11 @@ from proto import game_pb2 as pb
 class Fighter():
     #wizardData = ["game/assets/wizard/", 231, 190, 7]
 
-    def __init__(self, player, x, y, width, height, flip, punch_sound, projectile_sound, hit_sound, state):
+    def __init__(self, player, x, y, width, height, flip, punch_sound, projectile_sound, hit_sound, player1_controls, player2_controls):
         # self.animationList = self.loadImages(spriteSheet, 5)
         self.updateFrame = pygame.time.get_ticks()
         self.action = 0  # 0=idle, 1=attack1, 2=attack2, 3=dying, 4=running, 5=jumping, 6=falling, 7=hit
         self.frame = 0
-        self.state = state
         self.player = player
         self.flip = flip
         self.rect = pygame.Rect((x, y, width, height))
@@ -23,56 +22,17 @@ class Fighter():
         self.hit = False
         self.shooting_projectile = False
         self.projectiles = []
-        self.projectile_cooldown = 0
+        self.attack2_cooldown = 0
         self.attack_type = 0
         self.health = 100
-        self.attack_cooldown = 0
+        self.attack1_cooldown = 0
         self.color = (255, 0, 0)
         self.punch_sound = punch_sound
         self.projectile_sound = projectile_sound
         self.hit_sound = hit_sound
         self.alive = True
-        self.player1_controls = {"left": pygame.K_a, "right": pygame.K_d, "jump": pygame.K_w, "attack1": pygame.K_r,
-                                 "attack2": pygame.K_t, "block": pygame.K_s}
-        self.player2_controls = {"left": pygame.K_LEFT, "right": pygame.K_RIGHT, "jump": pygame.K_UP,
-                                 "attack1": pygame.K_n, "attack2": pygame.K_m, "block": pygame.K_DOWN}
-
-
-        #load wizard sheet
-        self.wizardSheet = pygame.image.load("game/assets/wizard/wizard_spritesheet.png")
-        #load nomad sheet
-        self.nomadSheet = pygame.image.load("game/assets/nomad/nomad_spritesheet.png")
-        #load warrior sheet
-        self.warriorSheet = pygame.image.load("game/assets/warrior/warrior_spritesheet.png")
-
-
-        if self.state == 0:
-            self.spriteSheet = self.wizardSheet
-            self.sizeX = self.wizardSheetX = 231
-            self.sizeY = self.wizardSheetY = 190
-            self.scale = self.wizardScale = 1.2
-            self.offset = [100, 55]
-            self.animationSteps = [5, 7, 7, 6, 7, 1, 1, 3]
-            self.animationList = self.loadImages(self.wizardSheet, self.animationSteps)
-            self.img = self.animationList[self.action][self.frame]
-        elif self.state == 1:
-            self.spriteSheet = self.nomadSheet
-            self.sizeX = self.nomadSheetX = 126
-            self.sizeY = self.nomadSheetY = 126
-            self.scale = self.nomadScale = 2.2
-            self.offset = [55, 35]
-            self.animationSteps = [10, 7, 6, 11, 8, 3, 3, 3]
-            self.animationList = self.loadImages(self.nomadSheet, self.animationSteps)
-            self.img = self.animationList[self.action][self.frame]
-        elif self.state == 2:
-            self.spriteSheet = self.warriorSheet
-            self.sizeX = self.warriorSheetX = 135
-            self.sizeY = self.warriorSheetY = 135
-            self.scale = self.warriorScale = 2.4
-            self.offset = [55, 45]
-            self.animationSteps = [10, 4, 4, 9, 6, 2, 2, 3]
-            self.animationList = self.loadImages(self.warriorSheet, self.animationSteps)
-            self.img = self.animationList[self.action][self.frame]
+        self.player1_controls = player1_controls
+        self.player2_controls = player2_controls
 
 
     def loadImages(self, spriteSheet, animationSteps):
@@ -110,12 +70,12 @@ class Fighter():
         self.bounds(screen_width, screen_height)
 
         # count attack cooldown
-        if self.attack_cooldown > 0:
-            self.attack_cooldown -= 1
+        if self.attack1_cooldown > 0:
+            self.attack1_cooldown -= 1
 
         # count projectile cooldown
-        if self.projectile_cooldown > 0:
-            self.projectile_cooldown -= 1
+        if self.attack2_cooldown > 0:
+            self.attack2_cooldown -= 1
 
         self.feet(surface, obstacles)
 
@@ -179,29 +139,7 @@ class Fighter():
             self.action = newAction
             self.updateFrame = pygame.time.get_ticks()
 
-    def attack(self, surface, target):
-        # self.attacking = True
-        if self.attack_type == 1:
-            if self.attack_cooldown == 0:
-                self.punch_sound.play()
-                damage = 10
-                attacking_rect = pygame.Rect(self.rect.centerx - (2 * self.rect.width * self.flip), self.rect.y,
-                                             2 * self.rect.width, self.rect.height // 2)
-                self.attack_cooldown = 20
 
-                if attacking_rect.colliderect(target.rect) and not target.blocking:
-                    target.take_hit(damage, self.flip)
-                    #target.hit = True
-
-                pygame.draw.rect(surface, (0, 255, 0), attacking_rect)
-
-        if self.attack_type == 2:
-            if self.projectile_cooldown == 0:
-                self.projectile_sound.play()
-                self.projectiles.append(
-                    Projectile(self.rect.centerx - (2 * self.rect.width * self.flip), self.rect.y, 2 * self.rect.width,
-                               self.rect.height // 2, 5, self, 10 - (20 * self.flip)))
-                self.projectile_cooldown = 100
 
     def draw(self, surface):
         #draw hitbox of player
@@ -230,13 +168,6 @@ class Fighter():
         #self.jump = False  # uncomment this to fly :)
 
         if not self.blocking:
-            # face direction of other player
-            # if target.rect.centerx > self.rect.centerx:
-            #     self.flip = False
-            # else:
-            #     self.flip = True
-
-            # movement
             # move left
             if key[player_controls["left"]]:
                 self.dx = -speed
@@ -294,7 +225,7 @@ class Fighter():
 
         # draw feet of character
         standing_on_platform_check = pygame.Rect((self.rect.x, self.rect.y + self.rect.height, self.rect.width, 10))
-        pygame.draw.rect(surface, (230, 176, 30), standing_on_platform_check)
+        #pygame.draw.rect(surface, (230, 176, 30), standing_on_platform_check)
         for obstacle in obstacles:
             if x_collision_check.colliderect(obstacle.rect):
                 self.vel_x = 0
@@ -327,34 +258,6 @@ class Fighter():
             self.dy = screen_height - 100 - self.rect.bottom
             self.jump = False
 
-    def change(self, state):
-        if state == "wizard":
-            self.spriteSheet = self.wizardSheet
-            self.sizeX = self.wizardSheetX = 231
-            self.sizeY = self.wizardSheetY = 190
-            self.scale = self.wizardScale = 1.2
-            self.offset = [100, 55]
-            self.animationSteps = [5, 7, 7, 6, 7, 1, 1, 3]
-            self.animationList = self.loadImages(self.wizardSheet, self.animationSteps)
-            self.img = self.animationList[self.action][self.frame]
-        elif state == "nomad":
-            self.spriteSheet = self.nomadSheet
-            self.sizeX = self.nomadSheetX = 126
-            self.sizeY = self.nomadSheetY = 126
-            self.scale = self.nomadScale = 2.2
-            self.offset = [55, 35]
-            self.animationSteps = [10, 7, 6, 11, 8, 3, 3, 3]
-            self.animationList = self.loadImages(self.nomadSheet, self.animationSteps)
-            self.img = self.animationList[self.action][self.frame]
-        elif state == "warrior":
-            self.spriteSheet = self.warriorSheet
-            self.sizeX = self.warriorSheetX = 135
-            self.sizeY = self.warriorSheetY = 135
-            self.scale = self.warriorScale = 2.4
-            self.offset = [55, 45]
-            self.animationSteps = [10, 4, 4, 9, 6, 2, 2, 3]
-            self.animationList = self.loadImages(self.warriorSheet, self.animationSteps)
-            self.img = self.animationList[self.action][self.frame]
 
 class OnlineFighter(Fighter):
 

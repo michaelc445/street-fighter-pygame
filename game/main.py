@@ -1,11 +1,21 @@
 import pygame
 from pygame import mixer
 from game.fighter import Fighter,OnlineFighter
+from game.characters.nomad import Nomad
+from game.characters.warrior import Warrior
+from game.characters.wizard import Wizard
 from game.obstacle import Obstacle
 from game.button import Button
 from game.network.game_client import GameClient
 import sys
 
+p1=""
+p2=""
+player1_controls = {"left": pygame.K_a, "right": pygame.K_d, "jump": pygame.K_w, "attack1": pygame.K_r,
+                                 "attack2": pygame.K_t, "block": pygame.K_s}
+
+player2_controls = {"left": pygame.K_LEFT, "right": pygame.K_RIGHT, "jump": pygame.K_UP,
+                                 "attack1": pygame.K_n, "attack2": pygame.K_m, "block": pygame.K_DOWN}
 
 def draw_bg():
     scaled_bg = pygame.transform.scale(bg_image, (SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -33,9 +43,9 @@ def control_handling(keys, key):
                 pygame.quit()
                 sys.exit()
             if event.type == pygame.KEYDOWN:
-                if event.key in fighter_1.player1_controls.values():
+                if event.key in player1_controls.values():
                     return
-                elif event.key in fighter_2.player2_controls.values():
+                elif event.key in player2_controls.values():
                     return
                 keys[key] = event.key
                 return
@@ -66,6 +76,25 @@ def sfx_change(level):
 
 # game loop
 def game_loop():
+
+    if p1 == "wizard":
+        fighter_1 = Wizard(1, 200, 310, 40, 100, False, punch_fx, projectile_fx, hit_fx, player1_controls, player2_controls)
+
+    elif p1 == "nomad":
+        fighter_1 = Nomad(1, 200, 310, 40, 100, False, punch_fx, projectile_fx, hit_fx, player1_controls, player2_controls)
+
+    elif p1 == "warrior":
+        fighter_1 = Warrior(1, 200, 310, 40, 100, False, punch_fx, projectile_fx, hit_fx, player1_controls, player2_controls)
+
+    if p2 == "wizard":
+        fighter_2 = Wizard(2, 700, 310, 40, 100, True, punch_fx, projectile_fx, hit_fx, player1_controls, player2_controls)
+
+    elif p2 == "nomad":
+        fighter_2 = Nomad(2, 700, 310, 40, 100, True, punch_fx, projectile_fx, hit_fx, player1_controls, player2_controls)
+
+    elif p2 == "warrior":
+        fighter_2 = Warrior(2, 700, 310, 40, 100, True, punch_fx, projectile_fx, hit_fx, player1_controls, player2_controls)
+
     run = True
     while run:
 
@@ -183,6 +212,8 @@ def multi_player_game_loop(game_client):
 
 # controls
 def controls():
+    global player1_controls
+    global player2_controls
     while True:
         controls_mouse = pygame.mouse.get_pos()
 
@@ -219,9 +250,11 @@ def controls():
                 if controls_back.checkForInput(controls_mouse):
                     opt()
                 if controls_player1.checkForInput(controls_mouse):
-                    player1()
+                    #player1()
+                    pass
                 if controls_player2.checkForInput(controls_mouse):
-                    player2()
+                    #player2()
+                    pass
 
         pygame.display.update()
 
@@ -241,27 +274,27 @@ def player1():
 
         # make player 1 controls with a button
         player1_up = Button(image=None, pos=(500, 150),
-                            text_input="Jump : " + pygame.key.name(fighter_1.player1_controls["jump"]), font=font(15),
+                            text_input="Jump : " + pygame.key.name(player1_controls["jump"]), font=font(15),
                             base_color="#d7fcd4", hovering_color="White")
 
         player1_down = Button(image=None, pos=(500, 200),
-                              text_input="Block : " + pygame.key.name(fighter_1.player1_controls["block"]),
+                              text_input="Block : " + pygame.key.name(player1_controls["block"]),
                               font=font(15), base_color="#d7fcd4", hovering_color="White")
 
         player1_left = Button(image=None, pos=(500, 250),
-                              text_input="Left : " + pygame.key.name(fighter_1.player1_controls["left"]), font=font(15),
+                              text_input="Left : " + pygame.key.name(player1_controls["left"]), font=font(15),
                               base_color="#d7fcd4", hovering_color="White")
 
         player1_right = Button(image=None, pos=(500, 300),
-                               text_input="Right : " + pygame.key.name(fighter_1.player1_controls["right"]),
+                               text_input="Right : " + pygame.key.name(player1_controls["right"]),
                                font=font(15), base_color="#d7fcd4", hovering_color="White")
 
         player1_attack1 = Button(image=None, pos=(500, 350),
-                                 text_input="Punch : " + pygame.key.name(fighter_1.player1_controls["attack1"]),
+                                 text_input="Punch : " + pygame.key.name(player1_controls["attack1"]),
                                  font=font(15), base_color="#d7fcd4", hovering_color="White")
 
         player1_attack2 = Button(image=None, pos=(500, 400),
-                                 text_input="Projectile : " + pygame.key.name(fighter_1.player1_controls["attack2"]),
+                                 text_input="Projectile : " + pygame.key.name(player1_controls["attack2"]),
                                  font=font(15), base_color="#d7fcd4", hovering_color="White")
 
         player1_back = Button(image=pygame.image.load("game/assets/menu/medium.png"), pos=(500, 475),
@@ -284,17 +317,17 @@ def player1():
                 if player1_back.checkForInput(player1_mouse):
                     controls()
                 if player1_up.checkForInput(player1_mouse):
-                    control_handling(fighter_1.player1_controls, "jump")
+                    control_handling(player1_controls, "jump")
                 if player1_down.checkForInput(player1_mouse):
-                    control_handling(fighter_1.player1_controls, "block")
+                    control_handling(player1_controls, "block")
                 if player1_left.checkForInput(player1_mouse):
-                    control_handling(fighter_1.player1_controls, "left")
+                    control_handling(player1_controls, "left")
                 if player1_right.checkForInput(player1_mouse):
-                    control_handling(fighter_1.player1_controls, "right")
+                    control_handling(player1_controls, "right")
                 if player1_attack1.checkForInput(player1_mouse):
-                    control_handling(fighter_1.player1_controls, "attack1")
+                    control_handling(player1_controls, "attack1")
                 if player1_attack2.checkForInput(player1_mouse):
-                    control_handling(fighter_1.player1_controls, "attack2")
+                    control_handling(player1_controls, "attack2")
 
         pygame.display.update()
 
@@ -313,23 +346,23 @@ def player2():
 
         # make player 2 controls with a button
         player2_up = Button(image=None, pos=(500, 150),
-                            text_input="Jump : " + pygame.key.name(fighter_2.player2_controls["jump"]), font=font(15),
+                            text_input="Jump : " + pygame.key.name(player2_controls["jump"]), font=font(15),
                             base_color="#d7fcd4", hovering_color="White")
 
         player2_down = Button(image=None, pos=(500, 200),
-                              text_input="Block : " + pygame.key.name(fighter_2.player2_controls["block"]),
+                              text_input="Block : " + pygame.key.name(player2_controls["block"]),
                               font=font(15), base_color="#d7fcd4", hovering_color="White")
 
         player2_left = Button(image=None, pos=(500, 250),
-                              text_input="Left : " + pygame.key.name(fighter_2.player2_controls["left"]), font=font(15),
+                              text_input="Left : " + pygame.key.name(player2_controls["left"]), font=font(15),
                               base_color="#d7fcd4", hovering_color="White")
 
         player2_right = Button(image=None, pos=(500, 300),
-                               text_input="Right : " + pygame.key.name(fighter_2.player2_controls["right"]),
+                               text_input="Right : " + pygame.key.name(player2_controls["right"]),
                                font=font(15), base_color="#d7fcd4", hovering_color="White")
 
         player2_attack1 = Button(image=None, pos=(500, 350),
-                                 text_input="Punch : " + pygame.key.name(fighter_2.player2_controls["attack1"]),
+                                 text_input="Punch : " + pygame.key.name(player2_controls["attack1"]),
                                  font=font(15), base_color="#d7fcd4", hovering_color="White")
 
         player2_attack2 = Button(image=None, pos=(500, 400),
@@ -356,17 +389,17 @@ def player2():
                 if player2_back.checkForInput(player2_mouse):
                     controls()
                 if player2_up.checkForInput(player2_mouse):
-                    control_handling(fighter_2.player2_controls, "jump")
+                    control_handling(player2_controls, "jump")
                 if player2_down.checkForInput(player2_mouse):
-                    control_handling(fighter_2.player2_controls, "block")
+                    control_handling(player2_controls, "block")
                 if player2_left.checkForInput(player2_mouse):
-                    control_handling(fighter_2.player2_controls, "left")
+                    control_handling(player2_controls, "left")
                 if player2_right.checkForInput(player2_mouse):
-                    control_handling(fighter_2.player2_controls, "right")
+                    control_handling(player2_controls, "right")
                 if player2_attack1.checkForInput(player2_mouse):
-                    control_handling(fighter_2.player2_controls, "attack1")
+                    control_handling(player2_controls, "attack1")
                 if player2_attack2.checkForInput(player2_mouse):
-                    control_handling(fighter_2.player2_controls, "attack2")
+                    control_handling(player2_controls, "attack2")
 
         pygame.display.update()
 
@@ -556,6 +589,9 @@ def menu_play():
 
 #character select menu
 def menu_char():
+    global p1
+    global p2
+
     p1_color_wizard= "#d7fcd4"
     p1_color_warrior= "#d7fcd4"
     p1_color_nomad= "#d7fcd4"
@@ -627,32 +663,32 @@ def menu_char():
                     p1_color_wizard = "Yellow"
                     p1_color_warrior = "#d7fcd4"
                     p1_color_nomad = "#d7fcd4"
-                    fighter_1.change("wizard")
+                    p1 = "wizard"
                 if p1_warrior.checkForInput(mouse):
-                    fighter_1.change("warrior")
                     p1_color_warrior = "Yellow"
                     p1_color_wizard = "#d7fcd4"
                     p1_color_nomad = "#d7fcd4"
+                    p1="warrior"
                 if p1_nomad.checkForInput(mouse):
-                    fighter_1.change("nomad")
                     p1_color_nomad = "Yellow"
                     p1_color_wizard = "#d7fcd4"
                     p1_color_warrior = "#d7fcd4"
+                    p1="nomad"
                 if p2_wizard.checkForInput(mouse):
-                    fighter_2.change("wizard")
                     p2_color_wizard = "Blue"
                     p2_color_warrior = "#d7fcd4"
                     p2_color_nomad = "#d7fcd4"
+                    p2="wizard"
                 if p2_warrior.checkForInput(mouse):
-                    fighter_2.change("warrior")
                     p2_color_warrior = "Blue"
                     p2_color_nomad = "#d7fcd4"
                     p2_color_wizard = "#d7fcd4"
+                    p2="warrior"
                 if p2_nomad.checkForInput(mouse):
-                    fighter_2.change("nomad")
                     p2_color_nomad = "Blue"
                     p2_color_wizard = "#d7fcd4"
                     p2_color_warrior = "#d7fcd4"
+                    p2="nomad"
                 
                     
         pygame.display.update()
@@ -709,10 +745,13 @@ def main_menu():
 if __name__ == "__main__":
     mixer.init
     pygame.init()
-    fighter_1 = None
     # create game window
     SCREEN_WIDTH = 1000
     SCREEN_HEIGHT = 600
+
+    #default characters
+    p1="wizard"
+    p2="wizard"
 
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     pygame.display.set_caption("Main Menu")
@@ -740,9 +779,6 @@ if __name__ == "__main__":
     punch_fx.set_volume(0.15)
     projectile_fx.set_volume(0.5)
     hit_fx.set_volume(0.5)
-
-    fighter_1 = Fighter(1, 200, 310, 40, 100, False, punch_fx, projectile_fx, hit_fx, 0)
-    fighter_2 = Fighter(2, 700, 310, 40, 100, True, punch_fx, projectile_fx, hit_fx, 2)
 
     # animate fighters
     # fighter_1.frameUpdate()
