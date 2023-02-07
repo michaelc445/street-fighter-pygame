@@ -1,9 +1,9 @@
 import pygame
-from projectile import Projectile
-#from proto import game_pb2 as pb
+from game.projectile import Projectile
+from proto import game_pb2 as pb
 
 class Fighter():
-    #wizardData = ["assets/wizard/", 231, 190, 7]
+    #wizardData = ["game/assets/wizard/", 231, 190, 7]
 
     def __init__(self, player, x, y, width, height, flip, punch_sound, projectile_sound, hit_sound, state):
         # self.animationList = self.loadImages(spriteSheet, 5)
@@ -39,11 +39,11 @@ class Fighter():
 
 
         #load wizard sheet
-        self.wizardSheet = pygame.image.load("assets/wizard/wizard_spritesheet.png")
+        self.wizardSheet = pygame.image.load("game/assets/wizard/wizard_spritesheet.png")
         #load nomad sheet
-        self.nomadSheet = pygame.image.load("assets/nomad/nomad_spritesheet.png")
+        self.nomadSheet = pygame.image.load("game/assets/nomad/nomad_spritesheet.png")
         #load warrior sheet
-        self.warriorSheet = pygame.image.load("assets/warrior/warrior_spritesheet.png")
+        self.warriorSheet = pygame.image.load("game/assets/warrior/warrior_spritesheet.png")
 
 
         if self.state == 0:

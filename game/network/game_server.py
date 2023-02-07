@@ -1,5 +1,5 @@
 import socket
-#from proto import game_pb2 as pb
+from proto import game_pb2 as pb
 
 class Player(object):
 
