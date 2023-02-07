@@ -41,5 +41,5 @@ class Nomad(Fighter):
                 self.projectile_sound.play()
                 self.projectiles.append(
                     Projectile(self.rect.centerx - (2 * self.rect.width * self.flip), self.rect.y, 2 * self.rect.width,
-                                self.rect.height // 2, 5, self, 10 - (20 * self.flip)))
+                                self.rect.height // 2, 10, self, 10 - (20 * self.flip)))
                 self.attack2_cooldown = 100

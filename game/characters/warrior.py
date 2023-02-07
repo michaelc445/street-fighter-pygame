@@ -37,7 +37,7 @@ class Warrior(Fighter):
         if self.attack_type == 2:
             if self.attack2_cooldown == 0:
                 self.punch_sound.play()
-                damage = 30
+                damage = 20
                 attacking_rect = pygame.Rect(self.rect.centerx - (2 * self.rect.width * self.flip), self.rect.y,
                                              3 * self.rect.width, self.rect.height)
                 self.attack2_cooldown = 50
