@@ -133,7 +133,7 @@ class MatchServer(object):
     def __init__(self, local_port):
         self.BUFFER_SIZE = 1024
         self.port = local_port
-        self.free_ports = [i for i in range(1235, 1245)]
+        self.free_ports = [16559,16670,16405,16958,16961,17071,16857,17241,16962,16417]
         self.threads = []
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.socket.bind((self._get_local_address(), self.port))
