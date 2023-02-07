@@ -99,13 +99,10 @@ class GameClient(object):
         self.socket.sendto(message.SerializeToString(),(self.server_ip,self.game_port))
     def connect(self, ip, port, name):
         self.join_lobby(ip,port,"")
-        print("koin lobby done")
-        print(self.game_port)
         time.sleep(2)
         self.join_game(ip, self.game_port, name)
-        print("join game done")
         self.character_select()
-        print("char select done")
+
 
     async def send_update(self, update_message: pb.Update):
         self.socket.sendto(update_message.SerializeToString(), (self.server_ip, self.game_port))

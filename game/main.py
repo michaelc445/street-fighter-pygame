@@ -557,7 +557,7 @@ def main_menu():
                 if multi_player.checkForInput(mouse):
                     pygame.display.set_caption("Multi Player")
                     game_client = GameClient(1234)
-                    game_client.connect("192.168.0.111",1234,"m")
+                    game_client.connect("project.michaelc445.container.netsoc.cloud", 17023, "m")
                     print(game_client.player_id)
                     game_client.socket.setblocking(False)
                     multi_player_game_loop(game_client)
