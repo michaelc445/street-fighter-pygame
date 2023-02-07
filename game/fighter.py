@@ -1,5 +1,5 @@
 import pygame
-from projectile import Projectile
+from game.projectile import Projectile
 from proto import game_pb2 as pb
 
 
