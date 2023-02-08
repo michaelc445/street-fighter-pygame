@@ -1,6 +1,7 @@
 import pygame
 from pygame import mixer
-from game.fighter import Fighter,OnlineFighter
+from game.fighter import Fighter
+from game.online_fighter import OnlineFighter
 from game.characters.nomad import Nomad
 from game.characters.warrior import Warrior
 from game.characters.wizard import Wizard
