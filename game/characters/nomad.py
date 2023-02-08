@@ -34,20 +34,23 @@ class Nomad(Fighter):
             if self.attack1_cooldown == 0:
                 self.punch_sound.play()
                 damage = 10
+                knockback = 10
                 attacking_rect = pygame.Rect(self.rect.centerx - (2 * self.rect.width * self.flip), self.rect.y,
                                                 2 * self.rect.width, self.rect.height // 2)
                 self.attack1_cooldown = 20
 
                 if attacking_rect.colliderect(target.rect) and not target.blocking:
-                    target.take_hit(damage, self.flip)
+                    target.take_hit(damage, knockback, self.flip)
                     #target.hit = True
 
                 pygame.draw.rect(surface, (0, 255, 0), attacking_rect)
 
         if self.attack_type == 2:
             if self.attack2_cooldown == 0:
+                damage = 10
+                knockback = 15
                 self.projectile_sound.play()
                 self.projectiles.append(
                     Projectile(self.rect.centerx - (2 * self.rect.width * self.flip), self.rect.y, 2 * self.rect.width,
-                                self.rect.height // 2, 10, self, 10 - (20 * self.flip)))
+                                self.rect.height // 2, damage, knockback, self, 10 - (20 * self.flip)))
                 self.attack2_cooldown = 100

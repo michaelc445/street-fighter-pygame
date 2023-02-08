@@ -148,13 +148,13 @@ class Fighter():
         img = pygame.transform.flip(self.img, self.flip, False)
         surface.blit(img, (self.rect.x - self.offset[0] * self.scale, self.rect.y - self.offset[1] * self.scale))
 
-    def take_hit(self, damage, direction):
+    def take_hit(self, damage, knockback, direction):
         self.hit = True
         self.hit_sound.play()
         self.health -= damage
         self.color = (255, 255, 255)
-        self.vel_x += (damage - 2 * damage * direction)
-        self.vel_y -= damage
+        self.vel_x += (knockback - 2 * knockback * direction)
+        self.vel_y -= knockback
 
     def keybinds(self, player_controls, surface, target):
         # get keypresses

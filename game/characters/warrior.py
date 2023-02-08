@@ -34,12 +34,13 @@ class Warrior(Fighter):
             if self.attack1_cooldown == 0:
                 self.punch_sound.play()
                 damage = 10
+                knockback = 10
                 attacking_rect = pygame.Rect(self.rect.centerx - (2 * self.rect.width * self.flip), self.rect.y,
                                              2 * self.rect.width, self.rect.height // 2)
-                self.attack1_cooldown = 20
+                self.attack1_cooldown = 25
 
                 if attacking_rect.colliderect(target.rect) and not target.blocking:
-                    target.take_hit(damage, self.flip)
+                    target.take_hit(damage, knockback, self.flip)
                     #target.hit = True
 
                 pygame.draw.rect(surface, (0, 255, 0), attacking_rect)
@@ -48,12 +49,13 @@ class Warrior(Fighter):
             if self.attack2_cooldown == 0:
                 self.punch_sound.play()
                 damage = 20
+                knockback = 15
                 attacking_rect = pygame.Rect(self.rect.centerx - (2 * self.rect.width * self.flip), self.rect.y,
                                              3 * self.rect.width, self.rect.height)
                 self.attack2_cooldown = 50
 
                 if attacking_rect.colliderect(target.rect) and not target.blocking:
-                    target.take_hit(damage, self.flip)
+                    target.take_hit(damage, knockback, self.flip)
                     #target.hit = True
 
                 pygame.draw.rect(surface, (0, 255, 0), attacking_rect)

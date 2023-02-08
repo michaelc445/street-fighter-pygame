@@ -30,16 +30,20 @@ class Wizard(Fighter):
         # self.attacking = True
         if self.attack_type == 1:
             if self.attack1_cooldown == 0:
+                damage = 5
+                knockback = 5
                 self.projectile_sound.play()
                 self.projectiles.append(
-                    Projectile(self.rect.centerx - (2 * self.rect.width * self.flip), self.rect.y, 2 * self.rect.width,
-                               self.rect.height // 2, 5, self, 10 - (20 * self.flip)))
+                    Projectile(self.rect.centerx - (2 * self.rect.width * self.flip), self.rect.y, self.rect.width,
+                               self.rect.height // 2, damage, knockback, self, 10 - (20 * self.flip)))
                 self.attack1_cooldown = 50
 
         if self.attack_type == 2:
             if self.attack2_cooldown == 0:
+                damage = 15
+                knockback = 15
                 self.projectile_sound.play()
                 self.projectiles.append(
                     Projectile(self.rect.centerx - (2 * self.rect.width * self.flip), self.rect.y, 2 * self.rect.width,
-                               self.rect.height, 15, self, 10 - (20 * self.flip)))
-                self.attack2_cooldown = 100
+                               self.rect.height, damage, knockback, self, 5 - (10 * self.flip)))
+                self.attack2_cooldown = 150
