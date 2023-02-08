@@ -3,10 +3,8 @@ from game.projectile import Projectile
 
 
 class Fighter():
-    #wizardData = ["game/assets/wizard/", 231, 190, 7]
 
     def __init__(self, player, x, y, flip, punch_sound, projectile_sound, hit_sound, player1_controls, player2_controls):
-        # self.animationList = self.loadImages(spriteSheet, 5)
         self.updateFrame = pygame.time.get_ticks()
         self.action = 0  # 0=idle, 1=attack1, 2=attack2, 3=dying, 4=running, 5=jumping, 6=falling, 7=hit
         self.frame = 0

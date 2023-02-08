@@ -10,13 +10,6 @@ from game.button import Button
 from game.network.game_client import GameClient
 import sys
 
-p1=""
-p2=""
-player1_controls = {"left": pygame.K_a, "right": pygame.K_d, "jump": pygame.K_w, "attack1": pygame.K_r,
-                                 "attack2": pygame.K_t, "block": pygame.K_s}
-
-player2_controls = {"left": pygame.K_LEFT, "right": pygame.K_RIGHT, "jump": pygame.K_UP,
-                                 "attack1": pygame.K_n, "attack2": pygame.K_m, "block": pygame.K_DOWN}
 
 def draw_bg():
     scaled_bg = pygame.transform.scale(bg_image, (SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -142,16 +135,11 @@ def game_loop():
     sys.exit()
 
 def multi_player_game_loop(game_client):
-    gameKeys = [pygame.K_a, pygame.K_d, pygame.K_w, pygame.K_r, pygame.K_t]
+    #gameKeys = [pygame.K_a, pygame.K_d, pygame.K_w, pygame.K_r, pygame.K_t]
     pygame.init()
 
     pygame.display.set_caption("Team 5 Project")
 
-    # cap frame rate
-    clock = pygame.time.Clock()
-    FPS = 60
-    # define colors
-    # load bg image
 
     # create fighters
 
@@ -170,7 +158,10 @@ def multi_player_game_loop(game_client):
     obstacle_2 = Obstacle(700, 200, 200, 50)
     obstacles = [obstacle_1, obstacle_2]
     run = True
-
+    
+    #cap frame rate
+    clock = pygame.time.Clock()
+    FPS = 60
 
     while run:
 
@@ -575,7 +566,7 @@ def menu_play():
                     menu_char()
                 if local.checkForInput(mouse):
                     pygame.display.set_caption("Local Multiplayer")
-                    game_loop()
+                    menu_char()
                 if multiplayer.checkForInput(mouse):
                     pygame.display.set_caption("Multi Player")
                     game_client = GameClient(1234)
@@ -745,6 +736,15 @@ def main_menu():
 
 
 if __name__ == "__main__":
+
+    p1=""
+    p2=""
+    player1_controls = {"left": pygame.K_a, "right": pygame.K_d, "jump": pygame.K_w, "attack1": pygame.K_r,
+                                    "attack2": pygame.K_t, "block": pygame.K_s}
+
+    player2_controls = {"left": pygame.K_LEFT, "right": pygame.K_RIGHT, "jump": pygame.K_UP,
+                                    "attack1": pygame.K_n, "attack2": pygame.K_m, "block": pygame.K_DOWN}
+
     mixer.init
     pygame.init()
     # create game window
