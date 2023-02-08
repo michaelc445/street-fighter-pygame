@@ -46,31 +46,7 @@ class Fighter(object):
             y += 1
         return animationList
 
-    def feet(self, surface, obstacles):
-        # update player position
-        updatex, updatey = True, True
-        x_collision_check = pygame.Rect((self.rect.x + self.dx, self.rect.y, self.rect.width, self.rect.height))
-        y_collision_check = pygame.Rect((self.rect.x, self.rect.y + self.dy, self.rect.width, self.rect.height))
 
-        # draw feet of character
-        standing_on_platform_check = pygame.Rect((self.rect.x, self.rect.y + self.rect.height, self.rect.width, 10))
-        pygame.draw.rect(surface, (230, 176, 30), standing_on_platform_check)
-        for obstacle in obstacles:
-            if x_collision_check.colliderect(obstacle.rect):
-                self.vel_x = 0
-                updatex = False
-
-            if y_collision_check.colliderect(obstacle.rect):
-                updatey = False
-                self.vel_y = 0
-
-            if standing_on_platform_check.colliderect(obstacle.rect):
-                self.jump = False
-
-        if updatex:
-            self.rect.x += self.dx
-        if updatey:
-            self.rect.y += self.dy
     def move(self, screen_width, screen_height, surface, target, obstacles):
         GRAVITY = 2
         self.dx = 0
@@ -78,7 +54,7 @@ class Fighter(object):
 
         # check player 1 movement
 
-        self.keybinds(self.controls, surface, target)
+        self.keybinds(self.controls, surface, target,None)
 
 
         # apply gravity
