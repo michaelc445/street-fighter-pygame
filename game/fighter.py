@@ -86,8 +86,6 @@ class Fighter(object):
             self.actionUpdate(3)
         elif self.running:
             self.actionUpdate(4)
-        elif self.jump:
-            self.actionUpdate(5)
         elif self.hit:
             self.actionUpdate(7)
         elif self.attacking:
@@ -95,6 +93,8 @@ class Fighter(object):
                 self.actionUpdate(1)
             elif self.attack_type == 2:
                 self.actionUpdate(2)
+        elif self.jump:
+            self.actionUpdate(5)
         else:
             self.actionUpdate(0)
 
