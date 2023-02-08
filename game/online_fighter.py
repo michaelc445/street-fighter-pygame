@@ -9,6 +9,7 @@ class OnlineFighter(Fighter):
         super().__init__(player, x, y, width, height, flip, punch_sound, projectile_sound, hit_sound, player1_controls, player2_controls)
         self.game_client = None
         self.game_keys = [pygame.K_a, pygame.K_d, pygame.K_w, pygame.K_r, pygame.K_t]
+        
 
     def _create_update_message(self, key, target):
         t = {z: True for z in self.game_keys if key[z]}

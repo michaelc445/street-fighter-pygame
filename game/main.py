@@ -1,4 +1,4 @@
-import pygame
+import pygame, asyncio
 from pygame import mixer
 from game.fighter import Fighter
 from game.online_fighter import OnlineFighter
@@ -134,6 +134,16 @@ def game_loop():
     pygame.quit()
     sys.exit()
 
+async def update_enemy(game_client,local_player,enemy_character):
+    for message in game_client.get_updates():
+        local_player.health = message.enemyHealth
+        enemy_character.move_enemy(SCREEN_WIDTH, SCREEN_HEIGHT, screen, local_player, obstacles,
+
+                                   message.keys, message.x, message.y)
+def run_once(loop):
+    loop.call_soon(loop.stop)
+    loop.run_forever()
+
 def multi_player_game_loop(game_client):
     #gameKeys = [pygame.K_a, pygame.K_d, pygame.K_w, pygame.K_r, pygame.K_t]
     pygame.init()
@@ -142,7 +152,6 @@ def multi_player_game_loop(game_client):
 
 
     # create fighters
-
     f1 = createWizard(OnlineFighter, 1, 200, 310, False, punch_fx, projectile_fx, hit_fx, player1_controls, player2_controls)
     f2 = createWarrior(OnlineFighter, 2, 700, 310, True, punch_fx, projectile_fx, hit_fx, player1_controls, player2_controls)
 
@@ -158,11 +167,9 @@ def multi_player_game_loop(game_client):
     obstacle_2 = Obstacle(700, 200, 200, 50)
     obstacles = [obstacle_1, obstacle_2]
     run = True
-    
-    #cap frame rate
     clock = pygame.time.Clock()
     FPS = 60
-
+    loop = asyncio.get_event_loop()
     while run:
 
         # cap frame rate
@@ -177,12 +184,18 @@ def multi_player_game_loop(game_client):
         draw_health_bar(fighters[1].health, 580, 20)
 
         # move fighters
-        local_player.move(SCREEN_WIDTH, SCREEN_HEIGHT, screen, enemy_character, obstacles, game_client)
-        for message in game_client.get_updates():
-            local_player.health = message.enemyHealth
-            enemy_character.move_enemy(SCREEN_WIDTH, SCREEN_HEIGHT, screen, local_player, obstacles,
-                                        message.keys,message.x,message.y)
+        message = local_player.move(SCREEN_WIDTH, SCREEN_HEIGHT, screen, enemy_character, obstacles, game_client)
+        loop.create_task(local_player.game_client.send_update(message))
+        loop.create_task(game_client.get_update())
 
+        for message in game_client.messages:
+            if message.quit:
+                run = False
+            local_player.health = message.enemyHealth
+            enemy_character.move_enemy(SCREEN_WIDTH,SCREEN_HEIGHT,screen,local_player,obstacles,message.keys,message.x,message.y)
+            enemy_character.feet(screen, obstacles)
+
+        enemy_character.draw_projectile(local_player,screen.get_width(),screen)
         # draw fighters
         local_player.draw(screen)
         enemy_character.draw(screen)
@@ -193,6 +206,9 @@ def multi_player_game_loop(game_client):
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+
+                local_player.game_client.quit_game()
+
                 run = False
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
@@ -201,7 +217,9 @@ def multi_player_game_loop(game_client):
         # if fighter 1 or 2 punches, play the punch.wav sound effect
 
         # update display
+
         pygame.display.update()
+        run_once(loop)
     pygame.quit()
     sys.exit()
 
@@ -772,8 +790,8 @@ if __name__ == "__main__":
     menu_bg = pygame.image.load("game/assets/menu/main_menu_bg.png").convert_alpha()
 
     # use mixer to load music and sounds
-    #mixer.music.load("game/assets/audio/main.mp3")
-    #mixer.music.play(-1)
+    mixer.music.load("game/assets/audio/main.mp3")
+    mixer.music.play(-1)
     mixer.music.set_volume(0)
     punch_fx = mixer.Sound("game/assets/audio/punch.wav")
     projectile_fx = mixer.Sound("game/assets/audio/proj.wav")
