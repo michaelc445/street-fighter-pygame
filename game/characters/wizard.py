@@ -2,10 +2,10 @@ import pygame
 from game.fighter import Fighter
 from game.projectile import Projectile
 
-def createWizard(inherit_from, player, x, y, flip, punch_sound, projectile_sound, hit_sound, player1_controls, player2_controls):
+def createWizard(inherit_from, player, x, y, flip, punch_sound, projectile_sound, hit_sound,controls):
     class Wizard(inherit_from):
-        def __init__(self, player, x, y, flip, punch_sound, projectile_sound, hit_sound, player1_controls, player2_controls):
-            super().__init__(player, x, y, flip, punch_sound, projectile_sound, hit_sound, player1_controls, player2_controls)
+        def __init__(self, player, x, y, flip, punch_sound, projectile_sound, hit_sound,controls):
+            super().__init__(player, x, y, flip, punch_sound, projectile_sound, hit_sound,controls)
 
             #hitbox
             height = 100
@@ -50,4 +50,4 @@ def createWizard(inherit_from, player, x, y, flip, punch_sound, projectile_sound
                                 self.rect.height, damage, knockback, self, 5 - (10 * self.flip)))
                     self.attack2_cooldown = 150
 
-    return Wizard(player, x, y, flip, punch_sound, projectile_sound, hit_sound, player1_controls, player2_controls)
+    return Wizard(player, x, y, flip, punch_sound, projectile_sound, hit_sound,controls)

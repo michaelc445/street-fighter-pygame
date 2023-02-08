@@ -2,10 +2,10 @@ import pygame
 from game.fighter import Fighter
 from game.projectile import Projectile
 
-def createNomad(inherit_from, player, x, y, flip, punch_sound, projectile_sound, hit_sound, player1_controls, player2_controls):
+def createNomad(inherit_from, player, x, y, flip, punch_sound, projectile_sound, hit_sound):
     class Nomad(inherit_from):
-        def __init__(self, player, x, y, flip, punch_sound, projectile_sound, hit_sound, player1_controls, player2_controls):
-            super().__init__(player, x, y, flip, punch_sound, projectile_sound, hit_sound, player1_controls, player2_controls)
+        def __init__(self, player, x, y, flip, punch_sound, projectile_sound, hit_sound):
+            super().__init__(player, x, y, flip, punch_sound, projectile_sound, hit_sound)
 
                 
             #hitbox
@@ -56,4 +56,4 @@ def createNomad(inherit_from, player, x, y, flip, punch_sound, projectile_sound,
                                     self.rect.height // 2, damage, knockback, self, 10 - (20 * self.flip)))
                     self.attack2_cooldown = 100
 
-    return Nomad(player, x, y, flip, punch_sound, projectile_sound, hit_sound, player1_controls, player2_controls)
+    return Nomad(player, x, y, flip, punch_sound, projectile_sound, hit_sound)

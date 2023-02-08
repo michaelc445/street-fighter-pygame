@@ -1,10 +1,10 @@
 import pygame
 from game.fighter import Fighter
 from game.projectile import Projectile
-def createWarrior(inherit_from, player, x, y, flip, punch_sound, projectile_sound, hit_sound, player1_controls, player2_controls):
+def createWarrior(inherit_from, player, x, y, flip, punch_sound, projectile_sound, hit_sound,controls):
     class Warrior(inherit_from):
-        def __init__(self, player, x, y, flip, punch_sound, projectile_sound, hit_sound, player1_controls, player2_controls):
-            super().__init__(player, x, y, flip, punch_sound, projectile_sound, hit_sound, player1_controls, player2_controls)
+        def __init__(self, player, x, y, flip, punch_sound, projectile_sound, hit_sound,controls):
+            super().__init__(player, x, y, flip, punch_sound, projectile_sound, hit_sound,controls)
 
 
             #hitbox
@@ -61,4 +61,4 @@ def createWarrior(inherit_from, player, x, y, flip, punch_sound, projectile_soun
 
                     pygame.draw.rect(surface, (0, 255, 0), attacking_rect)
 
-    return Warrior(player, x, y, flip, punch_sound, projectile_sound, hit_sound, player1_controls, player2_controls)
+    return Warrior(player, x, y, flip, punch_sound, projectile_sound, hit_sound,controls)
