@@ -59,10 +59,10 @@ def index():
 #####################################################################################################
 #####################################################################################################
 #####################################################################################################
-@app.route("/single_player", methods=["GET","POST"])
-def single_player():
+@app.route("/game", methods=["GET","POST"])
+def game():
     status = log_status()
-    return render_template("single_player.html",status=status)
+    return render_template("game.html",status=status)
 
 #####################################################################################################
 #####################################################################################################
@@ -72,10 +72,10 @@ def single_player():
 # for comparing other teams FPL points and your teams
 
 
-@app.route("/Multi_player", methods=["GET","POST"])
-def Multi_player():
+@app.route("/leaderboard.html", methods=["GET","POST"])
+def leaderboard():
     status = log_status()
-    return render_template("Multi_player.html",status=status)
+    return render_template("leaderboard.html",status=status)
 
 #####################################################################################################
 #####################################################################################################
