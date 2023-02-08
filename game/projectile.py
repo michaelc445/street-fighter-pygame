@@ -19,7 +19,6 @@ class Projectile():
         if (self.rect.left + self.dx < 0) or (self.rect.right + self.dx > screen_width):
             self.exists = False
             
-
         self.rect.x += self.dx
         if self.rect.colliderect(target.rect):
             if not target.blocking:

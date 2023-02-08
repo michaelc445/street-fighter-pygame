@@ -27,8 +27,6 @@ class Fighter(object):
         self.alive = True
         self.controls = controls
 
-
-
     def loadImages(self, spriteSheet, animationSteps):
         # extract images from sprite sheet
         y = 0
@@ -43,7 +41,6 @@ class Fighter(object):
             y += 1
         return animationList
 
-
     def move(self, screen_width, screen_height, surface, target, obstacles):
         GRAVITY = 2
         self.dx = 0
@@ -52,7 +49,6 @@ class Fighter(object):
         # check player 1 movement
 
         self.keybinds(self.controls, surface, target,None)
-
 
         # apply gravity
         self.grav(GRAVITY)
@@ -152,6 +148,7 @@ class Fighter(object):
                 projectile.draw(surface)
                 if not projectile.exists:
                     self.projectiles.remove(projectile)
+                    
     def keybinds(self, player_controls, surface, target,key):
         # get keypresses
         if key is None:
