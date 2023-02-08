@@ -84,7 +84,7 @@ def leaderboard():
 @app.route("/Download", methods=["GET","POST"])
 def Download():
     status = log_status()
-    return render_template("Multi_player.html",status=status)
+    return render_template("Download.html",status=status)
 
 
 
@@ -123,7 +123,6 @@ def register():
     return render_template("registration_form.html",form=form,status=status)
 
     
-
 
 @app.route("/login",methods=["GET","POST"])
 def login():
