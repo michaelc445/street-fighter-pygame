@@ -148,6 +148,8 @@ def multi_player_game_loop(game_client):
     pygame.display.set_caption("Team 5 Project")
 
     # cap frame rate
+    clock = pygame.time.Clock()
+    FPS = 60
     # define colors
     # load bg image
 
@@ -166,8 +168,7 @@ def multi_player_game_loop(game_client):
     obstacle_2 = Obstacle(700, 200, 200, 50)
     obstacles = [obstacle_1, obstacle_2]
     run = True
-    clock = pygame.time.Clock()
-    FPS = 60
+
 
     while run:
 
@@ -547,7 +548,7 @@ def menu_play():
 
         local = Button(image=pygame.image.load("game/assets/menu/long.png"), pos=(500, 275),
                       text_input="LOCAL MULTI", font=font(35), base_color="#d7fcd4", hovering_color="White")
-        #add multiplayer button here
+        
         multiplayer = Button(image=pygame.image.load("game/assets/menu/long.png"), pos=(500, 400),
                       text_input="MULTIPLAYER", font=font(35), base_color="#d7fcd4", hovering_color="White")
 

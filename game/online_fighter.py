@@ -5,8 +5,8 @@ from proto import game_pb2 as pb
 
 class OnlineFighter(Fighter):
 
-    def __init__(self, player, x, y, width, height, flip, punch_sound, projectile_sound, hit_sound):
-        super().__init__(player, x, y, width, height, flip, punch_sound, projectile_sound, hit_sound)
+    def __init__(self, player, x, y, width, height, flip, punch_sound, projectile_sound, hit_sound, player1_controls, player2_controls):
+        super().__init__(player, x, y, width, height, flip, punch_sound, projectile_sound, hit_sound, player1_controls, player2_controls)
         self.game_client = None
         self.game_keys = [pygame.K_a, pygame.K_d, pygame.K_w, pygame.K_r, pygame.K_t]
 
@@ -24,13 +24,12 @@ class OnlineFighter(Fighter):
         return message
 
     def move(self, screen_width, screen_height, surface, target, obstacles, game_client):
-        SPEED = 10
         GRAVITY = 2
         self.dx = 0
         self.dy = 0
-        # check player 1 movement
+        # check player movement
         keys = pygame.key.get_pressed()
-        self.keybinds(self.player1_controls, surface, target, SPEED, keys)
+        self.keybinds(self.player1_controls, surface, target, keys)
 
         # apply gravity
         self.grav(GRAVITY)
@@ -38,15 +37,17 @@ class OnlineFighter(Fighter):
         # keep player on screen
         self.bounds(screen_width, screen_height)
 
+        #keep player from phasing through obstacles
+        self.feet(surface, obstacles)
+
         # count attack cooldown
-        if self.attack_cooldown > 0:
-            self.attack_cooldown -= 1
+        if self.attack1_cooldown > 0:
+            self.attack1_cooldown -= 1
 
         # count projectile cooldown
-        if self.projectile_cooldown > 0:
-            self.projectile_cooldown -= 1
+        if self.attack2_cooldown > 0:
+            self.attack2_cooldown -= 1
 
-        self.feet(surface, obstacles)
         # update projectiles
         if self.projectiles:
             for projectile in self.projectiles:
@@ -54,32 +55,37 @@ class OnlineFighter(Fighter):
                 projectile.draw(surface)
                 if not projectile.exists:
                     self.projectiles.remove(projectile)
+
         message = self._create_update_message(keys, target)
         self.game_client.send_update(message)
 
     def move_enemy(self, screen_width, screen_height, surface, target, obstacles, key,x,y):
-        speed = 10
-        gravity = 2
+        GRAVITY = 2
         self.dx = 0
         self.dy = 0
         self.x = x
         self.y = y
-        self.keybinds(self.player1_controls, surface, target, speed, key)
 
-        self.grav(gravity)
+        #check player movement
+        self.keybinds(self.player1_controls, surface, target, key)
+
+        # apply gravity
+        self.grav(GRAVITY)
 
         # keep player on screen
         self.bounds(screen_width, screen_height)
 
+        #keep player from phasing through obstacles
+        self.feet(surface, obstacles)
+
         # count attack cooldown
-        if self.attack_cooldown > 0:
-            self.attack_cooldown -= 1
+        if self.attack1_cooldown > 0:
+            self.attack1_cooldown -= 1
 
         # count projectile cooldown
-        if self.projectile_cooldown > 0:
-            self.projectile_cooldown -= 1
+        if self.attack2_cooldown > 0:
+            self.attack2_cooldown -= 1
 
-        self.feet(surface, obstacles)
         # update projectiles
         if self.projectiles:
             for projectile in self.projectiles:
@@ -89,27 +95,30 @@ class OnlineFighter(Fighter):
                     self.projectiles.remove(projectile)
 
 
-    def keybinds(self, player_controls, surface, target, speed, key):
-        # get keypresses
-        if not self.blocking:
-            # face direction of other player
-            if target.rect.centerx > self.rect.centerx:
-                self.flip = False
-            else:
-                self.flip = True
+    def keybinds(self, player_controls, surface, target, key):
+        self.running = False
+        #self.jump = False  # uncomment this to fly :)
 
-            # movement
+        if not self.blocking and not self.attacking:
             # move left
             if key[player_controls["left"]]:
-                self.dx = -speed
+                self.dx = -self.speed
+                #        self.actionUpdate(4)
+                self.running = True
+                self.flip = True
             # move right
             if key[player_controls["right"]]:
-                self.dx = speed
+                self.dx = self.speed
+                #       self.actionUpdate(4)
+                self.running = True
+
+                self.flip = False
 
             # jump
             if key[player_controls["jump"]] and not self.jump:
                 self.vel_y = -30
                 self.jump = True
+                #self.actionUpdate(5)
 
             # attack
             if key[player_controls["attack1"]] or key[player_controls["attack2"]]:
@@ -118,6 +127,7 @@ class OnlineFighter(Fighter):
                     self.attack_type = 1
                 if key[player_controls["attack2"]]:
                     self.attack_type = 2
+
 
                 self.attack(surface, target)
 
