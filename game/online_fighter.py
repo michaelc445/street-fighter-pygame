@@ -38,7 +38,7 @@ class OnlineFighter(Fighter):
         self.bounds(screen_width, screen_height)
 
         #keep player from phasing through obstacles
-        self.feet(surface, obstacles)
+        self.obstacle_collision(surface, obstacles)
 
         # count attack cooldown
         if self.attack1_cooldown > 0:
@@ -76,7 +76,7 @@ class OnlineFighter(Fighter):
         self.bounds(screen_width, screen_height)
 
         #keep player from phasing through obstacles
-        self.feet(surface, obstacles)
+        self.obstacle_collision(surface, obstacles)
 
         # count attack cooldown
         if self.attack1_cooldown > 0:

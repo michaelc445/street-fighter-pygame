@@ -782,9 +782,7 @@ if __name__ == "__main__":
     projectile_fx.set_volume(0.5)
     hit_fx.set_volume(0.5)
 
-    # animate fighters
-    # fighter_1.frameUpdate()
-    # fighter_2.frameUpdate()
+
     # create obstacles
     #obstacle_1 = Obstacle(400, 300, 100, 300)
     obstacle_2 = Obstacle(700, 200, 200, 50)

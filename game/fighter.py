@@ -68,7 +68,7 @@ class Fighter():
         self.bounds(screen_width, screen_height)
 
         #keep player from phasing through obstacles
-        self.feet(surface, obstacles)
+        self.obstacle_collision(surface, obstacles)
 
         # count attack cooldown
         if self.attack1_cooldown > 0:
@@ -134,8 +134,6 @@ class Fighter():
             self.frame = 0
             self.action = newAction
             self.updateFrame = pygame.time.get_ticks()
-
-
 
     def draw(self, surface):
         #draw hitbox of player
@@ -208,7 +206,7 @@ class Fighter():
         self.dy += self.vel_y
         self.dx += self.vel_x
 
-    def feet(self, surface, obstacles):
+    def obstacle_collision(self, surface, obstacles):
         # update player position
         updatex, updatey = True, True
         x_collision_check = pygame.Rect((self.rect.x + self.dx, self.rect.y, self.rect.width, self.rect.height))
@@ -219,7 +217,7 @@ class Fighter():
         #pygame.draw.rect(surface, (230, 176, 30), standing_on_platform_check)
         for obstacle in obstacles:
             if x_collision_check.colliderect(obstacle.rect):
-                self.vel_x = 0
+                self.vel_x = -self.vel_x
                 updatex = False
 
             if y_collision_check.colliderect(obstacle.rect):
@@ -238,11 +236,13 @@ class Fighter():
         # keep players on screen
         if self.rect.left + self.dx < 0:
             self.dx = -self.rect.left
-            self.vel_x = 0
+            # bounce off wall if knocked into it
+            self.vel_x = -self.vel_x
 
         if self.rect.right + self.dx > screen_width:
             self.dx = screen_width - self.rect.right
-            self.vel_x = 0
+            # bounce off wall if knocked into it
+            self.vel_x = -self.vel_x
 
         if self.rect.bottom + self.dy > screen_height - 100:
             self.vel_y = 0
