@@ -196,6 +196,8 @@ def multi_player_game_loop(game_client):
             enemy_character.feet(screen, obstacles)
 
         enemy_character.draw_projectile(local_player,screen.get_width(),screen)
+        local_player.frameUpdate()
+        enemy_character.frameUpdate()
         # draw fighters
         local_player.draw(screen)
         enemy_character.draw(screen)

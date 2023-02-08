@@ -30,7 +30,7 @@ class OnlineFighter(Fighter):
         self.dy = 0
         # check player 1 movement
         keys = pygame.key.get_pressed()
-        self.keybinds(self.controls, surface, target, SPEED, keys)
+        self.keybinds(self.controls, surface, target, keys)
 
         # apply gravity
         self.grav(GRAVITY)
@@ -64,7 +64,7 @@ class OnlineFighter(Fighter):
         self.dy = 0
         self.x=x
         self.y=y
-        self.keybinds(self.controls, surface, target, speed, key)
+        self.keybinds(self.controls, surface, target, key)
 
         self.grav(gravity)
 
@@ -84,41 +84,36 @@ class OnlineFighter(Fighter):
 
 
 
-    def keybinds(self, player_controls, surface, target, speed, key):
-        # get keypresses
-        if not self.blocking:
-            # face direction of other player
-            if target.rect.centerx > self.rect.centerx:
-                self.flip = False
-            else:
-                self.flip = True
-
-            # movement
-            # move left
-            if key[player_controls["left"]]:
-                self.dx = -speed
-            # move right
-            if key[player_controls["right"]]:
-                self.dx = speed
-
-            # jump
-            if key[player_controls["jump"]] and not self.jump:
-                self.vel_y = -30
-                self.jump = True
-
-            # attack
-            if key[player_controls["attack1"]] or key[player_controls["attack2"]]:
-                # determine attack type
-                if key[player_controls["attack1"]]:
-                    self.attack_type = 1
-                if key[player_controls["attack2"]]:
-                    self.attack_type = 2
-
-                self.attack(surface, target)
-
-        # block
-        if key[player_controls["block"]]:
-            self.color = (0, 0, 255)
-            self.blocking = True
-        else:
-            self.blocking = False
+    # def keybinds(self, player_controls, surface, target, speed, key):
+    #     # get keypresses
+    #     if not self.blocking:
+    #
+    #         # movement
+    #         # move left
+    #         if key[player_controls["left"]]:
+    #             self.dx = -speed
+    #         # move right
+    #         if key[player_controls["right"]]:
+    #             self.dx = speed
+    #
+    #         # jump
+    #         if key[player_controls["jump"]] and not self.jump:
+    #             self.vel_y = -30
+    #             self.jump = True
+    #
+    #         # attack
+    #         if key[player_controls["attack1"]] or key[player_controls["attack2"]]:
+    #             # determine attack type
+    #             if key[player_controls["attack1"]]:
+    #                 self.attack_type = 1
+    #             if key[player_controls["attack2"]]:
+    #                 self.attack_type = 2
+    #
+    #             self.attack(surface, target)
+    #
+    #     # block
+    #     if key[player_controls["block"]]:
+    #         self.color = (0, 0, 255)
+    #         self.blocking = True
+    #     else:
+    #         self.blocking = False

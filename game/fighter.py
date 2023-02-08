@@ -179,9 +179,10 @@ class Fighter(object):
                 projectile.draw(surface)
                 if not projectile.exists:
                     self.projectiles.remove(projectile)
-    def keybinds(self, player_controls, surface, target):
+    def keybinds(self, player_controls, surface, target,key):
         # get keypresses
-        key = pygame.key.get_pressed()
+        if key is None:
+            key = pygame.key.get_pressed()
         self.running = False
         #self.jump = False  # uncomment this to fly :)
 
