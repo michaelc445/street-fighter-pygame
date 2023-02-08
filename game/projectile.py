@@ -9,6 +9,7 @@ class Projectile():
         self.knockback = knockback
         self.owner = owner
         self.dx = dx
+        self.direction = self.owner.flip
 
     def draw(self, surface):
         pygame.draw.rect(surface, self.color, self.rect)
@@ -22,7 +23,7 @@ class Projectile():
         self.rect.x += self.dx
         if self.rect.colliderect(target.rect):
             if not target.blocking:
-                target.take_hit(self.damage, self.knockback, self.owner.flip)
+                target.take_hit(self.damage, self.knockback, self.direction)
             self.exists = False
 
 
