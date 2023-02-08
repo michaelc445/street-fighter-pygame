@@ -193,7 +193,7 @@ def multi_player_game_loop(game_client):
                 run = False
             local_player.health = message.enemyHealth
             enemy_character.move_enemy(SCREEN_WIDTH,SCREEN_HEIGHT,screen,local_player,obstacles,message.keys,message.x,message.y)
-            enemy_character.feet(screen, obstacles)
+            enemy_character.obstacle_collision(screen, obstacles)
 
         enemy_character.draw_projectile(local_player,screen.get_width(),screen)
         local_player.frameUpdate()

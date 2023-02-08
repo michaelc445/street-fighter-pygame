@@ -46,7 +46,7 @@ class OnlineFighter(Fighter):
         if self.attack2_cooldown > 0:
             self.attack2_cooldown -= 1
 
-        self.feet(surface, obstacles)
+        self.obstacle_collision(surface, obstacles)
         # update projectiles
         if self.projectiles:
             for projectile in self.projectiles:
