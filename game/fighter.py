@@ -49,18 +49,17 @@ class Fighter():
         return animationList
 
     def move(self, screen_width, screen_height, surface, target, obstacles):
-        SPEED = 10
         GRAVITY = 2
         self.dx = 0
         self.dy = 0
 
         # check player 1 movement
         if self.player == 1:
-            self.keybinds(self.player1_controls, surface, target, SPEED)
+            self.keybinds(self.player1_controls, surface, target)
 
         # check player 2 movement
         if self.player == 2:
-            self.keybinds(self.player2_controls, surface, target, SPEED)
+            self.keybinds(self.player2_controls, surface, target)
 
         # apply gravity
         self.grav(GRAVITY)
@@ -157,7 +156,7 @@ class Fighter():
         self.vel_x += (damage - 2 * damage * direction)
         self.vel_y -= damage
 
-    def keybinds(self, player_controls, surface, target, speed):
+    def keybinds(self, player_controls, surface, target):
         # get keypresses
         key = pygame.key.get_pressed()
         self.running = False
@@ -166,13 +165,13 @@ class Fighter():
         if not self.blocking:
             # move left
             if key[player_controls["left"]]:
-                self.dx = -speed
+                self.dx = -self.speed
                 #        self.actionUpdate(4)
                 self.running = True
                 self.flip = True
             # move right
             if key[player_controls["right"]]:
-                self.dx = speed
+                self.dx = self.speed
                 #       self.actionUpdate(4)
                 self.running = True
 

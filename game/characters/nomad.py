@@ -12,6 +12,9 @@ class Nomad(Fighter):
         width = 70
         self.rect = pygame.Rect((x, y, width, height))
 
+        #character attributes
+        self.speed = 10
+
         #load nomad sheet
         self.nomadSheet = pygame.image.load("game/assets/nomad/nomad_spritesheet.png")
 

@@ -6,10 +6,13 @@ class Wizard(Fighter):
     def __init__(self, player, x, y, flip, punch_sound, projectile_sound, hit_sound, player1_controls, player2_controls):
         super().__init__(player, x, y, flip, punch_sound, projectile_sound, hit_sound, player1_controls, player2_controls)
 
-
+        #hitbox
         height = 100
         width = 60
         self.rect = pygame.Rect((x, y, width, height))
+
+        #character attributes
+        self.speed = 8
 
         #load wizard sheet
         self.wizardSheet = pygame.image.load("game/assets/wizard/wizard_spritesheet.png")
