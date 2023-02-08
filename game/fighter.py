@@ -160,7 +160,7 @@ class Fighter():
         self.running = False
         #self.jump = False  # uncomment this to fly :)
 
-        if not self.blocking:
+        if not self.blocking and not self.attacking:
             # move left
             if key[player_controls["left"]]:
                 self.dx = -self.speed
