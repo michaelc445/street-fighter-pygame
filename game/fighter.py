@@ -137,8 +137,8 @@ class Fighter():
 
     def draw(self, surface):
         #draw hitbox of player
-        pygame.draw.rect(surface, self.color, self.rect)
-        self.color = (255, 0, 0)
+        #pygame.draw.rect(surface, self.color, self.rect)
+        #self.color = (255, 0, 0)
 
         #draw player
         img = pygame.transform.flip(self.img, self.flip, False)
