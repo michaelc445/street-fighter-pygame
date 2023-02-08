@@ -2,9 +2,9 @@ import pygame
 from pygame import mixer
 from game.fighter import Fighter
 from game.online_fighter import OnlineFighter
-from game.characters.nomad import Nomad
-from game.characters.warrior import Warrior
-from game.characters.wizard import Wizard
+from game.characters.nomad import createNomad
+from game.characters.warrior import createWarrior
+from game.characters.wizard import createWizard
 from game.obstacle import Obstacle
 from game.button import Button
 from game.network.game_client import GameClient
@@ -79,22 +79,22 @@ def sfx_change(level):
 def game_loop():
 
     if p1 == "wizard":
-        fighter_1 = Wizard(1, 200, 310, False, punch_fx, projectile_fx, hit_fx, player1_controls, player2_controls)
+        fighter_1 = createWizard(Fighter, 1, 200, 310, False, punch_fx, projectile_fx, hit_fx, player1_controls, player2_controls)
 
     elif p1 == "nomad":
-        fighter_1 = Nomad(1, 200, 310, False, punch_fx, projectile_fx, hit_fx, player1_controls, player2_controls)
+        fighter_1 = createNomad(Fighter, 1, 200, 310, False, punch_fx, projectile_fx, hit_fx, player1_controls, player2_controls)
 
     elif p1 == "warrior":
-        fighter_1 = Warrior(1, 200, 310, False, punch_fx, projectile_fx, hit_fx, player1_controls, player2_controls)
+        fighter_1 = createWarrior(Fighter, 1, 200, 310, False, punch_fx, projectile_fx, hit_fx, player1_controls, player2_controls)
 
     if p2 == "wizard":
-        fighter_2 = Wizard(2, 700, 310, True, punch_fx, projectile_fx, hit_fx, player1_controls, player2_controls)
+        fighter_2 = createWizard(Fighter, 2, 700, 310, True, punch_fx, projectile_fx, hit_fx, player1_controls, player2_controls)
 
     elif p2 == "nomad":
-        fighter_2 = Nomad(2, 700, 310, True, punch_fx, projectile_fx, hit_fx, player1_controls, player2_controls)
+        fighter_2 = createNomad(Fighter, 2, 700, 310, True, punch_fx, projectile_fx, hit_fx, player1_controls, player2_controls)
 
     elif p2 == "warrior":
-        fighter_2 = Warrior(2, 700, 310, True, punch_fx, projectile_fx, hit_fx, player1_controls, player2_controls)
+        fighter_2 = createWarrior(Fighter, 2, 700, 310, True, punch_fx, projectile_fx, hit_fx, player1_controls, player2_controls)
 
     run = True
     while run:
@@ -155,8 +155,10 @@ def multi_player_game_loop(game_client):
 
     # create fighters
 
-    f1 = OnlineFighter(1, 200, 310, 40, 100, False, punch_fx, projectile_fx, hit_fx)
-    f2 = OnlineFighter(1, 700, 310, 40, 100, True, punch_fx, projectile_fx, hit_fx)
+    f1 = createWizard(OnlineFighter, 1, 200, 310, False, punch_fx, projectile_fx, hit_fx, player1_controls, player2_controls)
+    f2 = createWarrior(OnlineFighter, 2, 700, 310, True, punch_fx, projectile_fx, hit_fx, player1_controls, player2_controls)
+
+
     fighters = [f1, f2]
     pick = int(game_client.player_id)
 
