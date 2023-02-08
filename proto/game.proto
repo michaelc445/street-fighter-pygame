@@ -10,7 +10,6 @@ message Move{
 
 message Update{
   required int32 health = 1;
-
   required int32 enemyMove = 2;
   required bool moving =3;
   required int32 enemyHealth = 4;
@@ -19,11 +18,22 @@ message Update{
   required int32 y = 7;
   map<int32, bool> keys = 8;
   required bool id = 9;
+  //true means game over
+  required bool quit = 10;
 }
 
 message JoinLobbyRequest{
   //player name
   required string name =1;
+
+}
+message CreateLobbyRequest{
+  required string lobbyCode = 1;
+}
+message CreateLobbyResponse{
+  required bool ok = 1;
+  required int32 port = 2;
+  required bool start = 3;
 
 }
 message JoinLobbyResponse{
