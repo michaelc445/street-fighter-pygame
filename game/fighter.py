@@ -21,10 +21,10 @@ class Fighter():
         self.hit = False
         self.shooting_projectile = False
         self.projectiles = []
-        self.attack2_cooldown = 0
         self.attack_type = 0
         self.health = 100
         self.attack1_cooldown = 0
+        self.attack2_cooldown = 0
         self.color = (255, 0, 0)
         self.punch_sound = punch_sound
         self.projectile_sound = projectile_sound
@@ -77,8 +77,6 @@ class Fighter():
         # count projectile cooldown
         if self.attack2_cooldown > 0:
             self.attack2_cooldown -= 1
-
-        
 
         # update projectiles
         if self.projectiles:
@@ -188,10 +186,8 @@ class Fighter():
                 # determine attack type
                 if key[player_controls["attack1"]]:
                     self.attack_type = 1
-                    self.attacking = True
                 if key[player_controls["attack2"]]:
                     self.attack_type = 2
-                    self.attacking = True
 
 
                 self.attack(surface, target)

@@ -31,6 +31,7 @@ class Nomad(Fighter):
     def attack(self, surface, target):
         if self.attack_type == 1:
             if self.attack1_cooldown == 0:
+                self.attacking = True
                 self.punch_sound.play()
                 damage = 10
                 knockback = 10
@@ -46,6 +47,7 @@ class Nomad(Fighter):
 
         if self.attack_type == 2:
             if self.attack2_cooldown == 0:
+                self.attacking = True
                 damage = 10
                 knockback = 15
                 self.projectile_sound.play()

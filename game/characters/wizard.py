@@ -29,6 +29,7 @@ class Wizard(Fighter):
     def attack(self, surface, target):
         if self.attack_type == 1:
             if self.attack1_cooldown == 0:
+                self.attacking = True
                 damage = 5
                 knockback = 5
                 self.projectile_sound.play()
@@ -39,6 +40,7 @@ class Wizard(Fighter):
 
         if self.attack_type == 2:
             if self.attack2_cooldown == 0:
+                self.attacking = True
                 damage = 15
                 knockback = 15
                 self.projectile_sound.play()
