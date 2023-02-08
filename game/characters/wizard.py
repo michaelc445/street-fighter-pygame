@@ -1,5 +1,4 @@
 import pygame
-from game.fighter import Fighter
 from game.projectile import Projectile
 
 def createWizard(inherit_from, player, x, y, flip, punch_sound, projectile_sound, hit_sound,controls):
@@ -43,7 +42,7 @@ def createWizard(inherit_from, player, x, y, flip, punch_sound, projectile_sound
                 if self.attack2_cooldown == 0:
                     self.attacking = True
                     damage = 15
-                    knockback = 15
+                    knockback = 10
                     self.projectile_sound.play()
                     self.projectiles.append(
                         Projectile(self.rect.centerx - (2 * self.rect.width * self.flip), self.rect.y, 2 * self.rect.width,

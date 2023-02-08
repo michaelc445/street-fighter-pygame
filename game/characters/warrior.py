@@ -1,11 +1,9 @@
 import pygame
-from game.fighter import Fighter
-from game.projectile import Projectile
+
 def createWarrior(inherit_from, player, x, y, flip, punch_sound, projectile_sound, hit_sound,controls):
     class Warrior(inherit_from):
         def __init__(self, player, x, y, flip, punch_sound, projectile_sound, hit_sound,controls):
             super().__init__(player, x, y, flip, punch_sound, projectile_sound, hit_sound,controls)
-
 
             #hitbox
             height = 100
@@ -14,7 +12,6 @@ def createWarrior(inherit_from, player, x, y, flip, punch_sound, projectile_soun
 
             #character attributes
             self.speed = 8
-
 
             #load warrior sheet
             self.warriorSheet = pygame.image.load("game/assets/warrior/warrior_spritesheet.png")

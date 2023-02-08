@@ -1,9 +1,6 @@
 import pygame
 
-
-
 class Fighter(object):
-
     def __init__(self, player, x, y, flip, punch_sound, projectile_sound, hit_sound,controls):
         self.updateFrame = pygame.time.get_ticks()
         self.action = 0  # 0=idle, 1=attack1, 2=attack2, 3=dying, 4=running, 5=jumping, 6=falling, 7=hit

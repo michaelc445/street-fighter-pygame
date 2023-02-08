@@ -1,5 +1,4 @@
 import pygame
-from game.fighter import Fighter
 from game.projectile import Projectile
 
 def createNomad(inherit_from, player, x, y, flip, punch_sound, projectile_sound, hit_sound, controls):
@@ -7,7 +6,6 @@ def createNomad(inherit_from, player, x, y, flip, punch_sound, projectile_sound,
         def __init__(self, player, x, y, flip, punch_sound, projectile_sound, hit_sound, controls):
             super().__init__(player, x, y, flip, punch_sound, projectile_sound, hit_sound, controls)
 
-                
             #hitbox
             height = 100
             width = 70
