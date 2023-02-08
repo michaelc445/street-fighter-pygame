@@ -1,6 +1,6 @@
 import pygame
 from game.projectile import Projectile
-from proto import game_pb2 as pb
+
 
 class Fighter():
     #wizardData = ["game/assets/wizard/", 231, 190, 7]

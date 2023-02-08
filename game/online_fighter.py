@@ -1,5 +1,6 @@
 import pygame
 from game.fighter import Fighter
+from proto import game_pb2 as pb
 
 
 class OnlineFighter(Fighter):
