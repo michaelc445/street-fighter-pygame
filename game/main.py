@@ -81,13 +81,13 @@ def game_loop():
         fighter_1 = createWarrior(Fighter, 1, 200, 310, False, punch_fx, projectile_fx, hit_fx, player1_controls)
 
     if p2 == "wizard":
-        fighter_2 = createWizard(Fighter, 2, 700, 310, True, punch_fx, projectile_fx, hit_fx,player2_controls)
+        fighter_2 = createWizard(Fighter, 2, 700, 310, True, punch_fx, projectile_fx, hit_fx, player2_controls)
 
     elif p2 == "nomad":
-        fighter_2 = createNomad(Fighter, 2, 700, 310, True, punch_fx, projectile_fx, hit_fx,player2_controls)
+        fighter_2 = createNomad(Fighter, 2, 700, 310, True, punch_fx, projectile_fx, hit_fx, player2_controls)
 
     elif p2 == "warrior":
-        fighter_2 = createWarrior(Fighter, 2, 700, 310, True, punch_fx, projectile_fx, hit_fx,player2_controls)
+        fighter_2 = createWarrior(Fighter, 2, 700, 310, True, punch_fx, projectile_fx, hit_fx, player2_controls)
 
     run = True
     while run:
@@ -792,8 +792,8 @@ if __name__ == "__main__":
     menu_bg = pygame.image.load("game/assets/menu/main_menu_bg.png").convert_alpha()
 
     # use mixer to load music and sounds
-    mixer.music.load("game/assets/audio/main.mp3")
-    mixer.music.play(-1)
+    #mixer.music.load("game/assets/audio/main.mp3")
+    #mixer.music.play(-1)
     mixer.music.set_volume(0)
     punch_fx = mixer.Sound("game/assets/audio/punch.wav")
     projectile_fx = mixer.Sound("game/assets/audio/proj.wav")
