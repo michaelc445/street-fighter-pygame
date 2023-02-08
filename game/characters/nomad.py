@@ -29,7 +29,6 @@ class Nomad(Fighter):
 
 
     def attack(self, surface, target):
-        # self.attacking = True
         if self.attack_type == 1:
             if self.attack1_cooldown == 0:
                 self.punch_sound.play()

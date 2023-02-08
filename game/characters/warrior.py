@@ -29,7 +29,6 @@ class Warrior(Fighter):
         self.img = self.animationList[self.action][self.frame]        
 
     def attack(self, surface, target):
-        # self.attacking = True
         if self.attack_type == 1:
             if self.attack1_cooldown == 0:
                 self.punch_sound.play()

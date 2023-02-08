@@ -67,6 +67,9 @@ class Fighter():
         # keep player on screen
         self.bounds(screen_width, screen_height)
 
+        #keep player from phasing through obstacles
+        self.feet(surface, obstacles)
+
         # count attack cooldown
         if self.attack1_cooldown > 0:
             self.attack1_cooldown -= 1
@@ -75,7 +78,7 @@ class Fighter():
         if self.attack2_cooldown > 0:
             self.attack2_cooldown -= 1
 
-        self.feet(surface, obstacles)
+        
 
         # update projectiles
         if self.projectiles:
@@ -99,7 +102,7 @@ class Fighter():
         elif self.attacking:
             if self.attack_type == 1:
                 self.actionUpdate(1)
-            else:
+            elif self.attack_type == 2:
                 self.actionUpdate(2)
         else:
             self.actionUpdate(0)
@@ -121,17 +124,14 @@ class Fighter():
                     #check if an attack was executed
                 if self.action == 1 or self.action == 2:
                     self.attacking = False
-                    self.attack_cooldown = 20
                 #check if damage was taken
                 if self.action == 7:
                     self.hit = False
                         #if the player was in the middle of an attack, then the attack is stopped
                     self.attacking = False
-                    self.attack_cooldown = 20
                     self.frame = 0
 
     def actionUpdate(self, newAction):
-
         if newAction != self.action:
             self.frame = 0
             self.action = newAction
