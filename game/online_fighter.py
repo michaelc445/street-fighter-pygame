@@ -30,7 +30,7 @@ class OnlineFighter(Fighter):
         self.dy = 0
         # check player 1 movement
         keys = pygame.key.get_pressed()
-        self.keybinds(self.player1_controls, surface, target, SPEED, keys)
+        self.keybinds(self.controls, surface, target, SPEED, keys)
 
         # apply gravity
         self.grav(GRAVITY)
@@ -64,7 +64,7 @@ class OnlineFighter(Fighter):
         self.dy = 0
         self.x=x
         self.y=y
-        self.keybinds(self.player1_controls, surface, target, speed, key)
+        self.keybinds(self.controls, surface, target, speed, key)
 
         self.grav(gravity)
 

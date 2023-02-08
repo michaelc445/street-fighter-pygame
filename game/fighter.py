@@ -28,8 +28,8 @@ class Fighter(object):
         self.projectile_sound = projectile_sound
         self.hit_sound = hit_sound
         self.alive = True
-        self.player1_controls = controls
-        self.player2_controls = None
+        self.controls = controls
+
 
 
     def loadImages(self, spriteSheet, animationSteps):
@@ -77,12 +77,9 @@ class Fighter(object):
         self.dy = 0
 
         # check player 1 movement
-        if self.player == 1:
-            self.keybinds(self.player1_controls, surface, target)
 
-        # check player 2 movement
-        if self.player == 2:
-            self.keybinds(self.player2_controls, surface, target)
+        self.keybinds(self.controls, surface, target)
+
 
         # apply gravity
         self.grav(GRAVITY)
