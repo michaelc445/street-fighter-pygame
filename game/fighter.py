@@ -80,8 +80,6 @@ class Fighter(object):
             self.health = 0
             self.alive = False
             self.actionUpdate(3)
-        elif self.running:
-            self.actionUpdate(4)
         elif self.hit:
             self.actionUpdate(7)
         elif self.attacking:
@@ -91,6 +89,8 @@ class Fighter(object):
                 self.actionUpdate(2)
         elif self.jump:
             self.actionUpdate(5)
+        elif self.running:
+            self.actionUpdate(4)
         else:
             self.actionUpdate(0)
 
@@ -148,7 +148,7 @@ class Fighter(object):
                 projectile.draw(surface)
                 if not projectile.exists:
                     self.projectiles.remove(projectile)
-                    
+
     def keybinds(self, player_controls, surface, target,key):
         # get keypresses
         if key is None:
