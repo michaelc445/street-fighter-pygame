@@ -68,10 +68,6 @@ def game():
 #####################################################################################################
 #####################################################################################################
 
-
-# for comparing other teams FPL points and your teams
-
-
 @app.route("/leaderboard.html", methods=["GET","POST"])
 def leaderboard():
     status = log_status()
@@ -85,6 +81,11 @@ def leaderboard():
 def Download():
     status = log_status()
     return render_template("Download.html",status=status)
+
+@app.route("/about", methods=["GET","POST"])
+def Download():
+    status = log_status()
+    return render_template("about.html",status=status)
 
 
 
