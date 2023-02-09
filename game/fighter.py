@@ -125,10 +125,6 @@ class Fighter(object):
             self.updateFrame = pygame.time.get_ticks()
 
     def draw(self, surface):
-        #draw hitbox of player
-        #pygame.draw.rect(surface, self.color, self.rect)
-        #self.color = (255, 0, 0)
-
         #draw player
         img = pygame.transform.flip(self.img, self.flip, False)
         surface.blit(img, (self.rect.x - self.offset[0] * self.scale, self.rect.y - self.offset[1] * self.scale))
