@@ -729,8 +729,8 @@ if __name__ == "__main__":
     WHITE = (255, 255, 255)
 
     # load bg image
-    bg_image = pygame.image.load("game/assets/maps/cliffsv2.png").convert_alpha()
-    #bg_image = pygame.image.load("game/assets/maps/Enjl-Dream Ship Tileset/background_1.png").convert_alpha()
+    bg_image = pygame.image.load("game/assets/maps/churchv3.png").convert_alpha()
+    #bg_image = pygame.image.load("game/assets/maps/cliffsv2.png").convert_alpha()
 
     menu_bg = pygame.image.load("game/assets/menu/main_menu_bg.png").convert_alpha()
 
@@ -745,25 +745,36 @@ if __name__ == "__main__":
     projectile_fx.set_volume(0.5)
     hit_fx.set_volume(0.5)
 
-    fighter_1 = Fighter(1, 200, 310, 40, 100, False, punch_fx, projectile_fx, hit_fx, 0)
+    fighter_1 = Fighter(1, 280, 310, 40, 100, False, punch_fx, projectile_fx, hit_fx, 0)
     fighter_2 = Fighter(2, 700, 310, 40, 100, True, punch_fx, projectile_fx, hit_fx, 2)
 
     # animate fighters
     # fighter_1.frameUpdate()
     # fighter_2.frameUpdate()
     # create obstacles
-    obstacle_1 = Obstacle(107, 355, 90, 20)
-    obstacle_2 = Obstacle(120, 355, 60, 45)
 
-    obstacle_3 = Obstacle(325, 275, 400, 25)
-    obstacle_4 = Obstacle(350, 295, 350, 27)
+    # cliffs obstacles
+    #left_island1 = Obstacle(107, 355, 90, 20)
+    #left_island2 = Obstacle(120, 355, 60, 45)
+    #middle_island1 = Obstacle(325, 275, 400, 25)
+    #middle_island2 = Obstacle(350, 295, 350, 27)
+    #right_cliff1 = Obstacle(797, 145, 300, 50)
+    #right_cliff2 = Obstacle(810, 195, 200, 40)
+    #right_cliff3 = Obstacle(830, 235, 200, 35)
+    #right_cliff4 = Obstacle(850, 265, 200, 35)
+    #right_cliff5 = Obstacle(870, 285, 200, 35)
+    #right_cliff6 = Obstacle(225, 500, 570, 80)
 
-    obstacle_5 = Obstacle(797, 145, 300, 50)
-    obstacle_6 = Obstacle(810, 195, 200, 40)
-    obstacle_7 = Obstacle(830, 235, 200, 35)
-    obstacle_8 = Obstacle(850, 265, 200, 35)
-    obstacle_9 = Obstacle(870, 285, 200, 35)
+    #obstacles = [left_island1, left_island2, middle_island1, middle_island2, right_cliff1, right_cliff2, right_cliff3, right_cliff4, right_cliff5, right_cliff6]
 
 
-    obstacles = [obstacle_1, obstacle_2, obstacle_3, obstacle_4, obstacle_5, obstacle_6, obstacle_7, obstacle_8, obstacle_9]
+    # church obstacles
+    middle_floor = Obstacle(150, 530, 700, 80)
+    left_side = Obstacle(0, 387, 142, 160)
+    right_side = Obstacle(860, 387, 142, 160)
+    middle_top = Obstacle(235, 240, 525, 40)
+
+    obstacles = [middle_floor, left_side, right_side, middle_top]
+
+
     main_menu()

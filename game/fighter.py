@@ -322,10 +322,10 @@ class Fighter():
             self.dx = screen_width - self.rect.right
             self.vel_x = 0
 
-        if self.rect.bottom + self.dy > screen_height - 100:
-            self.vel_y = 0
-            self.dy = screen_height - 100 - self.rect.bottom
-            self.jump = False
+        #if self.rect.bottom + self.dy > screen_height - 100:
+        #    self.vel_y = 0
+        #    self.dy = screen_height - 100 - self.rect.bottom
+        #    self.jump = False
 
     def change(self, state):
         if state == "wizard":
