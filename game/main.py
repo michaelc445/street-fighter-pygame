@@ -10,6 +10,59 @@ from game.button import Button
 from game.network.game_client import GameClient
 import sys
 
+import game.main
+
+p1=""
+p2=""
+player1_controls = {"left": pygame.K_a, "right": pygame.K_d, "jump": pygame.K_w, "attack1": pygame.K_r,
+                                "attack2": pygame.K_t, "block": pygame.K_s}
+
+player2_controls = {"left": pygame.K_LEFT, "right": pygame.K_RIGHT, "jump": pygame.K_UP,
+                                "attack1": pygame.K_n, "attack2": pygame.K_m, "block": pygame.K_DOWN}
+
+mixer.init
+pygame.init()
+# create game window
+SCREEN_WIDTH = 1000
+SCREEN_HEIGHT = 600
+
+#default characters
+p1="wizard"
+p2="wizard"
+
+screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+pygame.display.set_caption("Main Menu")
+
+# cap frame rate
+clock = pygame.time.Clock()
+FPS = 60
+
+# define colors
+YELLOW = (255, 255, 0)
+RED = (255, 0, 0)
+WHITE = (255, 255, 255)
+
+# load bg image
+bg_image = pygame.image.load("game/assets/maps/background.png").convert_alpha()
+menu_bg = pygame.image.load("game/assets/menu/main_menu_bg.png").convert_alpha()
+
+# use mixer to load music and sounds
+#mixer.music.load("game/assets/audio/main.mp3")
+#mixer.music.play(-1)
+mixer.music.set_volume(0)
+punch_fx = mixer.Sound("game/assets/audio/punch.wav")
+projectile_fx = mixer.Sound("game/assets/audio/proj.wav")
+hit_fx = mixer.Sound("game/assets/audio/hit.wav")
+punch_fx.set_volume(0.15)
+projectile_fx.set_volume(0.5)
+hit_fx.set_volume(0.5)
+
+
+# create obstacles
+#obstacle_1 = Obstacle(400, 300, 100, 300)
+obstacle_2 = Obstacle(700, 200, 200, 50)
+obstacle_3 = Obstacle(100, 300, 100, 50)
+obstacles = [obstacle_2, obstacle_3]
 
 def draw_bg():
     scaled_bg = pygame.transform.scale(bg_image, (SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -708,104 +761,60 @@ def menu_char():
 
 # main menu
 def main_menu():
-    while True:
-        menu_scaled = pygame.transform.scale(menu_bg, (SCREEN_WIDTH, SCREEN_HEIGHT))
-        screen.blit(menu_scaled, (0, 0))
-        mouse = pygame.mouse.get_pos()
 
-        text = font(75).render("Main Menu", True, "#b68f40")
-        rect = text.get_rect(center=(500, 50))
+    menu_scaled = pygame.transform.scale(menu_bg, (SCREEN_WIDTH, SCREEN_HEIGHT))
+    screen.blit(menu_scaled, (0, 0))
+    mouse = pygame.mouse.get_pos()
 
-        play = Button(image=pygame.image.load("game/assets/menu/long.png"), pos=(500, 180),
-                      text_input="PLAY", font=font(55), base_color="#d7fcd4", hovering_color="White")
+    text = font(75).render("Main Menu", True, "#b68f40")
+    rect = text.get_rect(center=(500, 50))
 
-        #multi_player = Button(image=pygame.image.load("game/assets/Options Rect.png"), pos=(500, 275),
-                      #text_input="MULTI-PLAYER", font=font(45), base_color="#d7fcd4", hovering_color="White")
+    play = Button(image=pygame.image.load("game/assets/menu/long.png"), pos=(500, 180),
+                  text_input="PLAY", font=font(55), base_color="#d7fcd4", hovering_color="White")
 
-        options = Button(image=pygame.image.load("game/assets/menu/long.png"), pos=(500, 325),
-                         text_input="OPTIONS", font=font(55), base_color="#d7fcd4", hovering_color="White")
-        quit = Button(image=pygame.image.load("game/assets/menu/medium.png"), pos=(500, 470),
-                      text_input="QUIT", font=font(55), base_color="#d7fcd4", hovering_color="White")
+    #multi_player = Button(image=pygame.image.load("game/assets/Options Rect.png"), pos=(500, 275),
+                  #text_input="MULTI-PLAYER", font=font(45), base_color="#d7fcd4", hovering_color="White")
 
-        screen.blit(text, rect)
+    options = Button(image=pygame.image.load("game/assets/menu/long.png"), pos=(500, 325),
+                     text_input="OPTIONS", font=font(55), base_color="#d7fcd4", hovering_color="White")
+    quit = Button(image=pygame.image.load("game/assets/menu/medium.png"), pos=(500, 470),
+                  text_input="QUIT", font=font(55), base_color="#d7fcd4", hovering_color="White")
 
-        for button in [play, options, quit]:
-            button.changeColor(mouse)
-            button.update(screen)
+    screen.blit(text, rect)
 
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
+    for button in [play, options, quit]:
+        button.changeColor(mouse)
+        button.update(screen)
+
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            sys.exit()
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE:
                 pygame.quit()
                 sys.exit()
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:
-                    pygame.quit()
-                    sys.exit()
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if play.checkForInput(mouse):
-                    pygame.display.set_caption("Game Mode")
-                    menu_play()
-                if options.checkForInput(mouse):
-                    pygame.display.set_caption("Options")
-                    opt()
-                if quit.checkForInput(mouse):
-                    pygame.quit()
-                    sys.exit()
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if play.checkForInput(mouse):
+                pygame.display.set_caption("Game Mode")
+                menu_play()
+            if options.checkForInput(mouse):
+                pygame.display.set_caption("Options")
+                opt()
+            if quit.checkForInput(mouse):
+                pygame.quit()
+                sys.exit()
 
+
+def main():
+    state_map = {"main_menu": game.main.main_menu, "menu_play": game.main.menu_play}
+    run = True
+    while run:
+        draw_func = state_map[game_state]
+        draw_func()
         pygame.display.update()
 
 
+
 if __name__ == "__main__":
-
-    p1=""
-    p2=""
-    player1_controls = {"left": pygame.K_a, "right": pygame.K_d, "jump": pygame.K_w, "attack1": pygame.K_r,
-                                    "attack2": pygame.K_t, "block": pygame.K_s}
-
-    player2_controls = {"left": pygame.K_LEFT, "right": pygame.K_RIGHT, "jump": pygame.K_UP,
-                                    "attack1": pygame.K_n, "attack2": pygame.K_m, "block": pygame.K_DOWN}
-
-    mixer.init
-    pygame.init()
-    # create game window
-    SCREEN_WIDTH = 1000
-    SCREEN_HEIGHT = 600
-
-    #default characters
-    p1="wizard"
-    p2="wizard"
-
-    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-    pygame.display.set_caption("Main Menu")
-
-    # cap frame rate
-    clock = pygame.time.Clock()
-    FPS = 60
-
-    # define colors
-    YELLOW = (255, 255, 0)
-    RED = (255, 0, 0)
-    WHITE = (255, 255, 255)
-
-    # load bg image
-    bg_image = pygame.image.load("game/assets/maps/background.png").convert_alpha()
-    menu_bg = pygame.image.load("game/assets/menu/main_menu_bg.png").convert_alpha()
-
-    # use mixer to load music and sounds
-    #mixer.music.load("game/assets/audio/main.mp3")
-    #mixer.music.play(-1)
-    mixer.music.set_volume(0)
-    punch_fx = mixer.Sound("game/assets/audio/punch.wav")
-    projectile_fx = mixer.Sound("game/assets/audio/proj.wav")
-    hit_fx = mixer.Sound("game/assets/audio/hit.wav")
-    punch_fx.set_volume(0.15)
-    projectile_fx.set_volume(0.5)
-    hit_fx.set_volume(0.5)
-
-
-    # create obstacles
-    #obstacle_1 = Obstacle(400, 300, 100, 300)
-    obstacle_2 = Obstacle(700, 200, 200, 50)
-    obstacle_3 = Obstacle(100, 300, 100, 50)
-    obstacles = [obstacle_2, obstacle_3]
-    main_menu()
+    main()
