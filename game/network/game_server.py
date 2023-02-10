@@ -3,7 +3,6 @@ from proto import game_pb2 as pb
 from threading import Thread
 from datetime import datetime
 
-
 class Player(object):
 
     def __init__(self, name, ip, port, id):
