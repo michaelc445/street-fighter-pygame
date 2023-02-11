@@ -1,9 +1,9 @@
 import pygame
 
-def createWarrior(inherit_from, player, x, y, flip, punch_sound, projectile_sound, hit_sound,controls):
+def createWarrior(inherit_from, player, x, y, flip, controls):
     class Warrior(inherit_from):
-        def __init__(self, player, x, y, flip, punch_sound, projectile_sound, hit_sound,controls):
-            super().__init__(player, x, y, flip, punch_sound, projectile_sound, hit_sound,controls)
+        def __init__(self, player, x, y, flip, controls):
+            super().__init__(player, x, y, flip,controls)
 
             #hitbox
             height = 100
@@ -45,7 +45,7 @@ def createWarrior(inherit_from, player, x, y, flip, punch_sound, projectile_soun
             if self.attack_type == 2:
                 if self.attack2_cooldown == 0:
                     self.attacking = True
-                    self.punch_sound.play()
+                    #self.punch_sound.play()
                     damage = 20
                     knockback = 15
                     attacking_rect = pygame.Rect(self.rect.centerx - (2 * self.rect.width * self.flip), self.rect.y,
@@ -58,4 +58,4 @@ def createWarrior(inherit_from, player, x, y, flip, punch_sound, projectile_soun
 
                     pygame.draw.rect(surface, (0, 255, 0), attacking_rect)
 
-    return Warrior(player, x, y, flip, punch_sound, projectile_sound, hit_sound,controls)
+    return Warrior(player, x, y, flip, controls)

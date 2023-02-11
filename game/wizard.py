@@ -1,10 +1,10 @@
 import pygame
-from game.projectile import Projectile
+from projectile import Projectile
 
-def createWizard(inherit_from, player, x, y, flip, punch_sound, projectile_sound, hit_sound,controls):
+def createWizard(inherit_from, player, x, y, flip, controls):
     class Wizard(inherit_from):
-        def __init__(self, player, x, y, flip, punch_sound, projectile_sound, hit_sound,controls):
-            super().__init__(player, x, y, flip, punch_sound, projectile_sound, hit_sound,controls)
+        def __init__(self, player, x, y, flip, controls):
+            super().__init__(player, x, y, flip,controls)
 
             #hitbox
             height = 100
@@ -15,7 +15,7 @@ def createWizard(inherit_from, player, x, y, flip, punch_sound, projectile_sound
             self.speed = 8
 
             #load wizard sheet
-            self.wizardSheet = pygame.image.load("game/assets/wizard/wizard_spritesheet.png")
+            self.wizardSheet = pygame.image.load("wizard/wizard_spritesheet.png")
 
             self.spriteSheet = self.wizardSheet
             self.sizeX = self.wizardSheetX = 231
@@ -32,7 +32,7 @@ def createWizard(inherit_from, player, x, y, flip, punch_sound, projectile_sound
                     self.attacking = True
                     damage = 5
                     knockback = 5
-                    self.projectile_sound.play()
+                    #self.projectile_sound.play()
                     self.projectiles.append(
                         Projectile(self.rect.centerx - (2 * self.rect.width * self.flip), self.rect.y, self.rect.width,
                                 self.rect.height // 2, damage, knockback, self, 10 - (20 * self.flip)))
@@ -43,10 +43,10 @@ def createWizard(inherit_from, player, x, y, flip, punch_sound, projectile_sound
                     self.attacking = True
                     damage = 15
                     knockback = 10
-                    self.projectile_sound.play()
+                    #self.projectile_sound.play()
                     self.projectiles.append(
                         Projectile(self.rect.centerx - (2 * self.rect.width * self.flip), self.rect.y, 2 * self.rect.width,
                                 self.rect.height, damage, knockback, self, 5 - (10 * self.flip)))
                     self.attack2_cooldown = 150
 
-    return Wizard(player, x, y, flip, punch_sound, projectile_sound, hit_sound,controls)
+    return Wizard(player, x, y, flip, controls)

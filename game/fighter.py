@@ -1,7 +1,7 @@
 import pygame
 
 class Fighter(object):
-    def __init__(self, player, x, y, flip, punch_sound, projectile_sound, hit_sound,controls):
+    def __init__(self, player, x, y, flip, controls):
         self.updateFrame = pygame.time.get_ticks()
         self.action = 0  # 0=idle, 1=attack1, 2=attack2, 3=dying, 4=running, 5=jumping, 6=falling, 7=hit
         self.frame = 0
@@ -21,9 +21,7 @@ class Fighter(object):
         self.attack1_cooldown = 0
         self.attack2_cooldown = 0
         self.color = (255, 0, 0)
-        self.punch_sound = punch_sound
-        self.projectile_sound = projectile_sound
-        self.hit_sound = hit_sound
+
         self.alive = True
         self.controls = controls
 
@@ -131,7 +129,7 @@ class Fighter(object):
 
     def take_hit(self, damage, knockback, direction):
         self.hit = True
-        self.hit_sound.play()
+        #self.hit_sound.play()
         self.health -= damage
         self.color = (255, 255, 255)
         self.vel_x += (knockback - 2 * knockback * direction)

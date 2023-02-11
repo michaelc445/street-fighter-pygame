@@ -1,9 +1,12 @@
 import pygame,asyncio
 from pygame import mixer
 
+from warrior import createWarrior
+from nomad import createNomad
+from wizard import createWizard
 from obstacle import Obstacle
 from button import Button
-
+from fighter import Fighter
 import sys
 
 
@@ -18,13 +21,13 @@ class StreetFighter:
 
         self.player2_controls = {"left": pygame.K_LEFT, "right": pygame.K_RIGHT, "jump": pygame.K_UP,
                             "attack1": pygame.K_n, "attack2": pygame.K_m, "block": pygame.K_DOWN}
-
+        self.run = True
         mixer.init()
         # pygame.init()
         # create game window
         self.SCREEN_WIDTH = 1000
         self.SCREEN_HEIGHT = 600
-
+        self.game_in_progress = False
         # default characters
         self.p1 = "wizard"
         self.p2 = "wizard"
@@ -42,36 +45,36 @@ class StreetFighter:
         self.WHITE = (255, 255, 255)
 
         # load bg image
-        self.bg_image = pygame.image.load("assets/maps/background.png").convert_alpha()
-        self.menu_bg = pygame.image.load("assets/menu/main_menu_bg.png").convert_alpha()
+        self.bg_image = pygame.image.load("maps/background.png").convert_alpha()
+        self.menu_bg = pygame.image.load("menu/main_menu_bg.png").convert_alpha()
 
         # use mixer to load music and sounds
         # mixer.music.load("assets/audio/main.mp3")
         # mixer.music.play(-1)
         mixer.music.set_volume(0)
-        #self.punch_fx = mixer.Sound("audio/punch-pygbag.ogg")
-        #self.projectile_fx = mixer.Sound("audio/proj-pygbag.ogg")
-        #self.hit_fx = mixer.Sound("audio/hit-pygbag.ogg")
+        # self.punch_fx = mixer.Sound("audio/punch-pygbag.ogg")
+        # self.projectile_fx = mixer.Sound("audio/proj-pygbag.ogg")
+        # self.hit_fx = mixer.Sound("audio/hit-pygbag.ogg")
         # self.punch_fx.set_volume(0.15)
         # self.projectile_fx.set_volume(0.5)
         # self.hit_fx.set_volume(0.5)
 
         # create obstacles
-        # obstacle_1 = Obstacle(400, 300, 100, 300)
+        self.obstacle_1 = Obstacle(400, 300, 100, 300)
         self.obstacle_2 = Obstacle(700, 200, 200, 50)
         self.obstacle_3 = Obstacle(100, 300, 100, 50)
-        self.obstacles = [self.obstacle_2, self.obstacle_3]
+        self.obstacles = [self.obstacle_1,self.obstacle_2, self.obstacle_3]
 
         # current game state
 
         self.game_state = "main_menu"
         self.menu_scaled = pygame.transform.scale(self.menu_bg, (self.SCREEN_WIDTH, self.SCREEN_HEIGHT))
-
+        self.scaled_bg = pygame.transform.scale(self.bg_image, (self.SCREEN_WIDTH, self.SCREEN_HEIGHT))
 
 
     def draw_bg(self):
-        scaled_bg = pygame.transform.scale(self.bg_image, (self.SCREEN_WIDTH, self.SCREEN_HEIGHT))
-        self.screen.blit(scaled_bg, (0, 0))
+
+        self.screen.blit(self.scaled_bg, (0, 0))
 
 
     # draw health bars
@@ -84,7 +87,7 @@ class StreetFighter:
 
     # font size
     def font(self,size):
-        return pygame.font.Font("assets/menu/font.ttf", size)
+        return pygame.font.Font("menu/font.ttf", size)
 
 
     # when a button is pressed, it should change the key that is assigned to that action
@@ -126,68 +129,68 @@ class StreetFighter:
     #         self.hit_fx.set_volume(1)
 
 
-    # game loop
-    # def game_loop(self):
-    #     if self.p1 == "wizard":
-    #         fighter_1 = createWizard(Fighter, 1, 200, 310, False, self.punch_fx, self.projectile_fx, self.hit_fx, self.player1_controls)
-    #
-    #     elif self.p1 == "nomad":
-    #         fighter_1 = createNomad(Fighter, 1, 200, 310, False, self.punch_fx, self.projectile_fx, self.hit_fx, self.player1_controls)
-    #
-    #     elif self.p1 == "warrior":
-    #         fighter_1 = createWarrior(Fighter, 1, 200, 310, False, self.punch_fx, self.projectile_fx, self.hit_fx, self.player1_controls)
-    #
-    #     if self.p2 == "wizard":
-    #         fighter_2 = createWizard(Fighter, 2, 700, 310, True, self.punch_fx, self.projectile_fx, self.hit_fx, self.player2_controls)
-    #
-    #     elif self.p2 == "nomad":
-    #         fighter_2 = createNomad(Fighter, 2, 700, 310, True, self.punch_fx, self.projectile_fx, self.hit_fx, self.player2_controls)
-    #
-    #     elif self.p2 == "warrior":
-    #         fighter_2 = createWarrior(Fighter, 2, 700, 310, True, self.punch_fx, self.projectile_fx, self.hit_fx, self.player2_controls)
-    #
-    #     run = True
-    #     while run:
-    #
-    #         # cap frame rate
-    #         self.clock.tick(self.FPS)
-    #
-    #         # draw background
-    #         self.draw_bg()
-    #
-    #         # draw health bars
-    #         self.draw_health_bar(fighter_1.health, 20, 20)
-    #         self.draw_health_bar(fighter_2.health, 580, 20)
-    #
-    #         # move fighters
-    #         fighter_1.move(self.SCREEN_WIDTH, self.SCREEN_HEIGHT, self.screen, fighter_2, self.obstacles)
-    #         fighter_2.move(self.SCREEN_WIDTH, self.SCREEN_HEIGHT, self.screen, fighter_1, self.obstacles)
-    #
-    #         # update frames
-    #         fighter_1.frameUpdate()
-    #         fighter_2.frameUpdate()
-    #
-    #         # draw fighters
-    #         fighter_1.draw(self.screen)
-    #         fighter_2.draw(self.screen)
-    #
-    #         # draw obstacles
-    #         for obstacle in self.obstacles:
-    #             obstacle.draw(self.screen)
-    #
-    #         for event in pygame.event.get():
-    #             if event.type == pygame.QUIT:
-    #                 run = False
-    #             if event.type == pygame.KEYDOWN:
-    #                 if event.key == pygame.K_ESCAPE:
-    #                     run = False
-    #
-    #         # if fighter 1 or 2 punches, play the punch.wav sound effect
-    #
-    #         # update display
-    #         pygame.display.update()
-    #     pygame.quit()
-    #     sys.exit()
+
+    def game_loop(self):
+
+        if not self.game_in_progress:
+            if self.p1 == "wizard":
+                self.fighter_1 = createWizard(Fighter, 1, 200, 310, False, self.player1_controls)
+
+            elif self.p1 == "nomad":
+                self.fighter_1 = createNomad(Fighter, 1, 200, 310, False, self.player1_controls)
+
+            elif self.p1 == "warrior":
+                self.fighter_1 = createWarrior(Fighter, 1, 200, 310, False, self.player1_controls)
+
+            if self.p2 == "wizard":
+                self.fighter_2 = createWizard(Fighter, 2, 700, 310, True, self.player2_controls)
+
+            elif self.p2 == "nomad":
+                self.fighter_2 = createNomad(Fighter, 2, 700, 310, True, self.player2_controls)
+
+            elif self.p2 == "warrior":
+                self.fighter_2 = createWarrior(Fighter, 2, 700, 310, True, self.player2_controls)
+
+            self.game_in_progress = True
+
+
+
+
+        # cap frame rate
+        self.clock.tick(self.FPS)
+
+        # draw background
+        self.draw_bg()
+
+        # draw health bars
+        self.draw_health_bar(self.fighter_1.health, 20, 20)
+        self.draw_health_bar(self.fighter_2.health, 580, 20)
+
+        # move fighters
+        self.fighter_1.move(self.SCREEN_WIDTH, self.SCREEN_HEIGHT, self.screen, self.fighter_2, self.obstacles)
+        self.fighter_2.move(self.SCREEN_WIDTH, self.SCREEN_HEIGHT, self.screen, self.fighter_1, self.obstacles)
+
+        # update frames
+        self.fighter_1.frameUpdate()
+        self.fighter_2.frameUpdate()
+
+        # draw fighters
+        self.fighter_1.draw(self.screen)
+        self.fighter_2.draw(self.screen)
+
+        # draw obstacles
+        for obstacle in self.obstacles:
+            obstacle.draw(self.screen)
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                self.run = False
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    self.run = False
+
+
+
 
 
     async def update_enemy(self, game_client, local_player, enemy_character):
@@ -613,16 +616,16 @@ class StreetFighter:
         rect = text.get_rect(center=(500, 50))
         self.screen.blit(text, rect)
 
-        single_player = Button(image=pygame.image.load("assets/menu/long.png"), pos=(500, 150),
+        single_player = Button(image=pygame.image.load("menu/long.png"), pos=(500, 150),
                                text_input="SINGLEPLAYER", font=self.font(35), base_color="#d7fcd4", hovering_color="White")
 
-        local = Button(image=pygame.image.load("assets/menu/long.png"), pos=(500, 275),
+        local = Button(image=pygame.image.load("menu/long.png"), pos=(500, 275),
                        text_input="LOCAL MULTI", font=self.font(35), base_color="#d7fcd4", hovering_color="White")
 
-        multiplayer = Button(image=pygame.image.load("assets/menu/long.png"), pos=(500, 400),
+        multiplayer = Button(image=pygame.image.load("menu/long.png"), pos=(500, 400),
                              text_input="MULTIPLAYER", font=self.font(35), base_color="#d7fcd4", hovering_color="White")
 
-        back = Button(image=pygame.image.load("assets/menu/medium.png"), pos=(500, 525),
+        back = Button(image=pygame.image.load("menu/medium.png"), pos=(500, 525),
                       text_input="BACK", font=self.font(35), base_color="#d7fcd4", hovering_color="White")
 
         for button in [single_player, local, multiplayer, back]:
@@ -689,7 +692,7 @@ class StreetFighter:
         rect = text.get_rect(center=(700, 100))
         self.screen.blit(text, rect)
 
-        play = Button(image=pygame.image.load("assets/menu/medium.png"), pos=(700, 525),
+        play = Button(image=pygame.image.load("menu/medium.png"), pos=(700, 525),
                       text_input="PLAY", font=self.font(35), base_color="Black", hovering_color="Yellow")
         # character select buttons for player 1
         p1_wizard = Button(image=None, pos=(300, 275),
@@ -706,7 +709,7 @@ class StreetFighter:
         p2_nomad = Button(image=None, pos=(700, 150),
                           text_input="nomad", font=self.font(25), base_color=p2_color_nomad, hovering_color="Blue")
 
-        back = Button(image=pygame.image.load("assets/menu/medium.png"), pos=(300, 525),
+        back = Button(image=pygame.image.load("menu/medium.png"), pos=(300, 525),
                       text_input="BACK", font=self.font(35), base_color="Black", hovering_color="Yellow")
 
         for button in [back, play, p1_wizard, p1_warrior, p1_nomad, p2_wizard, p2_warrior, p2_nomad]:
@@ -725,7 +728,7 @@ class StreetFighter:
                 # make it so that when you click play, it goes to the game loop
                 if play.checkForInput(mouse):
                     pygame.display.set_caption("Game")
-                    self.game_loop()
+                    self.game_state = "local_game_loop"
                 if back.checkForInput(mouse):
                     pygame.display.set_caption("Main Menu")
                     self.game_state = "menu_play"
@@ -774,15 +777,15 @@ class StreetFighter:
         text = self.font(75).render("Main Menu", True, "#b68f40")
         rect = text.get_rect(center=(500, 50))
 
-        play = Button(image=pygame.image.load("assets/menu/long.png"), pos=(500, 180),
+        play = Button(image=pygame.image.load("menu/long.png"), pos=(500, 180),
                       text_input="PLAY", font=self.font(55), base_color="#d7fcd4", hovering_color="White")
 
         # multi_player = Button(image=pygame.image.load("assets/Options Rect.png"), pos=(500, 275),
         # text_input="MULTI-PLAYER", font=font(45), base_color="#d7fcd4", hovering_color="White")
 
-        options = Button(image=pygame.image.load("assets/menu/long.png"), pos=(500, 325),
+        options = Button(image=pygame.image.load("menu/long.png"), pos=(500, 325),
                          text_input="OPTIONS", font=self.font(55), base_color="#d7fcd4", hovering_color="White")
-        quit = Button(image=pygame.image.load("assets/menu/medium.png"), pos=(500, 470),
+        quit = Button(image=pygame.image.load("menu/medium.png"), pos=(500, 470),
                       text_input="QUIT", font=self.font(55), base_color="#d7fcd4", hovering_color="White")
 
         self.screen.blit(text, rect)
@@ -814,16 +817,13 @@ class StreetFighter:
     async def main(self):
         pygame.init()
         state_map = {"main_menu": self.main_menu, "menu_play": self.menu_play,
-                     "menu_char" : self.menu_char}
-        run = True
-        while run:
+                     "menu_char" : self.menu_char,"local_game_loop":self.game_loop}
+        self.run = True
+        while self.run:
             draw_func = state_map[self.game_state]
-            # print(self.game_state)
             draw_func()
-            # print("yeah go on")
-            # print("would you go way")
             await asyncio.sleep(0)
-            pygame.display.update()
+            pygame.display.flip()
 
 
 app = StreetFighter()
