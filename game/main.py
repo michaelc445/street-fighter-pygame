@@ -819,7 +819,8 @@ def multi_char_select(game_client):
 
 
 async def update_lobby(game_client,buttons):
-    char_resp = game_client.get_enemy_character()
+    game_client.get_enemy_character()
+    char_resp = game_client.enemy_resp
     buttons[char_resp.enemyCharacter].base_color = "Blue"
     for j in [z for z in range(0, 3) if z != char_resp.enemyCharacter]:
         buttons[j].base_color = "#d7fcd4"
