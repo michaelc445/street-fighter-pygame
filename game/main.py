@@ -755,7 +755,7 @@ def multi_char_select(game_client):
         loop.create_task(update_lobby(game_client,enemy_chars))
         if game_client.enemy_resp is not None:
             choice = game_client.enemy_resp.enemyCharacter
-            print(choice)
+            #print(choice)
 
             enemy_chars[choice].base_color="Blue"
             for j in [z for z in range(0, 3) if z != choice]:
@@ -805,7 +805,7 @@ def multi_char_select(game_client):
                 for i, button in enumerate(characters):
                     if button.checkForInput(mouse):
                         print("picking: %d name: %s"%(i,button.text_input))
-                        game_client.send_character_choice(i,False)
+                        loop.create_task(game_client.send_character_choice(i,False))
                         button.base_color = "Yellow"
                         p_choice = i
                         p1 = button.text_input
