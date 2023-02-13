@@ -112,7 +112,17 @@ class GameClient(object):
             local_player.health = message.enemyHealth
             enemy_character.move_enemy(SCREEN_WIDTH, SCREEN_HEIGHT, screen, local_player, obstacles, message.keys,
                                        message.x, message.y)
-
+    def get_enemy_character(self):
+        char_req = pb.CharacterSelectRequest()
+        try:
+            data, address = self.socket.recvfrom(self.BUFFER_SIZE)
+            char_req.ParseFromString(data)
+            return char_req
+        except:
+            return None
+    def send_character_choice(self,choice, locked_in):
+        char_req = pb.CharacterSelectRequest(id=self.player_id, character=choice, lockedIn=locked_in)
+        self.socket.sendto(char_req.SerializeToString(), (self.server_ip, self.game_port))
     async def get_update(self) -> list[pb.Update]:
         result: list[pb.Update] = []
         data = 1

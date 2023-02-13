@@ -590,7 +590,7 @@ def menu_play():
                 if multiplayer.checkForInput(mouse):
                     pygame.display.set_caption("Multi Player")
                     game_client = GameClient(1234)
-                    game_client.connect("project.michaelc445.container.netsoc.cloud", 17023, "m")
+                    game_client.connect("192.168.0.33", 1234, "m")
                     print(game_client.player_id)
                     game_client.socket.setblocking(False)
                     multi_player_game_loop(game_client)
@@ -705,6 +705,107 @@ def menu_char():
                 
                     
         pygame.display.update()
+def multi_char_select(game_client):
+    global p1, p2
+    default_colour = "#d7fcd4"
+    p1_sel = "Yellow"
+    p2_sel = "Blue"
+
+    play = Button(image=pygame.image.load("game/assets/menu/medium.png"), pos=(700, 525),
+                  text_input="PLAY", font=font(35), base_color="Black", hovering_color="Yellow")
+    # character select buttons for player 1
+    p1_wizard = Button(image=None, pos=(300, 275),
+                       text_input="wizard", font=font(25), base_color=default_colour, hovering_color="Yellow")
+    p1_warrior = Button(image=None, pos=(300, 400),
+                        text_input="warrior", font=font(25), base_color=default_colour, hovering_color="Yellow")
+    p1_nomad = Button(image=None, pos=(300, 150),
+                      text_input="nomad", font=font(25), base_color=default_colour, hovering_color="Yellow")
+    # character select buttons for player 2
+    p2_wizard = Button(image=None, pos=(700, 275),
+                       text_input="wizard", font=font(25), base_color=default_colour, hovering_color="Blue")
+    p2_warrior = Button(image=None, pos=(700, 400),
+                        text_input="warrior", font=font(25), base_color=default_colour, hovering_color="Blue")
+    p2_nomad = Button(image=None, pos=(700, 150),
+                      text_input="nomad", font=font(25), base_color=default_colour, hovering_color="Blue")
+
+    back = Button(image=pygame.image.load("game/assets/menu/medium.png"), pos=(300, 525),
+                  text_input="BACK", font=font(35), base_color="Black", hovering_color="Yellow")
+
+
+    menu_scaled = pygame.transform.scale(menu_bg, (SCREEN_WIDTH, SCREEN_HEIGHT))
+    characters = [p1_wizard, p1_warrior, p1_nomad]
+    enemy_chars = [p2_wizard, p2_warrior, p2_nomad]
+    p_choice = 0
+    locked_in = False
+    enemy_ready =False
+    while True:
+        mouse = pygame.mouse.get_pos()
+        screen.blit(menu_scaled, (0, 0))
+        enemy_resp = game_client.get_enemy_character()
+        if enemy_resp:
+            choice = enemy_resp.character
+            if choice >= 0  and choice < len(enemy_chars):
+                enemy_chars[choice].base_color = "Blue"
+                p2 = button.text_input
+                for j in [z for z in range(0, 3) if z != i]:
+                    characters[j].base_color = default_colour
+            if enemy_resp.start:
+                multi_player_game_loop(game_client)
+        for button in [ back, play, p1_wizard, p1_warrior, p1_nomad]:
+            button.changeColor(mouse)
+            button.update(screen)
+        for button in enemy_chars:
+            button.update(screen)
+
+
+        text = font(35).render("CHARACTER SELECT", True, "#b68f40")
+        rect = text.get_rect(center=(500, 50))
+        screen.blit(text, rect)
+
+        # player 1
+        text = font(15).render("PLAYER 1", True, "#b68f40")
+        rect = text.get_rect(center=(300, 100))
+        screen.blit(text, rect)
+
+        # player 2
+        text = font(15).render("PLAYER 2", True, "#b68f40")
+        rect = text.get_rect(center=(700, 100))
+        screen.blit(text, rect)
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    pygame.quit()
+                    sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                # make it so that when you click play, it goes to the game loop
+                if play.checkForInput(mouse):
+                    game_client.send_character_choice(p_choice, True)
+                    locked_in = True
+                    #pygame.display.set_caption("Game")
+
+                if back.checkForInput(mouse):
+                    pygame.display.set_caption("Main Menu")
+                    main_menu()
+                if locked_in:
+                    continue
+                for i, button in enumerate(characters):
+                    if button.checkForInput(mouse):
+                        game_client.send_character_choice(i,False)
+                        button.base_color = "Yellow"
+                        p_choice = i
+                        p1 = button.text_input
+                        for j in [z for z in range(0,3) if z !=i]:
+                            characters[j].base_color=default_colour
+
+
+
+        pygame.display.update()
+
+
 
 # main menu
 def main_menu():
@@ -744,7 +845,7 @@ def main_menu():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if play.checkForInput(mouse):
                     pygame.display.set_caption("Game Mode")
-                    menu_play()
+                    multi_char_select()
                 if options.checkForInput(mouse):
                     pygame.display.set_caption("Options")
                     opt()

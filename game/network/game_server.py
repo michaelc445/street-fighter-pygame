@@ -70,6 +70,26 @@ class GameServer(object):
                 self.socket.sendto(resp.SerializeToString(), address)
             except:
                 continue
+    def character_select_new(self):
+        locked_in = {}
+
+        while len(locked_in) <2:
+            data, address = self.socket.recvfrom(self.BUFFER_SIZE)
+            char_select_req = pb.CharacterSelectRequest()
+            char_select_req.ParseFromString(data)
+            if char_select_req.id < 0 or char_select_req.id > 1:
+                resp = pb.CharacterSelectResponse(ok=0, playerId=0, start=0, enemyCharacter=0)
+                self.socket.sendto(resp.SerializeToString(), address)
+                raise ValueError
+
+            enemy = (char_select_req.id + 1) % 2
+
+            resp = pb.CharacterSelectResponse(ok=1,
+                                              playerId=char_select_req.id,
+                                              start=0,
+                                              enemyCharacter=self.connections[enemy].character)
+            self.connections.append(Player(char_select_req.name, address[0], address[1]))
+            self.socket.sendto(resp.SerializeToString(), address)
 
     def create_lobby(self):
         # get 2 connections
@@ -133,16 +153,27 @@ class MatchServer(object):
     def __init__(self, local_port):
         self.BUFFER_SIZE = 1024
         self.port = local_port
-        self.port_mappings = {1235: 16559,
-                              1236: 16670,
-                              1237: 16405,
-                              1238: 16958,
-                              1239: 16961,
-                              1240: 17071,
-                              1241: 16857,
-                              1242: 17241,
-                              1243: 16962,
-                              1244: 16417
+        # self.port_mappings = {1235: 16559,
+        #                       1236: 16670,
+        #                       1237: 16405,
+        #                       1238: 16958,
+        #                       1239: 16961,
+        #                       1240: 17071,
+        #                       1241: 16857,
+        #                       1242: 17241,
+        #                       1243: 16962,
+        #                       1244: 16417
+        #                       }
+        self.port_mappings = {1235: 1235,
+                              1236: 1236,
+                              1237: 1237,
+                              1238: 1238,
+                              1239: 1239,
+                              1240: 1240,
+                              1241: 1241,
+                              1242: 1242,
+                              1243: 1243,
+                              1244: 1244
                               }
         self.free_ports = [i for i in range(1235, 1245)]
         self.threads = []
