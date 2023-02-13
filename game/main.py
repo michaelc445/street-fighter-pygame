@@ -590,6 +590,7 @@ def menu_play():
                 if multiplayer.checkForInput(mouse):
                     pygame.display.set_caption("Multi Player")
                     game_client = GameClient(1234)
+                    print("connecting to server")
                     game_client.connect("192.168.0.33", 1234, "m")
                     print(game_client.player_id)
                     game_client.socket.setblocking(False)
@@ -742,6 +743,7 @@ def multi_char_select(game_client):
         mouse = pygame.mouse.get_pos()
         screen.blit(menu_scaled, (0, 0))
         enemy_resp = game_client.get_enemy_character()
+
         if enemy_resp:
             choice = enemy_resp.character
             if choice >= 0  and choice < len(enemy_chars):
