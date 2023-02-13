@@ -751,17 +751,17 @@ def multi_char_select(game_client):
             button.changeColor(mouse)
             button.update(screen)
 
-        enemy_resp = game_client.get_enemy_character()
+
         loop.create_task(update_lobby(game_client,enemy_chars))
-        if enemy_resp is not None:
-            choice = enemy_resp.enemyCharacter
+        if game_client.enemy_resp is not None:
+            choice = game_client.enemy_resp.enemyCharacter
             print(choice)
 
             enemy_chars[choice].base_color="Blue"
             for j in [z for z in range(0, 3) if z != choice]:
                 enemy_chars[j].base_color = default_colour
                 enemy_chars[j].update(screen)
-            if enemy_resp.start:
+            if game_client.enemy_resp.start:
                 game_client.enemy_char = choice
                 break
 
@@ -814,7 +814,8 @@ def multi_char_select(game_client):
 
 
 
-        pygame.display.flip()
+        pygame.display.update()
+        run_once(loop)
 
 
 async def update_lobby(game_client,buttons):
@@ -822,7 +823,7 @@ async def update_lobby(game_client,buttons):
     buttons[char_resp.enemyCharacter].base_color = "Blue"
     for j in [z for z in range(0, 3) if z != char_resp.enemyCharacter]:
         buttons[j].base_color = "#d7fcd4"
-
+    game_client.enemy_resp = char_resp
 # main menu
 def main_menu():
     while True:
