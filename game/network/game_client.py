@@ -101,7 +101,7 @@ class GameClient(object):
         self.join_lobby(ip,port,"")
         time.sleep(2)
         self.join_game(ip, self.game_port, name)
-        self.character_select()
+
 
 
     async def send_update(self, update_message: pb.Update):
@@ -113,11 +113,11 @@ class GameClient(object):
             enemy_character.move_enemy(SCREEN_WIDTH, SCREEN_HEIGHT, screen, local_player, obstacles, message.keys,
                                        message.x, message.y)
     def get_enemy_character(self):
-        char_req = pb.CharacterSelectRequest()
+        char_resp = pb.CharacterSelectResponse()
         try:
             data, address = self.socket.recvfrom(self.BUFFER_SIZE)
-            char_req.ParseFromString(data)
-            return char_req
+            char_resp.ParseFromString(data)
+            return char_resp
         except:
             return None
     def send_character_choice(self,choice, locked_in):
