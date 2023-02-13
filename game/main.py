@@ -147,14 +147,17 @@ def run_once(loop):
 def multi_player_game_loop(game_client):
     #gameKeys = [pygame.K_a, pygame.K_d, pygame.K_w, pygame.K_r, pygame.K_t]
     pygame.init()
+    f1,f2 = None,None
 
     pygame.display.set_caption("Team 5 Project")
-
-
+    char_dict = {0: createNomad, 1: createWizard, 2: createWarrior}
+    if game_client.player_id == 0:
     # create fighters
-    f1 = createWizard(OnlineFighter, 1, 200, 310, False, punch_fx, projectile_fx, hit_fx,player1_controls)
-    f2 = createWarrior(OnlineFighter, 2, 700, 310, True, punch_fx, projectile_fx, hit_fx,player1_controls)
-
+        f1 = char_dict[game_client.local_char](OnlineFighter, 1, 200, 310, False, punch_fx, projectile_fx, hit_fx,player1_controls)
+        f2 = char_dict[game_client.enemy_char](OnlineFighter, 2, 700, 310, True, punch_fx, projectile_fx, hit_fx,player1_controls)
+    else:
+        f1 = char_dict[game_client.enemy_char](OnlineFighter, 1, 200, 310, False, punch_fx, projectile_fx, hit_fx, player1_controls)
+        f2 = char_dict[game_client.local_char](OnlineFighter, 2, 700, 310, True, punch_fx, projectile_fx, hit_fx, player1_controls)
 
     fighters = [f1, f2]
     pick = int(game_client.player_id)
@@ -717,14 +720,14 @@ def multi_char_select(game_client):
                   text_input="PLAY", font=font(35), base_color="Black", hovering_color="Yellow")
     # character select buttons for player 1
     p1_wizard = Button(image=None, pos=(300, 275),
-                       text_input="wizard", font=font(25), base_color=default_colour, hovering_color="Yellow")
+                       text_input="wizard", font=font(25), base_color="Yellow", hovering_color="Yellow")
     p1_warrior = Button(image=None, pos=(300, 400),
                         text_input="warrior", font=font(25), base_color=default_colour, hovering_color="Yellow")
     p1_nomad = Button(image=None, pos=(300, 150),
                       text_input="nomad", font=font(25), base_color=default_colour, hovering_color="Yellow")
     # character select buttons for player 2
     p2_wizard = Button(image=None, pos=(700, 275),
-                       text_input="wizard", font=font(25), base_color=default_colour, hovering_color="Blue")
+                       text_input="wizard", font=font(25), base_color="Blue", hovering_color="Blue")
     p2_warrior = Button(image=None, pos=(700, 400),
                         text_input="warrior", font=font(25), base_color=default_colour, hovering_color="Blue")
     p2_nomad = Button(image=None, pos=(700, 150),
@@ -735,31 +738,37 @@ def multi_char_select(game_client):
 
 
     menu_scaled = pygame.transform.scale(menu_bg, (SCREEN_WIDTH, SCREEN_HEIGHT))
-    characters = [p1_wizard, p1_warrior, p1_nomad]
-    enemy_chars = [p2_wizard, p2_warrior, p2_nomad]
+    characters = [p1_nomad,p1_wizard, p1_warrior]
+    enemy_chars = [p2_nomad,p2_wizard, p2_warrior]
     p_choice = 0
     locked_in = False
     while True:
         mouse = pygame.mouse.get_pos()
         screen.blit(menu_scaled, (0, 0))
-        enemy_resp = game_client.get_enemy_character()
 
-        if enemy_resp:
-            choice = enemy_resp.enemyCharacter
-            if choice >= 0  and choice < len(enemy_chars):
-                enemy_chars[choice].base_color = "Blue"
-                p2 = button.text_input
-                for j in [z for z in range(0, 3) if z != choice]:
-                    enemy_chars[j].base_color = default_colour
-                    enemy_chars[j].update(screen)
-            if enemy_resp.start:
-                break
         for button in [ back, play, p1_wizard, p1_warrior, p1_nomad]:
             button.changeColor(mouse)
             button.update(screen)
         for button in enemy_chars:
             button.update(screen)
+        enemy_resp = game_client.get_enemy_character()
 
+        if enemy_resp is not None:
+            choice = enemy_resp.enemyCharacter
+            print(choice)
+            #print(characters)
+            if choice >= 0 and choice < len(enemy_chars):
+                enemy_chars[choice].base_color = "Blue"
+                enemy_chars[choice].update(screen)
+                p2 = enemy_chars[choice].text_input
+                print(p2)
+                for j in [z for z in range(0, 3) if z != choice]:
+                    enemy_chars[j].base_color = default_colour
+                    enemy_chars[j].update(screen)
+            if enemy_resp.start:
+                game_client.enemy_char = choice
+                break
+            enemy_resp = None
 
         text = font(35).render("CHARACTER SELECT", True, "#b68f40")
         rect = text.get_rect(center=(500, 50))
@@ -788,6 +797,7 @@ def multi_char_select(game_client):
                 if play.checkForInput(mouse):
                     game_client.send_character_choice(p_choice, True)
                     locked_in = True
+                    game_client.local_char = p_choice
                     #pygame.display.set_caption("Game")
 
                 if back.checkForInput(mouse):
@@ -797,6 +807,7 @@ def multi_char_select(game_client):
                     continue
                 for i, button in enumerate(characters):
                     if button.checkForInput(mouse):
+                        print("picking: %d name: %s"%(i,button.text_input))
                         game_client.send_character_choice(i,False)
                         button.base_color = "Yellow"
                         p_choice = i
