@@ -754,19 +754,19 @@ def multi_char_select(game_client):
 
         loop.create_task(update_lobby(game_client,enemy_chars))
         if game_client.enemy_resp is not None:
-            choice = game_client.enemy_resp.enemyCharacter
-            #print(choice)
 
-            enemy_chars[choice].base_color="Blue"
-            for j in [z for z in range(0, 3) if z != choice]:
+
+            enemy_chars[game_client.enemy_char].base_color="Blue"
+            for j in [z for z in range(0, 3) if z != game_client.enemy_char]:
                 enemy_chars[j].base_color = default_colour
-                enemy_chars[j].update(screen)
+
             if game_client.enemy_resp.start:
-                game_client.enemy_char = choice
+
                 break
 
-        # for button in enemy_chars:
-        #     button.update(screen)
+            game_client.enemy_resp = None
+        for button in enemy_chars:
+            button.update(screen)
         text = font(35).render("CHARACTER SELECT", True, "#b68f40")
         rect = text.get_rect(center=(500, 50))
         screen.blit(text, rect)
@@ -805,7 +805,7 @@ def multi_char_select(game_client):
                 for i, button in enumerate(characters):
                     if button.checkForInput(mouse):
                         print("picking: %d name: %s"%(i,button.text_input))
-                        loop.create_task(game_client.send_character_choice(i,False))
+                        game_client.send_character_choice(i,False)
                         button.base_color = "Yellow"
                         p_choice = i
                         p1 = button.text_input
@@ -821,11 +821,10 @@ def multi_char_select(game_client):
 async def update_lobby(game_client,buttons):
     loop = asyncio.get_event_loop()
     loop.create_task(game_client.get_enemy_character())
-    char_resp = game_client.enemy_resp
-    buttons[char_resp.enemyCharacter].base_color = "Blue"
-    for j in [z for z in range(0, 3) if z != char_resp.enemyCharacter]:
+    buttons[game_client.enemy_char].base_color = "Blue"
+    for j in [z for z in range(0, 3) if z != game_client.enemy_char]:
         buttons[j].base_color = "#d7fcd4"
-    game_client.enemy_resp = char_resp
+
 # main menu
 def main_menu():
     while True:

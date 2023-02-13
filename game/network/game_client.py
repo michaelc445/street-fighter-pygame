@@ -119,10 +119,12 @@ class GameClient(object):
         try:
             data, address = self.socket.recvfrom(self.BUFFER_SIZE)
             char_resp.ParseFromString(data)
-            return char_resp
+            self.enemy_resp = char_resp
+            self.enemy_char = char_resp.enemyCharacter
+
         except:
-            return None
-    async def send_character_choice(self,choice, locked_in):
+            pass
+    def send_character_choice(self,choice, locked_in):
         char_req = pb.CharacterSelectRequest(id=self.player_id, character=choice, lockedIn=locked_in)
         self.socket.sendto(char_req.SerializeToString(), (self.server_ip, self.game_port))
     async def get_update(self) -> list[pb.Update]:
