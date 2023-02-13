@@ -742,6 +742,7 @@ def multi_char_select(game_client):
     enemy_chars = [p2_nomad,p2_wizard, p2_warrior]
     p_choice = 0
     locked_in = False
+    loop = asyncio.get_event_loop()
     while True:
         mouse = pygame.mouse.get_pos()
         screen.blit(menu_scaled, (0, 0))
@@ -751,7 +752,7 @@ def multi_char_select(game_client):
             button.update(screen)
 
         enemy_resp = game_client.get_enemy_character()
-
+        loop.create_task(update_lobby(game_client,enemy_chars))
         if enemy_resp is not None:
             choice = enemy_resp.enemyCharacter
             print(choice)
@@ -816,6 +817,11 @@ def multi_char_select(game_client):
         pygame.display.flip()
 
 
+async def update_lobby(game_client,buttons):
+    char_resp = game_client.get_enemy_character()
+    buttons[char_resp.enemyCharacter].base_color = "Blue"
+    for j in [z for z in range(0, 3) if z != char_resp.enemyCharacter]:
+        buttons[j].base_color = "#d7fcd4"
 
 # main menu
 def main_menu():

@@ -81,17 +81,19 @@ class GameServer(object):
                 resp = pb.CharacterSelectResponse(ok=0, playerId=0, start=False, enemyCharacter=0)
                 self.socket.sendto(resp.SerializeToString(), address)
                 raise ValueError
+            print("player: %d picks: %d"%(char_select_req.id, char_select_req.character))
             if char_select_req.lockedIn:
                 locked_in[str(char_select_req.id)]=address
-                self.connections[char_select_req.id].character = char_select_req.character
+            self.connections[char_select_req.id].character = char_select_req.character
             enemy = (char_select_req.id + 1) % 2
 
             resp = pb.CharacterSelectResponse(ok=1,
                                               playerId=char_select_req.id,
                                               start=0,
-                                              enemyCharacter=self.connections[enemy].character)
-
-            self.socket.sendto(resp.SerializeToString(), address)
+                                              enemyCharacter=char_select_req.character)
+            e_address = self.connections[enemy]
+            print("sending to player: %d value: %d"%(enemy,char_select_req.character))
+            self.socket.sendto(resp.SerializeToString(), (e_address.ip,e_address.port))
 
     def create_lobby(self):
         # get 2 connections
