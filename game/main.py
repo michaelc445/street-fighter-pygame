@@ -590,9 +590,11 @@ def menu_play():
                 if multiplayer.checkForInput(mouse):
                     pygame.display.set_caption("Multi Player")
                     game_client = GameClient(1234)
+                    print("connecting to server")
                     game_client.connect("192.168.0.33", 1234, "m")
                     print(game_client.player_id)
                     game_client.socket.setblocking(False)
+                    multi_char_select(game_client)
                     multi_player_game_loop(game_client)
                 if back.checkForInput(mouse):
                     pygame.display.set_caption("Main Menu")
@@ -737,20 +739,21 @@ def multi_char_select(game_client):
     enemy_chars = [p2_wizard, p2_warrior, p2_nomad]
     p_choice = 0
     locked_in = False
-    enemy_ready =False
     while True:
         mouse = pygame.mouse.get_pos()
         screen.blit(menu_scaled, (0, 0))
         enemy_resp = game_client.get_enemy_character()
+
         if enemy_resp:
-            choice = enemy_resp.character
+            choice = enemy_resp.enemyCharacter
             if choice >= 0  and choice < len(enemy_chars):
                 enemy_chars[choice].base_color = "Blue"
                 p2 = button.text_input
-                for j in [z for z in range(0, 3) if z != i]:
-                    characters[j].base_color = default_colour
+                for j in [z for z in range(0, 3) if z != choice]:
+                    enemy_chars[j].base_color = default_colour
+                    enemy_chars[j].update(screen)
             if enemy_resp.start:
-                multi_player_game_loop(game_client)
+                break
         for button in [ back, play, p1_wizard, p1_warrior, p1_nomad]:
             button.changeColor(mouse)
             button.update(screen)
@@ -845,7 +848,7 @@ def main_menu():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if play.checkForInput(mouse):
                     pygame.display.set_caption("Game Mode")
-                    multi_char_select()
+                    menu_play()
                 if options.checkForInput(mouse):
                     pygame.display.set_caption("Options")
                     opt()
