@@ -749,27 +749,23 @@ def multi_char_select(game_client):
         for button in [ back, play, p1_wizard, p1_warrior, p1_nomad]:
             button.changeColor(mouse)
             button.update(screen)
-        for button in enemy_chars:
-            button.update(screen)
+
         enemy_resp = game_client.get_enemy_character()
 
         if enemy_resp is not None:
             choice = enemy_resp.enemyCharacter
             print(choice)
-            #print(characters)
-            if choice >= 0 and choice < len(enemy_chars):
-                enemy_chars[choice].base_color = "Blue"
-                enemy_chars[choice].update(screen)
-                p2 = enemy_chars[choice].text_input
-                print(p2)
-                for j in [z for z in range(0, 3) if z != choice]:
-                    enemy_chars[j].base_color = default_colour
-                    enemy_chars[j].update(screen)
+
+            enemy_chars[choice].base_color="Blue"
+            for j in [z for z in range(0, 3) if z != choice]:
+                enemy_chars[j].base_color = default_colour
+                enemy_chars[j].update(screen)
             if enemy_resp.start:
                 game_client.enemy_char = choice
                 break
-            enemy_resp = None
 
+        # for button in enemy_chars:
+        #     button.update(screen)
         text = font(35).render("CHARACTER SELECT", True, "#b68f40")
         rect = text.get_rect(center=(500, 50))
         screen.blit(text, rect)
@@ -817,7 +813,7 @@ def multi_char_select(game_client):
 
 
 
-        pygame.display.update()
+        pygame.display.flip()
 
 
 
