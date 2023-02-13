@@ -9,7 +9,7 @@ class Player(object):
         self.name = name
         self.ip = ip
         self.port = port
-        self.character = None
+        self.character = 0
         self.id = id
 
 
@@ -78,17 +78,19 @@ class GameServer(object):
             char_select_req = pb.CharacterSelectRequest()
             char_select_req.ParseFromString(data)
             if char_select_req.id < 0 or char_select_req.id > 1:
-                resp = pb.CharacterSelectResponse(ok=0, playerId=0, start=0, enemyCharacter=0)
+                resp = pb.CharacterSelectResponse(ok=0, playerId=0, start=False, enemyCharacter=0)
                 self.socket.sendto(resp.SerializeToString(), address)
                 raise ValueError
-
+            if char_select_req.lockedIn:
+                locked_in[str(char_select_req.id)]=address
+                self.connections[char_select_req.id].character = char_select_req.character
             enemy = (char_select_req.id + 1) % 2
 
             resp = pb.CharacterSelectResponse(ok=1,
                                               playerId=char_select_req.id,
                                               start=0,
                                               enemyCharacter=self.connections[enemy].character)
-            self.connections.append(Player(char_select_req.name, address[0], address[1]))
+
             self.socket.sendto(resp.SerializeToString(), address)
 
     def create_lobby(self):
@@ -97,20 +99,20 @@ class GameServer(object):
             self.get_connection()
         # tell clients character select is ready
         for i, person in enumerate(self.connections):
-            resp = pb.JoinLobbyResponse(ok=1, playerId=person.id, start=1)
+            resp = pb.JoinLobbyResponse(ok=1, playerId=person.id, start=True)
             self.socket.sendto(resp.SerializeToString(), (person.ip, person.port))
 
         locked = 0
         # get character selections
         for i in range(2):
-            self.handle_character_request()
+            self.character_select_new()
         # tell clients game is ready
         for i in range(len(self.connections)):
             enemy = (i + 1) % 2
             resp = pb.CharacterSelectResponse(playerId=i,
                                               ok=1,
-                                              start=1,
-                                              enemyCharacter=0)
+                                              start=True,
+                                              enemyCharacter=self.connections[enemy].character)
             p = self.connections[i]
             self.socket.sendto(resp.SerializeToString(), (p.ip, p.port))
         # start listening for game updates
