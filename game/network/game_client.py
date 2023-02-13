@@ -18,7 +18,7 @@ class GameClient(object):
         self.local_char = 0
         self.enemy_char = 0
         self.messages= []
-        self.enemy_resp = None
+        self.enemy_resp = pb.CharacterSelectResponse(enemyCharacter=0)
 
     def host_game(self):
         self.socket.bind((self.local_ip, self.local_port))
