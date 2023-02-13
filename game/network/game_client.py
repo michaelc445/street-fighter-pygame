@@ -15,7 +15,8 @@ class GameClient(object):
         self.local_port = local_port
         self.BUFFER_SIZE = 1024
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-
+        self.local_char = 0
+        self.enemy_char = 0
         self.messages= []
 
     def host_game(self):

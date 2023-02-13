@@ -147,14 +147,16 @@ def run_once(loop):
 def multi_player_game_loop(game_client):
     #gameKeys = [pygame.K_a, pygame.K_d, pygame.K_w, pygame.K_r, pygame.K_t]
     pygame.init()
-
+    f1,f2 = None,None
     pygame.display.set_caption("Team 5 Project")
-
-
+    char_dict = {0: createWizard, 1: createWarrior, 2: createNomad}
+    if game_client.player_id == 0:
     # create fighters
-    f1 = createWizard(OnlineFighter, 1, 200, 310, False, punch_fx, projectile_fx, hit_fx,player1_controls)
-    f2 = createWarrior(OnlineFighter, 2, 700, 310, True, punch_fx, projectile_fx, hit_fx,player1_controls)
-
+        f1 = char_dict[game_client.local_char](OnlineFighter, 1, 200, 310, False, punch_fx, projectile_fx, hit_fx,player1_controls)
+        f2 = char_dict[game_client.enemy_char](OnlineFighter, 2, 700, 310, True, punch_fx, projectile_fx, hit_fx,player1_controls)
+    else:
+        f1 = char_dict[game_client.enemy_char](OnlineFighter, 1, 200, 310, False, punch_fx, projectile_fx, hit_fx, player1_controls)
+        f2 = char_dict[game_client.local_char](OnlineFighter, 2, 700, 310, True, punch_fx, projectile_fx, hit_fx, player1_controls)
 
     fighters = [f1, f2]
     pick = int(game_client.player_id)
@@ -748,11 +750,13 @@ def multi_char_select(game_client):
             choice = enemy_resp.enemyCharacter
             if choice >= 0  and choice < len(enemy_chars):
                 enemy_chars[choice].base_color = "Blue"
+                enemy_chars[choice].update(screen)
                 p2 = button.text_input
                 for j in [z for z in range(0, 3) if z != choice]:
                     enemy_chars[j].base_color = default_colour
                     enemy_chars[j].update(screen)
             if enemy_resp.start:
+                game_client.enemy_char = choice
                 break
         for button in [ back, play, p1_wizard, p1_warrior, p1_nomad]:
             button.changeColor(mouse)
@@ -788,6 +792,7 @@ def multi_char_select(game_client):
                 if play.checkForInput(mouse):
                     game_client.send_character_choice(p_choice, True)
                     locked_in = True
+                    game_client.local_char = p_choice
                     #pygame.display.set_caption("Game")
 
                 if back.checkForInput(mouse):
