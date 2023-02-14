@@ -73,7 +73,8 @@ class GameServer(object):
     def character_select_new(self):
         locked_in = {}
 
-        while len(locked_in) <2:
+        while len(locked_in) < 2:
+
             data, address = self.socket.recvfrom(self.BUFFER_SIZE)
             char_select_req = pb.CharacterSelectRequest()
             char_select_req.ParseFromString(data)
@@ -81,18 +82,18 @@ class GameServer(object):
                 resp = pb.CharacterSelectResponse(ok=0, playerId=0, start=False, enemyCharacter=0)
                 self.socket.sendto(resp.SerializeToString(), address)
                 raise ValueError
-            print("player: %d picks: %d"%(char_select_req.id, char_select_req.character))
+            #print("player: %d picks: %d"%(char_select_req.id, char_select_req.character))
             if char_select_req.lockedIn:
                 locked_in[str(char_select_req.id)]=address
             self.connections[char_select_req.id].character = char_select_req.character
             enemy = (char_select_req.id + 1) % 2
-
+            print(len(locked_in))
             resp = pb.CharacterSelectResponse(ok=1,
                                               playerId=char_select_req.id,
                                               start=0,
                                               enemyCharacter=char_select_req.character)
             e_address = self.connections[enemy]
-            print("sending to player: %d value: %d"%(enemy,char_select_req.character))
+            #print("sending to player: %d value: %d"%(enemy,char_select_req.character))
             self.socket.sendto(resp.SerializeToString(), (e_address.ip,e_address.port))
 
     def create_lobby(self):
@@ -104,10 +105,8 @@ class GameServer(object):
             resp = pb.JoinLobbyResponse(ok=1, playerId=person.id, start=True)
             self.socket.sendto(resp.SerializeToString(), (person.ip, person.port))
 
-        locked = 0
         # get character selections
-        for i in range(2):
-            self.character_select_new()
+        self.character_select_new()
         # tell clients game is ready
         for i in range(len(self.connections)):
             enemy = (i + 1) % 2
