@@ -8,19 +8,26 @@ class OnlineFighter(Fighter):
         super().__init__(player, x, y, flip, punch_sound, projectile_sound, hit_sound,controls)
         self.game_client = None
         self.game_keys = [pygame.K_a, pygame.K_d, pygame.K_w, pygame.K_r, pygame.K_t,pygame.K_s]
+        self._start_x = x
+        self._start_y = y
+    def reset(self):
+        self.x = self._start_x
+        self.y = self._start_y
+        self.health = 100
 
     def _create_update_message(self, key, target):
         t = {z: True for z in self.game_keys if key[z]}
-        message = pb.Update(keys=t)
-        message.health = self.health
-        message.enemyMove = 0
-        message.moving = False
-        message.enemyHealth = target.health
-        message.enemyAttack = 0
-        message.x = self.rect.x
-        message.y = self.rect.y
-        message.id = self.game_client.player_id
-        message.quit=False
+        message = pb.Update(keys=t,
+                            health=self.health,
+                            moving=False,
+                            enemyHealth=target.health,
+                            enemyAttack=0,
+                            x=self.rect.x,
+                            y=self.rect.y,
+                            id=self.game_client.player_id,
+                            quit=False,
+                            restart=False)
+
         return message
 
     def move(self, screen_width, screen_height, surface, target, obstacles, game_client):

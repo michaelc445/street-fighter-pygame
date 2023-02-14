@@ -195,6 +195,10 @@ def multi_player_game_loop(game_client):
             if message.quit:
                 run = False
             local_player.health = message.enemyHealth
+            if message.restart:
+                local_player.reset()
+                enemy_character.reset()
+
             enemy_character.move_enemy(SCREEN_WIDTH,SCREEN_HEIGHT,screen,local_player,obstacles,message.keys,message.x,message.y)
             enemy_character.obstacle_collision(screen, obstacles)
 

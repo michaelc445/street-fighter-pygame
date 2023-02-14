@@ -159,13 +159,32 @@ class GameServer(object):
                             y=0,
                             keys={},
                             id=0,
-                            quit=True
+                            quit=True,
+                            restart=False
+                            )
+        for player in self.connections:
+            self.socket.sendto(message.SerializeToString(),(player.ip,player.port))
+
+
+    def restart_game(self):
+        message = pb.Update(health=0,
+                            enemyMove=0,
+                            moving=False,
+                            enemyHealth=0,
+                            enemyAttack=0,
+                            x=0,
+                            y=0,
+                            keys={},
+                            id=0,
+                            restart=True,
+                            quit=False
                             )
         for player in self.connections:
             self.socket.sendto(message.SerializeToString(),(player.ip,player.port))
 
     def start_game(self):
         t = [datetime.now(), datetime.now()]
+        scores = [0,0]
         while True:
             try:
                 if self.player_timeout(t):
@@ -177,6 +196,10 @@ class GameServer(object):
                     break
                 game_update = pb.Update()
                 game_update.ParseFromString(data)
+                if game_update.enemyHealth <=0:
+                    self.restart_game()
+                    continue
+
                 t[int(game_update.id)] = datetime.now()
                 enemy = (game_update.id + 1) % 2
                 p = self.connections[enemy]
@@ -244,6 +267,9 @@ class MatchServer(object):
                     self.lobby_codes[lobby_req.lobbyCode] = address
                     response.start = False
                     self.socket.sendto(response.SerializeToString(), address)
+                    continue
+
+                if len(self.free_ports)==0:
                     continue
                 game_port = self.free_ports.pop(0)
                 print(game_port)
