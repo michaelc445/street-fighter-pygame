@@ -98,7 +98,8 @@ class GameClient(object):
                             y=0,
                             keys={},
                             id=self.player_id,
-                            quit=True
+                            quit=True,
+                            restart=False
                             )
         self.socket.sendto(message.SerializeToString(),(self.server_ip,self.game_port))
     def connect(self, ip, port, name):
