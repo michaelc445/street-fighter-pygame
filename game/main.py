@@ -757,9 +757,9 @@ def map_select():
         #map select buttons
         map1 = Button(image=None, pos=(300, 150),
                         text_input="map1", font=font(25), base_color="#d7fcd4", hovering_color="Yellow")
-        map2 = Button(image=None, pos=(700, 150),
+        map2 = Button(image=None, pos=(500, 150),
                         text_input="map2", font=font(25), base_color="#d7fcd4", hovering_color="Yellow")
-        map3 = Button(image=None, pos=(500, 150),
+        map3 = Button(image=None, pos=(700, 150),
                         text_input="map3", font=font(25), base_color="#d7fcd4", hovering_color="Yellow")
 
         back = Button(image=pygame.image.load("game/assets/menu/medium.png"), pos=(300, 525),
@@ -857,8 +857,8 @@ if __name__ == "__main__":
     mixer.init
     pygame.init()
     # create game window
-    SCREEN_WIDTH = 1920
-    SCREEN_HEIGHT = 1080
+    SCREEN_WIDTH = 1000
+    SCREEN_HEIGHT = 600
 
     #default characters
     p1="wizard"
