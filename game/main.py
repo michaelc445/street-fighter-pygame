@@ -755,10 +755,8 @@ def multi_char_select(game_client):
         p2_nomad = Button(image=None, pos=(700, 150),
                               text_input="nomad", font=font(25), base_color=p2_nom, hovering_color="Blue")
         enemy_chars = [p2_nomad, p2_wizard, p2_warrior]
-        loop.create_task(update_lobby(game_client,enemy_chars))
+        loop.create_task(game_client.get_enemy_character())
         if game_client.enemy_resp is not None:
-
-            print("enemy picked: %d"%(game_client.enemy_char))
             if game_client.enemy_char==0:
                 p2_nom = "Blue"
                 p2_wiz = default_colour
@@ -818,7 +816,6 @@ def multi_char_select(game_client):
                     continue
                 for i, button in enumerate(characters):
                     if button.checkForInput(mouse):
-                        print("picking: %d name: %s"%(i,button.text_input))
                         game_client.send_character_choice(i,False)
                         button.base_color = "Yellow"
                         p_choice = i
@@ -832,12 +829,10 @@ def multi_char_select(game_client):
         run_once(loop)
 
 
-async def update_lobby(game_client,buttons):
+async def update_lobby(game_client):
     loop = asyncio.get_event_loop()
     loop.create_task(game_client.get_enemy_character())
-    buttons[game_client.enemy_char].base_color = "Blue"
-    for j in [z for z in range(0, 3) if z != game_client.enemy_char]:
-        buttons[j].base_color = "#d7fcd4"
+
 
 # main menu
 def main_menu():
