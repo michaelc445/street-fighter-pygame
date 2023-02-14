@@ -24,6 +24,7 @@ class GameServer(object):
         self.p2_addr = None
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.socket.bind((self._get_local_address(), local_port))
+        self.socket.settimeout(10)
 
     def _get_local_address(self):
         sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -72,22 +73,31 @@ class GameServer(object):
                 continue
     def character_select_new(self):
         locked_in = {}
-
+        t = [datetime.now(), datetime.now()]
         while len(locked_in) < 2:
+            if self.player_timeout(t):
+                self.exit_character_select()
+                return False
 
-            data, address = self.socket.recvfrom(self.BUFFER_SIZE)
+            try:
+                data, address = self.socket.recvfrom(self.BUFFER_SIZE)
+            except TimeoutError:
+
+                self.exit_character_select()
+                return False
+
+
             char_select_req = pb.CharacterSelectRequest()
             char_select_req.ParseFromString(data)
             if char_select_req.id < 0 or char_select_req.id > 1:
                 resp = pb.CharacterSelectResponse(ok=0, playerId=0, start=False, enemyCharacter=0)
                 self.socket.sendto(resp.SerializeToString(), address)
                 raise ValueError
-            #print("player: %d picks: %d"%(char_select_req.id, char_select_req.character))
+            t[char_select_req.id]=datetime.now()
             if char_select_req.lockedIn:
                 locked_in[str(char_select_req.id)]=address
             self.connections[char_select_req.id].character = char_select_req.character
             enemy = (char_select_req.id + 1) % 2
-            print(len(locked_in))
             resp = pb.CharacterSelectResponse(ok=1,
                                               playerId=char_select_req.id,
                                               start=0,
@@ -95,9 +105,18 @@ class GameServer(object):
             e_address = self.connections[enemy]
             #print("sending to player: %d value: %d"%(enemy,char_select_req.character))
             self.socket.sendto(resp.SerializeToString(), (e_address.ip,e_address.port))
+        return True
+    #if the game times out, this function will update both players telling them the game is over
+    def exit_character_select(self):
+        resp = pb.CharacterSelectResponse(playerId=0,ok=0,start=0,enemyCharacter=0)
+        for player in self.connections:
+            self.socket.sendto(resp.SerializeToString(),(player.ip,player.port))
+
 
     def create_lobby(self):
+
         # get 2 connections
+
         for i in range(2):
             self.get_connection()
         # tell clients character select is ready
@@ -106,7 +125,9 @@ class GameServer(object):
             self.socket.sendto(resp.SerializeToString(), (person.ip, person.port))
 
         # get character selections
-        self.character_select_new()
+        start = self.character_select_new()
+        if not start:
+            return
         # tell clients game is ready
         for i in range(len(self.connections)):
             enemy = (i + 1) % 2
@@ -117,7 +138,7 @@ class GameServer(object):
             p = self.connections[i]
             self.socket.sendto(resp.SerializeToString(), (p.ip, p.port))
         # start listening for game updates
-
+        self.socket.settimeout(5)
         self.start_game()
 
     def player_timeout(self, times):
@@ -128,14 +149,32 @@ class GameServer(object):
                 return True
 
         return False
+    def quit_game(self):
+        message = pb.Update(health=0,
+                            enemyMove=0,
+                            moving=False,
+                            enemyHealth=0,
+                            enemyAttack=0,
+                            x=0,
+                            y=0,
+                            keys={},
+                            id=0,
+                            quit=True
+                            )
+        for player in self.connections:
+            self.socket.sendto(message.SerializeToString(),(player.ip,player.port))
 
     def start_game(self):
         t = [datetime.now(), datetime.now()]
         while True:
             try:
                 if self.player_timeout(t):
+                    self.quit_game()
                     break
-                data, address = self.socket.recvfrom(self.BUFFER_SIZE)
+                try:
+                    data, address = self.socket.recvfrom(self.BUFFER_SIZE)
+                except TimeoutError:
+                    break
                 game_update = pb.Update()
                 game_update.ParseFromString(data)
                 t[int(game_update.id)] = datetime.now()
