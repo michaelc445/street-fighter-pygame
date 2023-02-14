@@ -793,7 +793,7 @@ def multi_char_select(game_client):
         text = font(15).render("ENEMY PICK", True, "#b68f40")
         rect = text.get_rect(center=(700, 100))
         screen.blit(text, rect)
-
+        game_client.send_character_choice(p_choice, locked_in)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -805,8 +805,8 @@ def multi_char_select(game_client):
             if event.type == pygame.MOUSEBUTTONDOWN:
                 # make it so that when you click play, it goes to the game loop
                 if play.checkForInput(mouse):
-                    game_client.send_character_choice(p_choice, True)
                     locked_in = True
+
                     game_client.local_char = p_choice
                     #pygame.display.set_caption("Game")
 
