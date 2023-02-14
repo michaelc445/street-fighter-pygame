@@ -744,7 +744,8 @@ def multi_char_select(game_client):
     while True:
         mouse = pygame.mouse.get_pos()
         screen.blit(menu_scaled, (0, 0))
-        if not game_client.quit_game:
+        if game_client.enemy_quit_game==0:
+            print("stopepd here")
             exit(0)
         for button in [ back, play, p1_wizard, p1_warrior, p1_nomad]:
             button.changeColor(mouse)
