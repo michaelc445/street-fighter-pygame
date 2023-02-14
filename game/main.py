@@ -740,6 +740,7 @@ def multi_char_select(game_client):
     p_choice = 0
     locked_in = False
     loop = asyncio.get_event_loop()
+    l_count=0
     while True:
         mouse = pygame.mouse.get_pos()
         screen.blit(menu_scaled, (0, 0))
@@ -793,7 +794,8 @@ def multi_char_select(game_client):
         text = font(15).render("ENEMY PICK", True, "#b68f40")
         rect = text.get_rect(center=(700, 100))
         screen.blit(text, rect)
-        game_client.send_character_choice(p_choice, locked_in)
+        if l_count ==0:
+            game_client.send_character_choice(p_choice, locked_in)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -825,7 +827,7 @@ def multi_char_select(game_client):
                             characters[j].base_color=default_colour
 
 
-
+        l_count = (l_count+1)%20
         pygame.display.update()
         run_once(loop)
 
