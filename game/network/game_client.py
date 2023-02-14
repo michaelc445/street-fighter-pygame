@@ -121,6 +121,7 @@ class GameClient(object):
             char_resp.ParseFromString(data)
             self.enemy_resp = char_resp
             self.enemy_char = char_resp.enemyCharacter
+            self.quit_game = char_resp.ok
 
         except:
             pass
