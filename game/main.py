@@ -723,11 +723,11 @@ def multi_char_select(game_client):
                   text_input="PLAY", font=font(35), base_color="Black", hovering_color="Yellow")
     # character select buttons for player 1
     p1_wizard = Button(image=None, pos=(300, 275),
-                       text_input="wizard", font=font(25), base_color="Yellow", hovering_color="Yellow")
+                       text_input="wizard", font=font(25), base_color=default_colour, hovering_color="Yellow")
     p1_warrior = Button(image=None, pos=(300, 400),
                         text_input="warrior", font=font(25), base_color=default_colour, hovering_color="Yellow")
     p1_nomad = Button(image=None, pos=(300, 150),
-                      text_input="nomad", font=font(25), base_color=default_colour, hovering_color="Yellow")
+                      text_input="nomad", font=font(25), base_color="Yellow", hovering_color="Yellow")
 
 
     back = Button(image=pygame.image.load("game/assets/menu/medium.png"), pos=(300, 525),
@@ -786,12 +786,12 @@ def multi_char_select(game_client):
         screen.blit(text, rect)
 
         # player 1
-        text = font(15).render("PLAYER 1", True, "#b68f40")
+        text = font(15).render("YOUR PICK", True, "#b68f40")
         rect = text.get_rect(center=(300, 100))
         screen.blit(text, rect)
 
         # player 2
-        text = font(15).render("PLAYER 2", True, "#b68f40")
+        text = font(15).render("ENEMY PICK", True, "#b68f40")
         rect = text.get_rect(center=(700, 100))
         screen.blit(text, rect)
 
