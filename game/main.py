@@ -89,8 +89,8 @@ def game_loop():
     elif p2 == "warrior":
         fighter_2 = createWarrior(Fighter, 2, 700, 310, True, punch_fx, projectile_fx, hit_fx, player2_controls)
 
-    if map == "base":
-        map_chosen = "game/assets/maps/background.png"
+    if map == "mountain":
+        map_chosen = "game/assets/maps/mountain.png"
 
         obstacles = []
     elif map == "church":
@@ -786,7 +786,7 @@ def map_select():
                     pygame.display.set_caption("Character Select")
                     menu_char()
                 if map1.checkForInput(mouse):
-                    map = "base"
+                    map = "mountain"
                 if map2.checkForInput(mouse):
                     map = "cliffs"
                 if map3.checkForInput(mouse):
@@ -865,7 +865,7 @@ if __name__ == "__main__":
     p2="wizard"
 
     #default map
-    map = "base"
+    map = "mountain"
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     pygame.display.set_caption("Main Menu")
 
