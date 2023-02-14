@@ -70,30 +70,28 @@ def sfx_change(level):
 
 # game loop
 def game_loop():
-
-    if p1 == "wizard":
-        fighter_1 = createWizard(Fighter, 1, 200, 310, False, punch_fx, projectile_fx, hit_fx, player1_controls)
-
-    elif p1 == "nomad":
-        fighter_1 = createNomad(Fighter, 1, 200, 310, False, punch_fx, projectile_fx, hit_fx, player1_controls)
-
-    elif p1 == "warrior":
-        fighter_1 = createWarrior(Fighter, 1, 200, 310, False, punch_fx, projectile_fx, hit_fx, player1_controls)
-
-    if p2 == "wizard":
-        fighter_2 = createWizard(Fighter, 2, 700, 310, True, punch_fx, projectile_fx, hit_fx, player2_controls)
-
-    elif p2 == "nomad":
-        fighter_2 = createNomad(Fighter, 2, 700, 310, True, punch_fx, projectile_fx, hit_fx, player2_controls)
-
-    elif p2 == "warrior":
-        fighter_2 = createWarrior(Fighter, 2, 700, 310, True, punch_fx, projectile_fx, hit_fx, player2_controls)
-
     if map == "mountain":
+        p1_spawn = [100, 100]
+        p2_spawn = [850, 100]
         map_chosen = "game/assets/maps/mountain.png"
+        # mountain obstacles
+        middle_ground1 = Obstacle(270, 410, 465, 60)
+        middle_ground2 = Obstacle(290, 470, 425, 60)
+        left_cliff1 = Obstacle(0, 235, 240, 60)
+        left_cliff2 = Obstacle(0, 295, 205, 60)
+        left_cliff3 = Obstacle(0, 355, 150, 60)
+        left_cliff4 = Obstacle(0, 405, 125, 300)
+        right_cliff1 = Obstacle(760, 235, 240, 60)
+        right_cliff2 = Obstacle(800, 295, 205, 60)
+        right_cliff3 = Obstacle(850, 355, 150, 60)
+        right_cliff4 = Obstacle(875, 405, 125, 300)
 
-        obstacles = []
+        obstacles = [middle_ground1, middle_ground2, left_cliff1, left_cliff2, left_cliff3, left_cliff4, right_cliff1,
+                     right_cliff2, right_cliff3, right_cliff4]
+
     elif map == "church":
+        p1_spawn = [80, 100]
+        p2_spawn = [900, 100]
         map_chosen = "game/assets/maps/church.png"
         # church obstacles
         middle_floor = Obstacle(150, 530, 700, 80)
@@ -104,6 +102,8 @@ def game_loop():
         obstacles = [middle_floor, left_side, right_side, middle_top]
 
     elif map == "cliffs":
+        p1_spawn = [500, 100]
+        p2_spawn = [500, 400]
         map_chosen = "game/assets/maps/cliffs.png"
         # cliffs obstacles
         left_island1 = Obstacle(107, 355, 90, 20)
@@ -118,6 +118,25 @@ def game_loop():
         right_cliff6 = Obstacle(225, 500, 570, 80)
 
         obstacles = [left_island1, left_island2, middle_island1, middle_island2, right_cliff1, right_cliff2, right_cliff3, right_cliff4, right_cliff5, right_cliff6]
+
+    if p1 == "wizard":
+        fighter_1 = createWizard(Fighter, 1, p1_spawn[0], p1_spawn[1], False, punch_fx, projectile_fx, hit_fx, player1_controls)
+
+    elif p1 == "nomad":
+        fighter_1 = createNomad(Fighter, 1, p1_spawn[0], p1_spawn[1], False, punch_fx, projectile_fx, hit_fx, player1_controls)
+
+    elif p1 == "warrior":
+        fighter_1 = createWarrior(Fighter, 1, p1_spawn[0], p1_spawn[1], False, punch_fx, projectile_fx, hit_fx, player1_controls)
+
+    if p2 == "wizard":
+        fighter_2 = createWizard(Fighter, 2, p2_spawn[0], p2_spawn[1], True, punch_fx, projectile_fx, hit_fx, player2_controls)
+
+    elif p2 == "nomad":
+        fighter_2 = createNomad(Fighter, 2, p2_spawn[0], p2_spawn[1], True, punch_fx, projectile_fx, hit_fx, player2_controls)
+
+    elif p2 == "warrior":
+        fighter_2 = createWarrior(Fighter, 2, p2_spawn[0], p2_spawn[1], True, punch_fx, projectile_fx, hit_fx, player2_controls)
+
 
     #load map
     bg_image = pygame.image.load(map_chosen).convert_alpha()
