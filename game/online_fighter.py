@@ -11,7 +11,6 @@ class OnlineFighter(Fighter):
         self._start_x = x
         self._start_y = y
     def reset(self):
-        print("reseting")
         self.rect.x = self._start_x
         self.rect.y = self._start_y
         self.health = 100
