@@ -185,20 +185,28 @@ class GameServer(object):
     def start_game(self):
         t = [datetime.now(), datetime.now()]
         scores = [0,0]
+        round_time = datetime.now()
         while True:
             try:
                 if self.player_timeout(t):
                     self.quit_game()
                     break
-                try:
-                    data, address = self.socket.recvfrom(self.BUFFER_SIZE)
-                except TimeoutError:
-                    break
+
+                data, address = self.socket.recvfrom(self.BUFFER_SIZE)
+
                 game_update = pb.Update()
                 game_update.ParseFromString(data)
-                if game_update.enemyHealth <=0:
+                if game_update.enemyHealth <=0 and datetime.now().second - round_time.second > 5:
+                    scores[game_update.id] +=1
+                    print(scores)
+                    if scores[game_update.id]==3:
+                        self.quit_game()
+                        break
+                    round_time = datetime.now()
                     self.restart_game()
                     continue
+                if game_update.quit:
+                    self.quit_game()
 
                 t[int(game_update.id)] = datetime.now()
                 enemy = (game_update.id + 1) % 2
@@ -206,6 +214,8 @@ class GameServer(object):
                 self.socket.sendto(game_update.SerializeToString(), (p.ip, p.port))
                 if game_update.quit:
                     break
+            except TimeoutError:
+                break
             except:
                 continue
 
