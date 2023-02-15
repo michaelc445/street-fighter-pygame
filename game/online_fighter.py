@@ -16,15 +16,12 @@ class OnlineFighter(Fighter):
         self.health = 100
         self.alive = True
         self.jump = False
-        self.running = False
-        self.attacking = False
-        self.blocking = False
+
         self.hit = False
         self.vel_x = 0
         self.vel_y = 0
         self.attack1_cooldown = 0
         self.attack2_cooldown = 0
-        self.frame = 0
         self.projectiles = []
 
     def _create_update_message(self, key, target):
