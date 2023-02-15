@@ -15,7 +15,7 @@ class OnlineFighter(Fighter):
         self.rect.x = self._start_x
         self.rect.y = self._start_y
         self.health = 100
-        self.alive= True
+        self.alive = True
 
     def _create_update_message(self, key, target):
         t = {z: True for z in self.game_keys if key[z]}
