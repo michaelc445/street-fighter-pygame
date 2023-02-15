@@ -173,6 +173,7 @@ def multi_player_game_loop(game_client):
     clock = pygame.time.Clock()
     FPS = 60
     loop = asyncio.get_event_loop()
+    quit_game_to_menu = False
     while run:
 
         # cap frame rate
@@ -193,7 +194,8 @@ def multi_player_game_loop(game_client):
 
         for message in game_client.messages:
             if message.quit:
-                run = False
+                local_player.game_client.quit_game()
+                quit_game_to_menu = True
             local_player.health = message.enemyHealth
             if message.restart:
                 local_player.reset()
@@ -203,7 +205,9 @@ def multi_player_game_loop(game_client):
 
             enemy_character.move_enemy(SCREEN_WIDTH,SCREEN_HEIGHT,screen,local_player,obstacles,message.keys,message.x,message.y)
             enemy_character.obstacle_collision(screen, obstacles)
-
+        if quit_game_to_menu:
+            print("here")
+            break
         enemy_character.draw_projectile(local_player,screen.get_width(),screen)
         local_player.frameUpdate()
         enemy_character.frameUpdate()
@@ -230,8 +234,8 @@ def multi_player_game_loop(game_client):
         # update display
         pygame.display.update()
         run_once(loop)
-    pygame.quit()
-    sys.exit()
+
+
 
 # controls
 def controls():
