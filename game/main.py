@@ -228,7 +228,6 @@ def multi_player_game_loop(game_client):
         # if fighter 1 or 2 punches, play the punch.wav sound effect
 
         # update display
-
         pygame.display.update()
         run_once(loop)
     pygame.quit()
