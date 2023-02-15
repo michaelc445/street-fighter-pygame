@@ -102,6 +102,7 @@ class GameClient(object):
                             restart=False
                             )
         self.socket.sendto(message.SerializeToString(),(self.server_ip,self.game_port))
+        self.socket.close()
     def connect(self, ip, port, name):
         self.join_lobby(ip,port,"")
         time.sleep(2)
