@@ -196,7 +196,7 @@ class GameServer(object):
 
                 game_update = pb.Update()
                 game_update.ParseFromString(data)
-                if game_update.enemyHealth <=0 and datetime.now().second - round_time.second > 5:
+                if game_update.enemyHealth <=0 and datetime.now().second - round_time.second > 2:
                     scores[game_update.id] +=1
                     print(scores)
                     if scores[game_update.id]==3:

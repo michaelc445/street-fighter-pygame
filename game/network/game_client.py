@@ -102,7 +102,7 @@ class GameClient(object):
                             restart=False
                             )
         self.socket.sendto(message.SerializeToString(),(self.server_ip,self.game_port))
-        self.socket.close()
+
     def connect(self, ip, port, name):
         self.join_lobby(ip,port,"")
         time.sleep(2)
@@ -111,7 +111,10 @@ class GameClient(object):
 
 
     async def send_update(self, update_message: pb.Update):
-        self.socket.sendto(update_message.SerializeToString(), (self.server_ip, self.game_port))
+        try:
+            self.socket.sendto(update_message.SerializeToString(), (self.server_ip, self.game_port))
+        except:
+            pass
 
     async def get_updates(self, local_player, enemy_character, SCREEN_WIDTH, SCREEN_HEIGHT, screen, obstacles):
         for message in self.get_update():
