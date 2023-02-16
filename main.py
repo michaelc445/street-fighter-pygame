@@ -559,8 +559,21 @@ def audio():
 
 #new menu for when you click play, it should have a "local multiplayer" and a "singleplayer" button
 def menu_play():
+    menu_scaled = pygame.transform.scale(menu_bg, (SCREEN_WIDTH, SCREEN_HEIGHT))
+    single_player = Button(image=pygame.image.load(resource_path("game/assets/menu/long.png")), pos=(500, 150),
+                           text_input="SINGLEPLAYER", font=font(35), base_color="#d7fcd4", hovering_color="White")
+
+    local = Button(image=pygame.image.load(resource_path("game/assets/menu/long.png")), pos=(500, 275),
+                   text_input="LOCAL MULTI", font=font(35), base_color="#d7fcd4", hovering_color="White")
+
+    multiplayer = Button(image=pygame.image.load(resource_path("game/assets/menu/long.png")), pos=(500, 400),
+                         text_input="MULTIPLAYER", font=font(35), base_color="#d7fcd4", hovering_color="White")
+
+    back = Button(image=pygame.image.load(resource_path("game/assets/menu/medium.png")), pos=(500, 525),
+                  text_input="BACK", font=font(35), base_color="#d7fcd4", hovering_color="White")
+
     while True:
-        menu_scaled = pygame.transform.scale(menu_bg, (SCREEN_WIDTH, SCREEN_HEIGHT))
+
         screen.blit(menu_scaled, (0, 0))
         mouse = pygame.mouse.get_pos()
 
@@ -568,17 +581,6 @@ def menu_play():
         rect = text.get_rect(center=(500, 50))
         screen.blit(text, rect)
 
-        single_player = Button(image=pygame.image.load(resource_path("game/assets/menu/long.png")), pos=(500, 150),
-                      text_input="SINGLEPLAYER", font=font(35), base_color="#d7fcd4", hovering_color="White")
-
-        local = Button(image=pygame.image.load(resource_path("game/assets/menu/long.png")), pos=(500, 275),
-                      text_input="LOCAL MULTI", font=font(35), base_color="#d7fcd4", hovering_color="White")
-        
-        multiplayer = Button(image=pygame.image.load(resource_path("game/assets/menu/long.png")), pos=(500, 400),
-                      text_input="MULTIPLAYER", font=font(35), base_color="#d7fcd4", hovering_color="White")
-
-        back = Button(image=pygame.image.load(resource_path("game/assets/menu/medium.png")), pos=(500, 525),
-                      text_input="BACK", font=font(35), base_color="#d7fcd4", hovering_color="White")
 
         for button in [single_player, local, multiplayer, back]:
             button.changeColor(mouse)
@@ -626,9 +628,9 @@ def menu_char():
     p2_color_wizard= "#d7fcd4"
     p2_color_warrior= "#d7fcd4"
     p2_color_nomad= "#d7fcd4"
-
+    menu_scaled = pygame.transform.scale(menu_bg, (SCREEN_WIDTH, SCREEN_HEIGHT))
     while True:
-        menu_scaled = pygame.transform.scale(menu_bg, (SCREEN_WIDTH, SCREEN_HEIGHT))
+
         screen.blit(menu_scaled, (0, 0))
         mouse = pygame.mouse.get_pos()
 
@@ -722,9 +724,6 @@ def menu_char():
 def multi_char_select(game_client):
     global p1, p2
     default_colour = "#d7fcd4"
-    p1_sel = "Yellow"
-    p2_sel = "Blue"
-
     p2_wiz = "#d7fcd4"
     p2_war=  "#d7fcd4"
     p2_nom = "#d7fcd4"
@@ -849,24 +848,19 @@ async def update_lobby(game_client):
 
 # main menu
 def main_menu():
+    menu_scaled = pygame.transform.scale(menu_bg, (SCREEN_WIDTH, SCREEN_HEIGHT))
+    play = Button(image=pygame.image.load(resource_path("game/assets/menu/long.png")), pos=(500, 180),
+                  text_input="PLAY", font=font(55), base_color="#d7fcd4", hovering_color="White")
+
+    options = Button(image=pygame.image.load(resource_path("game/assets/menu/long.png")), pos=(500, 325),
+                     text_input="OPTIONS", font=font(55), base_color="#d7fcd4", hovering_color="White")
+    quit = Button(image=pygame.image.load(resource_path("game/assets/menu/medium.png")), pos=(500, 470),
+                  text_input="QUIT", font=font(55), base_color="#d7fcd4", hovering_color="White")
+    text = font(75).render("Main Menu", True, "#b68f40")
+    rect = text.get_rect(center=(500, 50))
     while True:
-        menu_scaled = pygame.transform.scale(menu_bg, (SCREEN_WIDTH, SCREEN_HEIGHT))
         screen.blit(menu_scaled, (0, 0))
         mouse = pygame.mouse.get_pos()
-
-        text = font(75).render("Main Menu", True, "#b68f40")
-        rect = text.get_rect(center=(500, 50))
-
-        play = Button(image=pygame.image.load(resource_path("game/assets/menu/long.png")), pos=(500, 180),
-                      text_input="PLAY", font=font(55), base_color="#d7fcd4", hovering_color="White")
-
-        #multi_player = Button(image=pygame.image.load("game/assets/Options Rect.png"), pos=(500, 275),
-                      #text_input="MULTI-PLAYER", font=font(45), base_color="#d7fcd4", hovering_color="White")
-
-        options = Button(image=pygame.image.load(resource_path("game/assets/menu/long.png")), pos=(500, 325),
-                         text_input="OPTIONS", font=font(55), base_color="#d7fcd4", hovering_color="White")
-        quit = Button(image=pygame.image.load(resource_path("game/assets/menu/medium.png")), pos=(500, 470),
-                      text_input="QUIT", font=font(55), base_color="#d7fcd4", hovering_color="White")
 
         screen.blit(text, rect)
 
