@@ -83,7 +83,7 @@ class Fighter(object):
                     self.projectiles.remove(projectile)
 
     def frameUpdate(self):
-        if self.health < 0:
+        if self.health <= 0:
             self.health = 0
             self.alive = False
             self.actionUpdate(3)

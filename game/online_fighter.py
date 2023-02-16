@@ -72,6 +72,48 @@ class OnlineFighter(Fighter):
 
         return self._create_update_message(keys, target)
 
+    def frameUpdate(self):
+        if self.health < 0:
+            self.health = 0
+            self.alive = False
+            self.actionUpdate(3)
+        elif self.hit:
+            self.actionUpdate(7)
+        elif self.attacking:
+            if self.attack_type == 1:
+                self.actionUpdate(1)
+            elif self.attack_type == 2:
+                self.actionUpdate(2)
+        elif self.jump:
+            self.actionUpdate(5)
+        elif self.running:
+            self.actionUpdate(4)
+        else:
+            self.actionUpdate(0)
+
+        animation_cooldown = 30
+        #update image
+        self.img = self.animationList[self.action][self.frame]
+        #check if enough time has passed since the last update
+        if pygame.time.get_ticks() - self.updateFrame > animation_cooldown:
+            self.frame += 1
+            self.updateFrame = pygame.time.get_ticks()
+        #check if the animation has finished
+        if self.frame >= len(self.animationList[self.action]):
+            #if the player is dead then end the animation
+            if self.alive == False:
+                self.frame = len(self.animationList[self.action]) - 1
+            else:
+                self.frame = 0
+                    #check if an attack was executed
+                if self.action == 1 or self.action == 2:
+                    self.attacking = False
+                #check if damage was taken
+                if self.action == 7:
+                    self.hit = False
+                        #if the player was in the middle of an attack, then the attack is stopped
+                    self.attacking = False
+                    self.frame = 0
 
     def move_enemy(self, screen_width, screen_height, surface, target, obstacles, key,x,y):
         speed = 10
