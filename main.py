@@ -142,6 +142,7 @@ def game_loop():
     bg_image = pygame.image.load(map_chosen).convert_alpha()
 
     run = True
+    scores = [0,0]
     while run:
 
         # cap frame rate
@@ -157,6 +158,20 @@ def game_loop():
         # move fighters
         fighter_1.move(SCREEN_WIDTH, SCREEN_HEIGHT, screen, fighter_2, obstacles)
         fighter_2.move(SCREEN_WIDTH, SCREEN_HEIGHT, screen, fighter_1, obstacles)
+
+        if fighter_1.health <=0 or fighter_2.health <=0:
+            if fighter_1.health <=0:
+                scores[1] +=1
+            else:
+                scores[0] +=1
+
+            if scores[0] ==3 or scores[1]==3:
+                break
+
+            fighter_1.reset()
+            fighter_2.reset()
+
+
 
         # update frames
         fighter_1.frameUpdate()
@@ -183,8 +198,6 @@ def game_loop():
 
         # update display
         pygame.display.update()
-    pygame.quit()
-    sys.exit()
 
 async def update_enemy(game_client,local_player,enemy_character):
     for message in game_client.get_updates():

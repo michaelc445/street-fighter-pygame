@@ -8,18 +8,7 @@ class OnlineFighter(Fighter):
         super().__init__(player, x, y, flip, punch_sound, projectile_sound, hit_sound,controls)
         self.game_client = None
         self.game_keys = [pygame.K_a, pygame.K_d, pygame.K_w, pygame.K_r, pygame.K_t,pygame.K_s]
-        self._start_x = x
-        self._start_y = y
-    def reset(self):
-        self.rect.x = self._start_x
-        self.rect.y = self._start_y
-        self.health = 100
-        self.alive = True
-        self.vel_x = 0
-        self.vel_y = 0
-        self.attack1_cooldown = 0
-        self.attack2_cooldown = 0
-        self.projectiles = []
+
 
     def _create_update_message(self, key, target):
         t = {z: True for z in self.game_keys if key[z]}
@@ -59,6 +48,8 @@ class OnlineFighter(Fighter):
         # count projectile cooldown
         if self.attack2_cooldown > 0:
             self.attack2_cooldown -= 1
+
+
 
         self.obstacle_collision(surface, obstacles)
         # update projectiles

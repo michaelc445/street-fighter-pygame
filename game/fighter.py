@@ -26,6 +26,8 @@ class Fighter(object):
         self.hit_sound = hit_sound
         self.alive = True
         self.controls = controls
+        self._start_x = x
+        self._start_y = y
 
     def loadImages(self, spriteSheet, animationSteps):
         # extract images from sprite sheet
@@ -40,7 +42,16 @@ class Fighter(object):
             animationList.append(tempImageList)
             y += 1
         return animationList
-
+    def reset(self):
+        self.rect.x = self._start_x
+        self.rect.y = self._start_y
+        self.health = 100
+        self.alive = True
+        self.vel_x = 0
+        self.vel_y = 0
+        self.attack1_cooldown = 0
+        self.attack2_cooldown = 0
+        self.projectiles = []
     def resource_path(relative_path):
         try:
             base_path = sys._MEIPASS
@@ -63,6 +74,7 @@ class Fighter(object):
         # keep player on screen
         self.bounds(screen_width, screen_height)
 
+
         #keep player from phasing through obstacles
         self.obstacle_collision(surface, obstacles)
 
@@ -74,6 +86,8 @@ class Fighter(object):
         if self.attack2_cooldown > 0:
             self.attack2_cooldown -= 1
 
+        if self.rect.y > 1000:
+            self.health = -1
         # update projectiles
         if self.projectiles:
             for projectile in self.projectiles:
