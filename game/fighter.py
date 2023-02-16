@@ -83,7 +83,7 @@ class Fighter(object):
                     self.projectiles.remove(projectile)
 
     def frameUpdate(self):
-        if self.health < 0:
+        if self.health <= 0:
             self.health = 0
             self.alive = False
             self.actionUpdate(3)
@@ -245,9 +245,9 @@ class Fighter(object):
             # bounce off wall if knocked into it
             self.vel_x = -self.vel_x
 
-        if self.rect.bottom + self.dy > screen_height - 100:
-            self.vel_y = 0
-            self.dy = screen_height - 100 - self.rect.bottom
-            self.jump = False
+        #if self.rect.bottom + self.dy > screen_height - 100:
+        #    self.vel_y = 0
+        #   self.dy = screen_height - 100 - self.rect.bottom
+        #    self.jump = False
 
 
