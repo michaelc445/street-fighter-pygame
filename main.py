@@ -284,6 +284,12 @@ def multi_player_game_loop(game_client):
         local_player.draw(screen)
         enemy_character.draw(screen)
 
+        # check if they fell off the map
+        if local_player.y > 1000:
+            local_player.health = -1
+        if enemy_character.y > 1000:
+            enemy_character.health = -1
+
         # draw obstacles
         for obstacle in obstacles:
             obstacle.draw(screen)
