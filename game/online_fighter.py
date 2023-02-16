@@ -1,7 +1,7 @@
 import pygame
 from game.projectile import Projectile
 from game.fighter import Fighter
-from proto import game_pb2 as pb
+from game.proto import game_pb2 as pb
 class OnlineFighter(Fighter):
 
     def __init__(self, player, x, y, flip, punch_sound, projectile_sound, hit_sound,controls):
