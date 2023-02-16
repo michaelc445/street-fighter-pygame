@@ -218,9 +218,26 @@ def multi_player_game_loop(game_client):
     local_player.game_client = game_client
     enemy = (pick + 1) % 2
     enemy_character = fighters[enemy]
-    obstacle_1 = Obstacle(400, 300, 100, 300)
-    obstacle_2 = Obstacle(700, 200, 200, 50)
-    obstacles = [obstacle_1, obstacle_2]
+
+    p1_spawn = [100, 100]
+    p2_spawn = [850, 100]
+    map_chosen = "game/assets/maps/mountain.png"
+    # mountain obstacles
+    middle_ground1 = Obstacle(270, 410, 465, 60)
+    middle_ground2 = Obstacle(290, 470, 425, 60)
+    left_cliff1 = Obstacle(0, 235, 240, 60)
+    left_cliff2 = Obstacle(0, 295, 205, 60)
+    left_cliff3 = Obstacle(0, 355, 150, 60)
+    left_cliff4 = Obstacle(0, 405, 125, 300)
+    right_cliff1 = Obstacle(760, 235, 240, 60)
+    right_cliff2 = Obstacle(800, 295, 205, 60)
+    right_cliff3 = Obstacle(850, 355, 150, 60)
+    right_cliff4 = Obstacle(875, 405, 125, 300)
+
+    obstacles = [middle_ground1, middle_ground2, left_cliff1, left_cliff2, left_cliff3, left_cliff4, right_cliff1,
+                 right_cliff2, right_cliff3, right_cliff4]
+
+    bg_image = pygame.image.load(map_chosen).convert_alpha()
     run = True
     clock = pygame.time.Clock()
     FPS = 60
