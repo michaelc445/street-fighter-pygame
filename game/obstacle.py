@@ -6,6 +6,6 @@ class Obstacle():
         self.color = (0,0,0)
 
     def draw(self, surface):
-        pygame.draw.rect(surface, self.color, self.rect)
-        
+        #pygame.draw.rect(surface, self.color, self.rect)
+        return
     
