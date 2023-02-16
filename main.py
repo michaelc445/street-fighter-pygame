@@ -275,7 +275,6 @@ def multi_player_game_loop(game_client):
             enemy_character.move_enemy(SCREEN_WIDTH,SCREEN_HEIGHT,screen,local_player,obstacles,message.keys,message.x,message.y)
             enemy_character.obstacle_collision(screen, obstacles)
         if quit_game_to_menu:
-            print("here")
             break
         enemy_character.draw_projectile(local_player,screen.get_width(),screen)
         local_player.frameUpdate()
@@ -879,8 +878,13 @@ def multi_char_select(game_client):
         mouse = pygame.mouse.get_pos()
         screen.blit(menu_scaled, (0, 0))
         if game_client.enemy_quit_game==0:
-            print("stopepd here")
-            exit(0)
+            try:
+                game_client.socket.close()
+            except:
+                pass
+
+            break
+
         for button in [ back, play, p1_wizard, p1_warrior, p1_nomad]:
             button.hover(mouse)
             button.update(screen)
