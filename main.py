@@ -139,7 +139,7 @@ def game_loop():
 
 
     #load map
-    bg_image = pygame.image.load(map_chosen).convert_alpha()
+    bg_image = pygame.image.load(resource_path(map_chosen)).convert_alpha()
 
     run = True
     scores = [0,0]
@@ -819,7 +819,7 @@ def map_select():
         rect = text.get_rect(center=(500, 50))
         screen.blit(text, rect)
 
-        play = Button(image=pygame.image.load("game/assets/menu/medium.png"), pos=(700, 525),
+        play = Button(image=pygame.image.load(resource_path("game/assets/menu/medium.png")), pos=(700, 525),
                         text_input="PLAY", font=font(35), base_color="White", hovering_color="Yellow")
         #map select buttons
         map1 = Button(image=None, pos=(300, 150),
@@ -829,7 +829,7 @@ def map_select():
         map3 = Button(image=None, pos=(700, 150),
                         text_input="map3", font=font(25), base_color="#d7fcd4", hovering_color="Yellow")
 
-        back = Button(image=pygame.image.load("game/assets/menu/medium.png"), pos=(300, 525),
+        back = Button(image=pygame.image.load(resource_path("game/assets/menu/medium.png")), pos=(300, 525),
                       text_input="BACK", font=font(35), base_color="White", hovering_color="Yellow")
 
         for button in [back, play, map1, map2, map3]:
