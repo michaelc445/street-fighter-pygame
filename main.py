@@ -994,12 +994,12 @@ class StreetFighter:
         self.menu_bg = pygame.image.load(self.resource_path("game/assets/menu/main_menu_bg.png")).convert_alpha()
 
         # use mixer to load music and sounds
-        mixer.music.load(self.resource_path("game/assets/audio/main.mp3"))
+        mixer.music.load(self.resource_path("game/assets/audio/main.wav"))
         mixer.music.play(-1)
         mixer.music.set_volume(0)
-        self.punch_fx = mixer.Sound(self.resource_path("game/assets/audio/punch-pygbag.ogg"))
-        self.projectile_fx = mixer.Sound(self.resource_path("game/assets/audio/proj-pygbag.ogg"))
-        self.hit_fx = mixer.Sound(self.resource_path("game/assets/audio/hit-pygbag.ogg"))
+        self.punch_fx = mixer.Sound(self.resource_path("game/assets/audio/punch.wav"))
+        self.projectile_fx = mixer.Sound(self.resource_path("game/assets/audio/proj.wav"))
+        self.hit_fx = mixer.Sound(self.resource_path("game/assets/audio/hit.wav"))
         self.punch_fx.set_volume(0.15)
         self.projectile_fx.set_volume(0.5)
         self.hit_fx.set_volume(0.5)
