@@ -238,7 +238,7 @@ def multi_player_game_loop(game_client):
 
 
 
-    bg_image = pygame.image.load(map_chosen).convert_alpha()
+    bg_image = pygame.image.load(resource_path(map_chosen)).convert_alpha()
     run = True
     clock = pygame.time.Clock()
     FPS = 60
