@@ -15,7 +15,7 @@ def createNomad(inherit_from, player, x, y, flip, punch_sound, projectile_sound,
             self.speed = 10
 
             #load nomad sheet
-            self.nomadSheet = pygame.image.load("game/assets/nomad/nomad_spritesheet.png")
+            self.nomadSheet = pygame.image.load(inherit_from.resource_path("game/assets/nomad/nomad_spritesheet.png"))
 
             self.spriteSheet = self.nomadSheet
             self.sizeX = self.nomadSheetX = 126

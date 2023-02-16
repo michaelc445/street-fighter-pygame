@@ -1,5 +1,5 @@
 import pygame
-
+import sys,os
 class Fighter(object):
     def __init__(self, player, x, y, flip, punch_sound, projectile_sound, hit_sound,controls):
         self.updateFrame = pygame.time.get_ticks()
@@ -41,6 +41,13 @@ class Fighter(object):
             y += 1
         return animationList
 
+    def resource_path(relative_path):
+        try:
+            base_path = sys._MEIPASS
+        except Exception:
+            base_path = os.path.abspath(".")
+
+        return os.path.join(base_path, relative_path)
     def move(self, screen_width, screen_height, surface, target, obstacles):
         GRAVITY = 2
         self.dx = 0
