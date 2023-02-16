@@ -862,7 +862,7 @@ def multi_char_select(game_client):
             print("stopepd here")
             exit(0)
         for button in [ back, play, p1_wizard, p1_warrior, p1_nomad]:
-            button.changeColor(mouse)
+            button.hover(mouse)
             button.update(screen)
             # character select buttons for player 2
         p2_wizard = Button(image=None, pos=(700, 275),
