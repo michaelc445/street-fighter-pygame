@@ -68,6 +68,10 @@ class OnlineFighter(Fighter):
                 projectile.draw(surface)
                 if not projectile.exists:
                     self.projectiles.remove(projectile)
+
+        # check if they fell off the map
+        if self.rect.y > 1000:
+            self.health = -1
         return self._create_update_message(keys, target)
 
 
@@ -92,5 +96,9 @@ class OnlineFighter(Fighter):
         # count projectile cooldown
         if self.attack2_cooldown > 0:
             self.attack2_cooldown -= 1
+
+        # check if they fell off the map
+        if self.rect.y > 1000:
+            self.health = -1
 
 
