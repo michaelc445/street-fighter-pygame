@@ -69,9 +69,7 @@ class OnlineFighter(Fighter):
                 if not projectile.exists:
                     self.projectiles.remove(projectile)
 
-        # check if they fell off the map
-        if self.rect.y > 1000:
-            self.health = -1
+
         return self._create_update_message(keys, target)
 
 
