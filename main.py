@@ -146,7 +146,7 @@ def game_loop():
     while run:
 
         # cap frame rate
-        clock.tick(FPS)
+        clock.tick(GAME_FPS)
 
         # draw background
         draw_bg(scaled_bg)
@@ -255,13 +255,12 @@ def multi_player_game_loop(game_client):
     scaled_bg = pygame.transform.scale(bg_image, (SCREEN_WIDTH, SCREEN_HEIGHT))
     run = True
     clock = pygame.time.Clock()
-    FPS = 60
     loop = asyncio.get_event_loop()
     quit_game_to_menu = False
     while run:
 
         # cap frame rate
-        clock.tick(FPS)
+        clock.tick(GAME_FPS)
 
         # draw background
         draw_bg(scaled_bg)
@@ -368,7 +367,7 @@ def controls():
                     player2()
         if leave_menu:
             break
-        clock.tick(FPS)
+        clock.tick(MENU_FPS)
         pygame.display.update()
 
 
@@ -448,7 +447,7 @@ def player1():
                     control_handling(player1_controls, "attack2")
         if leave_menu:
             break
-        clock.tick(FPS)
+        clock.tick(MENU_FPS)
         pygame.display.update()
 
 
@@ -526,7 +525,7 @@ def player2():
                     control_handling(player2_controls, "attack2")
         if leave_menu:
             break
-        clock.tick(FPS)
+        clock.tick(MENU_FPS)
         pygame.display.update()
 
 
@@ -577,7 +576,7 @@ def opt():
                     audio()
         if leave_menu:
             break
-        clock.tick(FPS)
+        clock.tick(MENU_FPS)
         pygame.display.update()
 
 
@@ -664,7 +663,7 @@ def audio():
                     sfx_change(4)
         if leave_menu:
             break
-        clock.tick(FPS)
+        clock.tick(MENU_FPS)
         pygame.display.update()
 
 
@@ -728,7 +727,7 @@ def menu_play():
                     break
         if leave_menu:
             break
-        clock.tick(FPS)
+        clock.tick(MENU_FPS)
         pygame.display.update()
 
 #character select menu
@@ -839,7 +838,7 @@ def menu_char():
                 
         if leave_menu:
             break
-        clock.tick(FPS)
+        clock.tick(MENU_FPS)
         pygame.display.update()
 
 
@@ -899,7 +898,7 @@ def map_select():
                     map = "church"
         if leave_menu:
             break
-        clock.tick(FPS)
+        clock.tick(MENU_FPS)
         pygame.display.update()
 def multi_char_select(game_client):
     global p1, p2
@@ -1025,7 +1024,7 @@ def multi_char_select(game_client):
         l_count = (l_count+1)%20
         pygame.display.update()
         run_once(loop)
-        clock.tick(FPS)
+        clock.tick(MENU_FPS)
 
 async def update_lobby(game_client):
     loop = asyncio.get_event_loop()
@@ -1072,7 +1071,7 @@ def main_menu():
                 if quit.checkForInput(mouse):
                     pygame.quit()
                     sys.exit()
-        clock.tick(FPS)
+        clock.tick(MENU_FPS)
         pygame.display.update()
 
 #https://stackoverflow.com/a/51266275
@@ -1113,8 +1112,8 @@ if __name__ == "__main__":
 
     # cap frame rate
     clock = pygame.time.Clock()
-    FPS = 60
-
+    MENU_FPS = 20
+    GAME_FPS = 60
     # define colors
     YELLOW = (255, 255, 0)
     RED = (255, 0, 0)
