@@ -1,5 +1,5 @@
 import socket
-from proto import game_pb2 as pb
+from game.proto import game_pb2 as pb
 from threading import Thread
 from datetime import datetime
 
@@ -47,9 +47,11 @@ class GameServer(object):
                     raise ValueError
 
                 self.connections.append(Player(join_req.name, address[0], address[1], len(self.connections)))
+                return True
+            except Exception as e:
+                return False
 
-            except:
-                continue
+
 
     def handle_character_request(self):
         data, address, char_select_req = None, None, None
@@ -119,7 +121,10 @@ class GameServer(object):
         # get 2 connections
 
         for i in range(2):
-            self.get_connection()
+            if not self.get_connection():
+                self.socket.close()
+                return
+
         # tell clients character select is ready
         for i, person in enumerate(self.connections):
             resp = pb.JoinLobbyResponse(ok=1, playerId=person.id, start=True)
@@ -196,7 +201,6 @@ class GameServer(object):
             try:
                 data, address = self.socket.recvfrom(self.BUFFER_SIZE)
             except Exception as e:
-                print(e)
                 continue
 
             game_update = pb.Update()
@@ -212,7 +216,6 @@ class GameServer(object):
                 continue
 
             if game_update.quit:
-                print("quitting game")
                 self.quit_game()
 
             t[int(game_update.id)] = datetime.now()
@@ -221,7 +224,6 @@ class GameServer(object):
             try:
                 self.socket.sendto(game_update.SerializeToString(), (p.ip, p.port))
             except Exception as e:
-                print(e)
                 continue
             if game_update.quit:
                 break
@@ -235,28 +237,28 @@ class MatchServer(object):
     def __init__(self, local_port):
         self.BUFFER_SIZE = 1024
         self.port = local_port
-        # self.port_mappings = {1235: 16559,
-        #                       1236: 16670,
-        #                       1237: 16405,
-        #                       1238: 16958,
-        #                       1239: 16961,
-        #                       1240: 17071,
-        #                       1241: 16857,
-        #                       1242: 17241,
-        #                       1243: 16962,
-        #                       1244: 16417
-        #                       }
-        self.port_mappings = {1235: 1235,
-                              1236: 1236,
-                              1237: 1237,
-                              1238: 1238,
-                              1239: 1239,
-                              1240: 1240,
-                              1241: 1241,
-                              1242: 1242,
-                              1243: 1243,
-                              1244: 1244
+        self.port_mappings = {1235: 16559,
+                              1236: 16670,
+                              1237: 16405,
+                              1238: 16958,
+                              1239: 16961,
+                              1240: 17071,
+                              1241: 16857,
+                              1242: 17241,
+                              1243: 16962,
+                              1244: 16417
                               }
+        # self.port_mappings = {1235: 1235,
+        #                       1236: 1236,
+        #                       1237: 1237,
+        #                       1238: 1238,
+        #                       1239: 1239,
+        #                       1240: 1240,
+        #                       1241: 1241,
+        #                       1242: 1242,
+        #                       1243: 1243,
+        #                       1244: 1244
+        #                       }
         self.free_ports = [i for i in range(1235, 1245)]
         self.threads = []
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -289,13 +291,15 @@ class MatchServer(object):
                 if len(self.free_ports) == 0:
                     continue
                 game_port = self.free_ports.pop(0)
-                print(game_port)
+                # print("starting game on port %d\nactive game threads: %d\nfree ports: %s\n"%(game_port,
+                #                                                                            len(self.threads),
+                #                                                                            str(self.free_ports)))
                 response.port = self.port_mappings[game_port]
                 self.socket.sendto(response.SerializeToString(), address)
                 self.socket.sendto(response.SerializeToString(), self.lobby_codes[lobby_req.lobbyCode])
                 del self.lobby_codes[lobby_req.lobbyCode]
 
-                game_thread = GameThread(game_port, self.free_ports)
+                game_thread = GameThread(game_port)
                 self.threads.append(game_thread)
                 game_thread.start()
 
@@ -304,20 +308,24 @@ class MatchServer(object):
 
     def free_threads(self):
         for i in range(len(self.threads) - 1, -1, -1):
-            if not self.threads[i].is_alive():
-                self.threads.pop(i)
+            if self.threads[i].is_alive():
+                continue
+
+            if self.threads[i].local_port not in self.free_ports:
+                self.free_ports.append(self.threads[i].local_port)
+
+            self.threads.pop(i)
 
 
 class GameThread(Thread):
-    def __init__(self, local_port, free_ports):
+    def __init__(self, local_port):
         super().__init__()
         self.local_port = local_port
         # shared list for threads to append to when finished
-        self.ports = free_ports
+
 
     def run(self):
         GameServer(self.local_port).create_lobby()
-        self.ports.append(self.local_port)
 
 
 if __name__ == "__main__":
