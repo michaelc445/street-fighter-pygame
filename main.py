@@ -36,6 +36,8 @@ def draw_scores(p1_score, p2_score):
 def font(size):
     return pygame.font.Font(resource_path("game/assets/menu/font.ttf"), size)
 
+def locateFighter(fighter):
+    print(fighter.rect.x, fighter.rect.y)
 
 # when a button is pressed, it should change the key that is assigned to that action
 def control_handling(keys, key):
@@ -79,8 +81,8 @@ def sfx_change(level):
 # game loop
 def game_loop():
     if map == "mountain":
-        p1_spawn = [100, 100]
-        p2_spawn = [850, 100]
+        p1_spawn = [100, 134]
+        p2_spawn = [850, 134]
         map_chosen = "game/assets/maps/mountain.png"
         # mountain obstacles
         middle_ground1 = Obstacle(270, 410, 465, 60)
@@ -98,8 +100,8 @@ def game_loop():
                      right_cliff2, right_cliff3, right_cliff4]
 
     elif map == "church":
-        p1_spawn = [80, 100]
-        p2_spawn = [900, 100]
+        p1_spawn = [900, 286]
+        p2_spawn = [56, 286]
         map_chosen = "game/assets/maps/church.png"
         # church obstacles
         middle_floor = Obstacle(150, 530, 700, 80)
@@ -110,8 +112,8 @@ def game_loop():
         obstacles = [middle_floor, left_side, right_side, middle_top]
 
     elif map == "cliffs":
-        p1_spawn = [500, 100]
-        p2_spawn = [500, 400]
+        p1_spawn = [135, 254]
+        p2_spawn = [870, 45]
         map_chosen = "game/assets/maps/cliffs.png"
         # cliffs obstacles
         left_island1 = Obstacle(107, 355, 90, 20)
@@ -229,7 +231,8 @@ def game_loop():
                     run = False
 
         # if fighter 1 or 2 punches, play the punch.wav sound effect
-
+        #print coordinates of player 1
+        #locateFighter(fighter_1)
         # update display
         pygame.display.update()
 

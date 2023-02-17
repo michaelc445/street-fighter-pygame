@@ -59,6 +59,7 @@ class Fighter(object):
             base_path = os.path.abspath(".")
 
         return os.path.join(base_path, relative_path)
+    
     def move(self, screen_width, screen_height, surface, target, obstacles):
         GRAVITY = 2
         self.dx = 0
