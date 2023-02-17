@@ -1,7 +1,7 @@
 import socket
 import sys
 import time
-from proto import game_pb2 as pb
+from game.proto import game_pb2 as pb
 
 
 class GameClient(object):
@@ -15,8 +15,12 @@ class GameClient(object):
         self.local_port = local_port
         self.BUFFER_SIZE = 1024
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-
+        self.local_char = 0
+        self.enemy_char = 0
         self.messages= []
+        #enemy_quit_game ==1 means game is still active
+        self.enemy_quit_game=1
+        self.enemy_resp = pb.CharacterSelectResponse(enemyCharacter=0)
 
     def host_game(self):
         self.socket.bind((self.local_ip, self.local_port))
@@ -94,25 +98,43 @@ class GameClient(object):
                             y=0,
                             keys={},
                             id=self.player_id,
-                            quit=True
+                            quit=True,
+                            restart=False
                             )
         self.socket.sendto(message.SerializeToString(),(self.server_ip,self.game_port))
+
     def connect(self, ip, port, name):
         self.join_lobby(ip,port,"")
         time.sleep(2)
         self.join_game(ip, self.game_port, name)
-        self.character_select()
+
 
 
     async def send_update(self, update_message: pb.Update):
-        self.socket.sendto(update_message.SerializeToString(), (self.server_ip, self.game_port))
+        try:
+            self.socket.sendto(update_message.SerializeToString(), (self.server_ip, self.game_port))
+        except:
+            pass
 
     async def get_updates(self, local_player, enemy_character, SCREEN_WIDTH, SCREEN_HEIGHT, screen, obstacles):
         for message in self.get_update():
             local_player.health = message.enemyHealth
             enemy_character.move_enemy(SCREEN_WIDTH, SCREEN_HEIGHT, screen, local_player, obstacles, message.keys,
                                        message.x, message.y)
+    async def get_enemy_character(self):
+        char_resp = pb.CharacterSelectResponse()
+        try:
+            data, address = self.socket.recvfrom(self.BUFFER_SIZE)
+            char_resp.ParseFromString(data)
+            self.enemy_resp = char_resp
+            self.enemy_char = char_resp.enemyCharacter
+            self.enemy_quit_game = char_resp.ok
 
+        except:
+            pass
+    def send_character_choice(self,choice, locked_in):
+        char_req = pb.CharacterSelectRequest(id=self.player_id, character=choice, lockedIn=locked_in)
+        self.socket.sendto(char_req.SerializeToString(), (self.server_ip, self.game_port))
     async def get_update(self) -> list[pb.Update]:
         result: list[pb.Update] = []
         data = 1
