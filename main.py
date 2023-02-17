@@ -27,7 +27,11 @@ def draw_health_bar(health, x, y):
     pygame.draw.rect(screen, RED, (x, y, 400, 30))
     pygame.draw.rect(screen, YELLOW, (x, y, 400 * ratio, 30))
 
-
+def draw_scores(p1_score, p2_score):
+    score = " - "
+    draw_text(score, font(30), WHITE, screen, SCREEN_WIDTH / 2, 35)
+    draw_text(str(p1_score), font(30), WHITE, screen, SCREEN_WIDTH / 2 - 50, 35)
+    draw_text(str(p2_score), font(30), WHITE, screen, SCREEN_WIDTH / 2 + 50, 35)
 # font size
 def font(size):
     return pygame.font.Font(resource_path("game/assets/menu/font.ttf"), size)
@@ -164,6 +168,9 @@ def game_loop():
         draw_health_bar(fighter_1.health, 20, 20)
         draw_health_bar(fighter_2.health, 580, 20)
 
+        draw_scores(scores[0], scores[1])
+
+
         # move fighters
         if intro <= 0:
             fighter_1.move(SCREEN_WIDTH, SCREEN_HEIGHT, screen, fighter_2, obstacles)
@@ -178,11 +185,11 @@ def game_loop():
 
         if over == False:
             if not fighter_1.alive:
-                scores[0] += 1
+                scores[1] += 1
                 over = True
                 over_time = pygame.time.get_ticks()
             elif not fighter_2.alive:
-                scores[1] +=1
+                scores[0] +=1
                 over = True
                 over_time = pygame.time.get_ticks()
         else:
