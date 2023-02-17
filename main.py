@@ -15,7 +15,11 @@ def draw_bg(scaled_bg_image):
 
     screen.blit(scaled_bg_image, (0, 0))
 
-
+def draw_text(text, font, color, surface, x, y):
+    text = font.render(text, True, color)
+    rect = text.get_rect(center=(x, y))
+    screen.blit(text, rect)
+        
 # draw health bars
 def draw_health_bar(health, x, y):
     ratio = health / 100
@@ -143,6 +147,11 @@ def game_loop():
     scaled_bg = pygame.transform.scale(bg_image, (SCREEN_WIDTH, SCREEN_HEIGHT))
     run = True
     scores = [0,0]
+    #round variables
+    intro = 3
+    over = False
+    round_cd = 1500
+    last_tick_update = pygame.time.get_ticks()
     while run:
 
         # cap frame rate
@@ -156,20 +165,37 @@ def game_loop():
         draw_health_bar(fighter_2.health, 580, 20)
 
         # move fighters
-        fighter_1.move(SCREEN_WIDTH, SCREEN_HEIGHT, screen, fighter_2, obstacles)
-        fighter_2.move(SCREEN_WIDTH, SCREEN_HEIGHT, screen, fighter_1, obstacles)
+        if intro <= 0:
+            fighter_1.move(SCREEN_WIDTH, SCREEN_HEIGHT, screen, fighter_2, obstacles)
+            fighter_2.move(SCREEN_WIDTH, SCREEN_HEIGHT, screen, fighter_1, obstacles)
+        else:
+            draw_text(str(intro), font(80), RED, screen, (SCREEN_WIDTH / 2), SCREEN_HEIGHT / 3)
+            #reduce intro by 1 every second using pygame.time.get_ticks()
+            if pygame.time.get_ticks() - last_tick_update >= 1000:
+                intro -= 1
+                last_tick_update = pygame.time.get_ticks()
+                print(intro)
 
-        if fighter_1.health <=0 or fighter_2.health <=0:
-            if fighter_1.health <=0:
+
+        if over == False:
+            if not fighter_1.alive:
+                scores[0] += 1
+                over = True
+                over_time = pygame.time.get_ticks()
+            elif not fighter_2.alive:
                 scores[1] +=1
-            else:
-                scores[0] +=1
-
-            if scores[0] ==3 or scores[1]==3:
+                over = True
+                over_time = pygame.time.get_ticks()
+        else:
+            if fighter_1.alive:    
+                draw_text("PLAYER 1 WINS", font(50), RED, screen, (SCREEN_WIDTH / 2), SCREEN_HEIGHT / 3)
+            elif fighter_2.alive:
+                draw_text("PLAYER 2 WINS", font(50), RED, screen, (SCREEN_WIDTH / 2), SCREEN_HEIGHT / 3)
+            if scores[0] == 3 or scores[1] == 3:
                 break
 
-            fighter_1.reset()
-            fighter_2.reset()
+            #fighter_1.reset()
+            #fighter_2.reset()
 
 
 
@@ -1101,6 +1127,7 @@ if __name__ == "__main__":
     SCREEN_WIDTH = 1000
     SCREEN_HEIGHT = 600
 
+
     #default characters
     p1="wizard"
     p2="wizard"
@@ -1120,7 +1147,6 @@ if __name__ == "__main__":
     WHITE = (255, 255, 255)
 
     # load bg image
-
     bg_image = pygame.image.load(resource_path("game/assets/maps/background.png")).convert_alpha()
 
     menu_bg = pygame.image.load(resource_path("game/assets/menu/main_menu_bg.png")).convert_alpha()
