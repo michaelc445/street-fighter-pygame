@@ -174,7 +174,6 @@ def game_loop():
             if pygame.time.get_ticks() - last_tick_update >= 1000:
                 intro -= 1
                 last_tick_update = pygame.time.get_ticks()
-                print(intro)
 
 
         if over == False:
@@ -191,11 +190,13 @@ def game_loop():
                 draw_text("PLAYER 1 WINS", font(50), RED, screen, (SCREEN_WIDTH / 2), SCREEN_HEIGHT / 3)
             elif fighter_2.alive:
                 draw_text("PLAYER 2 WINS", font(50), RED, screen, (SCREEN_WIDTH / 2), SCREEN_HEIGHT / 3)
-            if scores[0] == 3 or scores[1] == 3:
-                break
-
-            #fighter_1.reset()
-            #fighter_2.reset()
+            #if scores[0] == 3 or scores[1] == 3:
+            #    break
+            if pygame.time.get_ticks() - over_time >= round_cd:
+                over = False
+                fighter_1.reset()
+                fighter_2.reset()
+                
 
 
 
