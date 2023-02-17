@@ -324,7 +324,9 @@ def multi_player_game_loop(game_client):
 # controls
 def controls():
     leave_menu = False
+    clock = pygame.time.Clock()
     while True:
+
         controls_mouse = pygame.mouse.get_pos()
 
         menu_scaled = pygame.transform.scale(menu_bg, (SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -366,6 +368,7 @@ def controls():
                     player2()
         if leave_menu:
             break
+        clock.tick(FPS)
         pygame.display.update()
 
 
@@ -374,7 +377,9 @@ def player1():
     global player1_controls
     # player1_keys = {"left": "a", "right": "d", "jump": "w", "block": "s", "attack1": "r", "attack2": "t"}
     leave_menu = False
+    clock = pygame.time.Clock()
     while True:
+
         player1_mouse = pygame.mouse.get_pos()
 
         menu_scaled = pygame.transform.scale(menu_bg, (SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -443,6 +448,7 @@ def player1():
                     control_handling(player1_controls, "attack2")
         if leave_menu:
             break
+        clock.tick(FPS)
         pygame.display.update()
 
 
@@ -450,6 +456,7 @@ def player1():
 def player2():
     global player2_controls
     leave_menu = False
+    clock = pygame.time.Clock()
     while True:
         player2_mouse = pygame.mouse.get_pos()
 
@@ -519,6 +526,7 @@ def player2():
                     control_handling(player2_controls, "attack2")
         if leave_menu:
             break
+        clock.tick(FPS)
         pygame.display.update()
 
 
@@ -526,6 +534,7 @@ def player2():
 def opt():
     menu_scaled = pygame.transform.scale(menu_bg, (SCREEN_WIDTH, SCREEN_HEIGHT))
     leave_menu = False
+    clock = pygame.time.Clock()
     while True:
         opt_mouse = pygame.mouse.get_pos()
 
@@ -568,6 +577,7 @@ def opt():
                     audio()
         if leave_menu:
             break
+        clock.tick(FPS)
         pygame.display.update()
 
 
@@ -575,6 +585,7 @@ def opt():
 def audio():
     menu_scaled = pygame.transform.scale(menu_bg, (SCREEN_WIDTH, SCREEN_HEIGHT))
     leave_menu = False
+    clock = pygame.time.Clock()
     while True:
         audio_mouse = pygame.mouse.get_pos()
         screen.blit(menu_scaled, (0, 0))
@@ -653,6 +664,7 @@ def audio():
                     sfx_change(4)
         if leave_menu:
             break
+        clock.tick(FPS)
         pygame.display.update()
 
 
@@ -671,6 +683,7 @@ def menu_play():
     back = Button(image=pygame.image.load(resource_path("game/assets/menu/medium.png")), pos=(500, 525),
                   text_input="BACK", font=font(35), base_color="#d7fcd4", hovering_color="White")
     leave_menu = False
+    clock = pygame.time.Clock()
     while True:
 
         screen.blit(menu_scaled, (0, 0))
@@ -701,7 +714,7 @@ def menu_play():
                     pygame.display.set_caption("Local Multiplayer")
                     menu_char()
                 if multiplayer.checkForInput(mouse):
-                    pygame.display.set_caption("Multi Player")
+                    pygame.display.set_caption("Multi Player Menu")
                     game_client = GameClient(1234)
                     print("connecting to server")
                     game_client.connect("project.michaelc445.container.netsoc.cloud", 17023, "m")
@@ -715,6 +728,7 @@ def menu_play():
                     break
         if leave_menu:
             break
+        clock.tick(FPS)
         pygame.display.update()
 
 #character select menu
@@ -731,6 +745,7 @@ def menu_char():
     p2_color_nomad= "#d7fcd4"
     menu_scaled = pygame.transform.scale(menu_bg, (SCREEN_WIDTH, SCREEN_HEIGHT))
     leave_menu = False
+    clock = pygame.time.Clock()
     while True:
 
         screen.blit(menu_scaled, (0, 0))
@@ -824,6 +839,7 @@ def menu_char():
                 
         if leave_menu:
             break
+        clock.tick(FPS)
         pygame.display.update()
 
 
@@ -831,6 +847,7 @@ def menu_char():
 def map_select():
     global map
     leave_menu = False
+    clock = pygame.time.Clock()
     while True:
         menu_scaled = pygame.transform.scale(menu_bg, (SCREEN_WIDTH, SCREEN_HEIGHT))
         screen.blit(menu_scaled, (0, 0))
@@ -882,6 +899,7 @@ def map_select():
                     map = "church"
         if leave_menu:
             break
+        clock.tick(FPS)
         pygame.display.update()
 def multi_char_select(game_client):
     global p1, p2
@@ -911,6 +929,7 @@ def multi_char_select(game_client):
     locked_in = False
     loop = asyncio.get_event_loop()
     l_count=0
+    clock = pygame.time.Clock()
     while True:
         mouse = pygame.mouse.get_pos()
         screen.blit(menu_scaled, (0, 0))
@@ -1006,6 +1025,7 @@ def multi_char_select(game_client):
         l_count = (l_count+1)%20
         pygame.display.update()
         run_once(loop)
+        clock.tick(FPS)
 
 async def update_lobby(game_client):
     loop = asyncio.get_event_loop()
@@ -1023,6 +1043,7 @@ def main_menu():
                   text_input="QUIT", font=font(55), base_color="#d7fcd4", hovering_color="White")
     text = font(75).render("Main Menu", True, "#b68f40")
     rect = text.get_rect(center=(500, 50))
+    clock = pygame.time.Clock()
     while True:
         screen.blit(menu_scaled, (0, 0))
         mouse = pygame.mouse.get_pos()
@@ -1051,7 +1072,7 @@ def main_menu():
                 if quit.checkForInput(mouse):
                     pygame.quit()
                     sys.exit()
-
+        clock.tick(FPS)
         pygame.display.update()
 
 #https://stackoverflow.com/a/51266275
