@@ -35,7 +35,7 @@ def createWizard(inherit_from, player, x, y, flip, punch_sound, projectile_sound
                     self.projectile_sound.play()
                     self.projectiles.append(
                         Projectile(self.rect.centerx - (2 * self.rect.width * self.flip), self.rect.y, self.rect.width,
-                                self.rect.height // 2, damage, knockback, self, 10 - (20 * self.flip)))
+                                self.rect.height // 2, damage, knockback, self, 10 - (20 * self.flip), "game/assets/projectiles/Kdawgy.png"))
                     self.attack1_cooldown = 50
 
             if self.attack_type == 2:
@@ -46,7 +46,7 @@ def createWizard(inherit_from, player, x, y, flip, punch_sound, projectile_sound
                     self.projectile_sound.play()
                     self.projectiles.append(
                         Projectile(self.rect.centerx - (2 * self.rect.width * self.flip), self.rect.y, 2 * self.rect.width,
-                                self.rect.height, damage, knockback, self, 5 - (10 * self.flip)))
+                                self.rect.height, damage, knockback, self, 5 - (10 * self.flip), "game/assets/projectiles/Kdawgy.png"))
                     self.attack2_cooldown = 150
 
     return Wizard(player, x, y, flip, punch_sound, projectile_sound, hit_sound,controls)
