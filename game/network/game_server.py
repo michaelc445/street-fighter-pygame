@@ -341,9 +341,11 @@ class MatchServer(object):
                 if len(self.free_ports) == 0:
                     continue
                 game_port = self.free_ports.pop(0)
-                print("starting game on port %d\nactive game threads: %d\nfree ports: %s\n" % (game_port,
-                                                                                               len(self.threads),
-                                                                                               str(self.free_ports)))
+                print("starting game on port %d\nactive game threads: %d\nfree ports: %s\n%s" % (game_port,
+                                                                                                 len(self.threads),
+                                                                                                 str(self.free_ports),
+                                                                                                 str(self.lobby_codes)))
+
                 response.port = self.port_mappings[game_port]
                 self.socket.sendto(response.SerializeToString(), address)
                 self.socket.sendto(response.SerializeToString(), self.lobby_codes[lobby_req.lobbyCode])
