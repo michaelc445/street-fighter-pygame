@@ -2,7 +2,7 @@ import socket
 from game.proto import game_pb2 as pb
 from threading import Thread
 from datetime import datetime
-
+import random
 
 class Player(object):
 
@@ -18,6 +18,7 @@ class GameServer(object):
     def __init__(self, local_port):
         self.local_ip = self._get_local_address()
         self.connections = []
+        self.map_pick = None
         self.player_count = 0
         self.local_port = local_port
         self.BUFFER_SIZE = 1024
@@ -50,8 +51,6 @@ class GameServer(object):
                 return True
             except Exception as e:
                 return False
-
-
 
     def handle_character_request(self):
         data, address, char_select_req = None, None, None
@@ -116,6 +115,49 @@ class GameServer(object):
         for player in self.connections:
             self.socket.sendto(resp.SerializeToString(), (player.ip, player.port))
 
+    def exit_map_select(self):
+        resp = pb.MapSelectResponse(ok=0,mapId=0,start=False)
+        for player in self.connections:
+            self.socket.sendto(resp.SerializeToString(),(player.ip,player.port))
+    def map_select(self):
+        # player_id: map_id
+        # both players locked in if length is 2
+        locked_in = {}
+        t = [datetime.now(), datetime.now()]
+        while len(locked_in) < 2:
+            if self.player_timeout(t):
+                self.exit_map_select()
+                return False
+
+            try:
+                data,address = self.socket.recvfrom(self.BUFFER_SIZE)
+            except TimeoutError:
+                self.exit_map_select()
+                return False
+
+            map_select_req = pb.MapSelectRequest()
+            map_select_req.ParseFromString(data)
+            if map_select_req.playerId < 0 or map_select_req.playerId > 1:
+                self.exit_map_select()
+                return False
+            if map_select_req.playerId in locked_in:
+
+                continue
+
+            if map_select_req.lockedIn:
+                print("player: %d picked map : %d" % (map_select_req.playerId, map_select_req.mapId))
+                locked_in[map_select_req.playerId] = map_select_req.mapId
+
+
+        votes = [v for _,v in locked_in]
+        self.map_pick = random.choice(votes)
+        print("map select over final pick ", self.map_pick)
+        return True
+
+
+
+
+
     def create_lobby(self):
 
         # get 2 connections
@@ -133,6 +175,7 @@ class GameServer(object):
         # get character selections
         start = self.character_select_new()
         if not start:
+            self.socket.close()
             return
         # tell clients game is ready
         for i in range(len(self.connections)):
@@ -143,6 +186,14 @@ class GameServer(object):
                                               enemyCharacter=self.connections[enemy].character)
             p = self.connections[i]
             self.socket.sendto(resp.SerializeToString(), (p.ip, p.port))
+
+        map_success = self.map_select()
+
+        if not map_success:
+            self.socket.close()
+            return
+        for player in self.connections:
+            map_response = pb.MapSelectResponse(ok=1,mapId=self.map_pick,start=True,)
         # start listening for game updates
         self.socket.settimeout(5)
         self.start_game()
@@ -291,9 +342,9 @@ class MatchServer(object):
                 if len(self.free_ports) == 0:
                     continue
                 game_port = self.free_ports.pop(0)
-                # print("starting game on port %d\nactive game threads: %d\nfree ports: %s\n"%(game_port,
-                #                                                                            len(self.threads),
-                #                                                                            str(self.free_ports)))
+                print("starting game on port %d\nactive game threads: %d\nfree ports: %s\n"%(game_port,
+                                                                                           len(self.threads),
+                                                                                           str(self.free_ports)))
                 response.port = self.port_mappings[game_port]
                 self.socket.sendto(response.SerializeToString(), address)
                 self.socket.sendto(response.SerializeToString(), self.lobby_codes[lobby_req.lobbyCode])
@@ -322,7 +373,6 @@ class GameThread(Thread):
         super().__init__()
         self.local_port = local_port
         # shared list for threads to append to when finished
-
 
     def run(self):
         GameServer(self.local_port).create_lobby()

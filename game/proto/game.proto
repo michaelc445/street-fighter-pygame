@@ -79,6 +79,4 @@ message MapSelectResponse{
   required int32 mapId = 2;
   // match ready to start if true
   required bool start = 3;
-  // enemy selected map id
-  required int32 enemySelection = 4;
 }
