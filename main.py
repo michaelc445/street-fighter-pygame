@@ -843,7 +843,7 @@ def multi_lobby_menu(game_client):
                     pygame.display.set_caption("Game")
                     if game_client.lobby_searching:
                         continue
-                    loop.create_task(game_client.join_lobby("192.168.0.33",1234,lobby_code_input.value))
+                    loop.create_task(game_client.join_lobby("project.michaelc445.container.netsoc.cloud",17023,lobby_code_input.value))
                     game_client.lobby_searching = True
                 if back.checkForInput(mouse):
                     pygame.display.set_caption("Map Select")
@@ -917,7 +917,7 @@ def menu_play():
                         game_client.socket.close()
                         return
                     time.sleep(2)
-                    game_client.join_game("192.168.0.33",game_client.game_port,"m")
+                    game_client.join_game("project.michaelc445.container.netsoc.cloud",game_client.game_port,"m")
                     # print("connecting to server")
                     # game_client.connect("192.168.0.33", 1234, "m")
                     print(game_client.player_id)
