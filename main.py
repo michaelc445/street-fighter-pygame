@@ -821,7 +821,7 @@ def menu_play():
                     pygame.display.set_caption("Multi Player Menu")
                     game_client = GameClient(1234)
                     print("connecting to server")
-                    game_client.connect("project.michaelc445.container.netsoc.cloud", 17023, "m")
+                    game_client.connect("192.168.0.33", 1234, "m")
                     print(game_client.player_id)
                     game_client.socket.setblocking(False)
                     multi_char_select(game_client)
