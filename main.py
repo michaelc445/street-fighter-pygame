@@ -777,13 +777,24 @@ def multi_lobby_menu(game_client):
     clock = pygame.time.Clock()
     menu_scaled = pygame.transform.scale(menu_bg, (SCREEN_WIDTH, SCREEN_HEIGHT))
 
+    lobby_code_input = pygame_textinput.TextInputVisualizer()
+    name_input = pygame_textinput.TextInputVisualizer()
     locked_in = False
     loop = asyncio.get_event_loop()
     p_choice = 0
     locked_in = False
     lobby_searching = False
+    lobby_in = False
+    name_in = False
+    lobby_pos = (700, 325)
+    name_pos = (300, 325)
+    lobby_code_button= Button(image=pygame.image.load(resource_path("game/assets/menu/small.png")), pos=lobby_pos,
+                  text_input="l_code", font=font(10), base_color="White", hovering_color="White")
 
+    name_button = Button(image=pygame.image.load(resource_path("game/assets/menu/small.png")), pos=name_pos,
+                  text_input="name", font=font(35), base_color="White", hovering_color="White")
     while True:
+        events = pygame.event.get()
         if game_client.lobby_ready:
             return True
 
@@ -791,7 +802,9 @@ def multi_lobby_menu(game_client):
             loop.create_task(game_client.check_game_ready())
 
 
+
         screen.blit(menu_scaled, (0, 0))
+
         mouse = pygame.mouse.get_pos()
 
         text = font(35).render("Lobby Menu", True, "#b68f40")
@@ -806,12 +819,17 @@ def multi_lobby_menu(game_client):
                       text_input="BACK", font=font(35), base_color="White", hovering_color="Yellow")
 
 
+        if lobby_in:
+            lobby_code_input.update(events)
 
-        for button in [back, play]:
+        if name_in:
+            name_input.update(events)
+
+        for button in [back, play,name_button,lobby_code_button]:
             button.hover(mouse)
             button.update(screen)
 
-        for event in pygame.event.get():
+        for event in events:
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
@@ -825,13 +843,23 @@ def multi_lobby_menu(game_client):
                     pygame.display.set_caption("Game")
                     if game_client.lobby_searching:
                         continue
-                    loop.create_task(game_client.join_lobby("192.168.0.33",1234,""))
+                    loop.create_task(game_client.join_lobby("192.168.0.33",1234,lobby_code_input.value))
                     game_client.lobby_searching = True
                 if back.checkForInput(mouse):
                     pygame.display.set_caption("Map Select")
                     return False
+                if lobby_code_button.checkForInput(mouse):
+                    lobby_in = True
+                    name_in = False
+                elif name_button.checkForInput(mouse):
+                    lobby_in = False
+                    name_in = True
+                else:
+                    lobby_in = False
+                    name_in = False
 
-
+        screen.blit(lobby_code_input.surface, lobby_pos)
+        screen.blit(name_input.surface, name_pos)
 
         clock.tick(MENU_FPS)
         pygame.display.update()
