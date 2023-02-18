@@ -116,9 +116,10 @@ class GameServer(object):
             self.socket.sendto(resp.SerializeToString(), (player.ip, player.port))
 
     def exit_map_select(self):
-        resp = pb.MapSelectResponse(ok=0,mapId=0,start=False)
+        resp = pb.MapSelectResponse(ok=0, mapId=0, start=False)
         for player in self.connections:
-            self.socket.sendto(resp.SerializeToString(),(player.ip,player.port))
+            self.socket.sendto(resp.SerializeToString(), (player.ip, player.port))
+
     def map_select(self):
         # player_id: map_id
         # both players locked in if length is 2
@@ -130,7 +131,7 @@ class GameServer(object):
                 return False
 
             try:
-                data,address = self.socket.recvfrom(self.BUFFER_SIZE)
+                data, address = self.socket.recvfrom(self.BUFFER_SIZE)
             except TimeoutError:
                 self.exit_map_select()
                 return False
@@ -140,23 +141,16 @@ class GameServer(object):
             if map_select_req.playerId < 0 or map_select_req.playerId > 1:
                 self.exit_map_select()
                 return False
+            t[map_select_req.playerId] = datetime.now()
             if map_select_req.playerId in locked_in:
-
                 continue
 
             if map_select_req.lockedIn:
-                print("player: %d picked map : %d" % (map_select_req.playerId, map_select_req.mapId))
                 locked_in[map_select_req.playerId] = map_select_req.mapId
 
-
-        votes = [v for _,v in locked_in]
+        votes = [v for _, v in locked_in.items()]
         self.map_pick = random.choice(votes)
-        print("map select over final pick ", self.map_pick)
         return True
-
-
-
-
 
     def create_lobby(self):
 
@@ -193,7 +187,8 @@ class GameServer(object):
             self.socket.close()
             return
         for player in self.connections:
-            map_response = pb.MapSelectResponse(ok=1,mapId=self.map_pick,start=True,)
+            map_response = pb.MapSelectResponse(ok=1, mapId=self.map_pick, start=True )
+            self.socket.sendto(map_response.SerializeToString(),(player.ip,player.port))
         # start listening for game updates
         self.socket.settimeout(5)
         self.start_game()
@@ -342,9 +337,9 @@ class MatchServer(object):
                 if len(self.free_ports) == 0:
                     continue
                 game_port = self.free_ports.pop(0)
-                print("starting game on port %d\nactive game threads: %d\nfree ports: %s\n"%(game_port,
-                                                                                           len(self.threads),
-                                                                                           str(self.free_ports)))
+                print("starting game on port %d\nactive game threads: %d\nfree ports: %s\n" % (game_port,
+                                                                                               len(self.threads),
+                                                                                               str(self.free_ports)))
                 response.port = self.port_mappings[game_port]
                 self.socket.sendto(response.SerializeToString(), address)
                 self.socket.sendto(response.SerializeToString(), self.lobby_codes[lobby_req.lobbyCode])
