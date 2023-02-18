@@ -23,6 +23,7 @@ class GameClient(object):
         self.enemy_resp = pb.CharacterSelectResponse(enemyCharacter=0)
         self.map_select_done = False
         self.map_choice = None
+        self.continue_map_select= True
 
     def host_game(self):
         self.socket.bind((self.local_ip, self.local_port))
@@ -145,6 +146,7 @@ class GameClient(object):
             map_resp.ParseFromString(data)
             self.map_select_done = map_resp.start
             self.map_choice = map_resp.mapId
+            self.continue_map_select = map_resp.ok
         except:
             pass
     def send_character_choice(self,choice, locked_in):
