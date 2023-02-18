@@ -212,24 +212,58 @@ def run_once(loop):
 def multi_player_game_loop(game_client):
     #gameKeys = [pygame.K_a, pygame.K_d, pygame.K_w, pygame.K_r, pygame.K_t]
     pygame.init()
+    if game_client.map_choice ==0:
+        p1_spawn = [100, 100]
+        p2_spawn = [850, 100]
+        map_chosen = "game/assets/maps/mountain.png"
+        # mountain obstacles
+        middle_ground1 = Obstacle(270, 410, 465, 60)
+        middle_ground2 = Obstacle(290, 470, 425, 60)
+        left_cliff1 = Obstacle(0, 235, 240, 60)
+        left_cliff2 = Obstacle(0, 295, 205, 60)
+        left_cliff3 = Obstacle(0, 355, 150, 60)
+        left_cliff4 = Obstacle(0, 405, 125, 300)
+        right_cliff1 = Obstacle(760, 235, 240, 60)
+        right_cliff2 = Obstacle(800, 295, 205, 60)
+        right_cliff3 = Obstacle(850, 355, 150, 60)
+        right_cliff4 = Obstacle(875, 405, 125, 300)
+        obstacles = [middle_ground1, middle_ground2, left_cliff1, left_cliff2, left_cliff3, left_cliff4, right_cliff1,
+                     right_cliff2, right_cliff3, right_cliff4]
+    elif game_client.map_choice ==1:
+        p1_spawn = [80, 100]
+        p2_spawn = [900, 100]
+        map_chosen = "game/assets/maps/church.png"
+        # church obstacles
+        middle_floor = Obstacle(150, 530, 700, 80)
+        left_side = Obstacle(0, 387, 142, 160)
+        right_side = Obstacle(860, 387, 142, 160)
+        middle_top = Obstacle(235, 240, 525, 40)
 
-    p1_spawn = [100, 100]
-    p2_spawn = [850, 100]
-    map_chosen = "game/assets/maps/mountain.png"
-    # mountain obstacles
-    middle_ground1 = Obstacle(270, 410, 465, 60)
-    middle_ground2 = Obstacle(290, 470, 425, 60)
-    left_cliff1 = Obstacle(0, 235, 240, 60)
-    left_cliff2 = Obstacle(0, 295, 205, 60)
-    left_cliff3 = Obstacle(0, 355, 150, 60)
-    left_cliff4 = Obstacle(0, 405, 125, 300)
-    right_cliff1 = Obstacle(760, 235, 240, 60)
-    right_cliff2 = Obstacle(800, 295, 205, 60)
-    right_cliff3 = Obstacle(850, 355, 150, 60)
-    right_cliff4 = Obstacle(875, 405, 125, 300)
+        obstacles = [middle_floor, left_side, right_side, middle_top]
+    elif game_client.map_choice==2:
+        p1_spawn = [500, 100]
+        p2_spawn = [500, 400]
+        map_chosen = "game/assets/maps/cliffs.png"
+        # cliffs obstacles
+        left_island1 = Obstacle(107, 355, 90, 20)
+        left_island2 = Obstacle(120, 355, 60, 45)
+        middle_island1 = Obstacle(325, 275, 400, 25)
+        middle_island2 = Obstacle(350, 295, 350, 27)
+        right_cliff1 = Obstacle(797, 145, 300, 50)
+        right_cliff2 = Obstacle(810, 195, 200, 40)
+        right_cliff3 = Obstacle(830, 235, 200, 35)
+        right_cliff4 = Obstacle(850, 265, 200, 35)
+        right_cliff5 = Obstacle(870, 285, 200, 35)
+        right_cliff6 = Obstacle(225, 500, 570, 80)
 
-    obstacles = [middle_ground1, middle_ground2, left_cliff1, left_cliff2, left_cliff3, left_cliff4, right_cliff1,
-                 right_cliff2, right_cliff3, right_cliff4]
+        obstacles = [left_island1, left_island2, middle_island1, middle_island2, right_cliff1, right_cliff2,
+                     right_cliff3, right_cliff4, right_cliff5, right_cliff6]
+    else:
+        game_client.quit_game()
+        print("failed to load map ",game_client.map_choice)
+        return
+
+
 
     pygame.display.set_caption("Team 5 Project")
     char_dict = {0: createNomad, 1: createWizard, 2: createWarrior}
@@ -666,6 +700,77 @@ def audio():
         clock.tick(MENU_FPS)
         pygame.display.update()
 
+def multi_map_select(game_client):
+    leave_menu = False
+    clock = pygame.time.Clock()
+    menu_scaled = pygame.transform.scale(menu_bg, (SCREEN_WIDTH, SCREEN_HEIGHT))
+
+    p_choice = 0
+    locked_in = False
+    loop = asyncio.get_event_loop()
+    map_choice = 0
+    locked_in = False
+    while True:
+        loop.create_task(game_client.get_map_choice())
+        screen.blit(menu_scaled, (0, 0))
+        mouse = pygame.mouse.get_pos()
+        if game_client.map_select_done:
+            break
+
+
+
+
+        text = font(35).render("MAP SELECT", True, "#b68f40")
+        rect = text.get_rect(center=(500, 50))
+        screen.blit(text, rect)
+
+        play = Button(image=pygame.image.load(resource_path("game/assets/menu/medium.png")), pos=(700, 525),
+                      text_input="PLAY", font=font(35), base_color="White", hovering_color="Yellow")
+        # map select buttons
+        map1 = Button(image=None, pos=(300, 150),
+                      text_input="map1", font=font(25), base_color="#d7fcd4", hovering_color="Yellow")
+        map2 = Button(image=None, pos=(500, 150),
+                      text_input="map2", font=font(25), base_color="#d7fcd4", hovering_color="Yellow")
+        map3 = Button(image=None, pos=(700, 150),
+                      text_input="map3", font=font(25), base_color="#d7fcd4", hovering_color="Yellow")
+
+        back = Button(image=pygame.image.load(resource_path("game/assets/menu/medium.png")), pos=(300, 525),
+                      text_input="BACK", font=font(35), base_color="White", hovering_color="Yellow")
+
+        for button in [back, play, map1, map2, map3]:
+            button.hover(mouse)
+            button.update(screen)
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    pygame.quit()
+                    sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                # make it so that when you click play, it goes to the game loop
+                if play.checkForInput(mouse):
+                    pygame.display.set_caption("Game")
+                    locked_in = True
+                if back.checkForInput(mouse):
+                    pygame.display.set_caption("Map Select")
+                    leave_menu = True
+                    break
+                if map1.checkForInput(mouse):
+                    p_choice=0
+                if map2.checkForInput(mouse):
+                    p_choice = 1
+                if map3.checkForInput(mouse):
+                    p_choice = 2
+        if leave_menu:
+            break
+
+        game_client.send_map_choice(map_choice, locked_in)
+        clock.tick(MENU_FPS)
+        pygame.display.update()
+        run_once(loop)
 
 #new menu for when you click play, it should have a "local multiplayer" and a "singleplayer" button
 def menu_play():
@@ -720,6 +825,7 @@ def menu_play():
                     print(game_client.player_id)
                     game_client.socket.setblocking(False)
                     multi_char_select(game_client)
+                    multi_map_select(game_client)
                     multi_player_game_loop(game_client)
                 if back.checkForInput(mouse):
                     pygame.display.set_caption("Main Menu")
@@ -847,8 +953,8 @@ def map_select():
     global map
     leave_menu = False
     clock = pygame.time.Clock()
+    menu_scaled = pygame.transform.scale(menu_bg, (SCREEN_WIDTH, SCREEN_HEIGHT))
     while True:
-        menu_scaled = pygame.transform.scale(menu_bg, (SCREEN_WIDTH, SCREEN_HEIGHT))
         screen.blit(menu_scaled, (0, 0))
         mouse = pygame.mouse.get_pos()
 

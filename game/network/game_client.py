@@ -21,6 +21,8 @@ class GameClient(object):
         #enemy_quit_game ==1 means game is still active
         self.enemy_quit_game=1
         self.enemy_resp = pb.CharacterSelectResponse(enemyCharacter=0)
+        self.map_select_done = False
+        self.map_choice = None
 
     def host_game(self):
         self.socket.bind((self.local_ip, self.local_port))
@@ -122,14 +124,25 @@ class GameClient(object):
             enemy_character.move_enemy(SCREEN_WIDTH, SCREEN_HEIGHT, screen, local_player, obstacles, message.keys,
                                        message.x, message.y)
     async def get_enemy_character(self):
-        char_resp = pb.CharacterSelectResponse()
+
         try:
+            char_resp = pb.CharacterSelectResponse()
             data, address = self.socket.recvfrom(self.BUFFER_SIZE)
             char_resp.ParseFromString(data)
             self.enemy_resp = char_resp
             self.enemy_char = char_resp.enemyCharacter
             self.enemy_quit_game = char_resp.ok
 
+        except:
+            pass
+
+    async def get_map_choice(self):
+        try:
+            map_resp = pb.MapSelectResponse()
+            data,address = self.socket.recvfrom(self.BUFFER_SIZE)
+            map_resp.ParseFromString(data)
+            self.map_select_done = map_resp.start
+            self.map_choice = map_resp.mapId
         except:
             pass
     def send_character_choice(self,choice, locked_in):
