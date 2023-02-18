@@ -1,4 +1,4 @@
-import pygame, asyncio
+import pygame, asyncio,pygame_textinput
 from pygame import mixer
 from game.fighter import Fighter
 from game.online_fighter import OnlineFighter
@@ -9,7 +9,7 @@ from game.obstacle import Obstacle
 from game.button import Button
 from game.network.game_client import GameClient
 import sys, os
-
+import time
 
 def draw_bg(scaled_bg_image):
     screen.blit(scaled_bg_image, (0, 0))
@@ -772,6 +772,70 @@ def multi_map_select(game_client):
         pygame.display.update()
         run_once(loop)
 
+def multi_lobby_menu(game_client):
+    leave_menu = False
+    clock = pygame.time.Clock()
+    menu_scaled = pygame.transform.scale(menu_bg, (SCREEN_WIDTH, SCREEN_HEIGHT))
+
+    locked_in = False
+    loop = asyncio.get_event_loop()
+    p_choice = 0
+    locked_in = False
+    lobby_searching = False
+
+    while True:
+        if game_client.lobby_ready:
+            return True
+
+        if game_client.lobby_searching:
+            loop.create_task(game_client.check_game_ready())
+
+
+        screen.blit(menu_scaled, (0, 0))
+        mouse = pygame.mouse.get_pos()
+
+        text = font(35).render("Lobby Menu", True, "#b68f40")
+        rect = text.get_rect(center=(500, 50))
+        screen.blit(text, rect)
+
+        play = Button(image=pygame.image.load(resource_path("game/assets/menu/medium.png")), pos=(700, 525),
+                      text_input="PLAY", font=font(35), base_color="White", hovering_color="Yellow")
+
+
+        back = Button(image=pygame.image.load(resource_path("game/assets/menu/medium.png")), pos=(300, 525),
+                      text_input="BACK", font=font(35), base_color="White", hovering_color="Yellow")
+
+
+
+        for button in [back, play]:
+            button.hover(mouse)
+            button.update(screen)
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    pygame.quit()
+                    sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                # make it so that when you click play, it goes to the game loop
+                if play.checkForInput(mouse):
+                    pygame.display.set_caption("Game")
+                    if game_client.lobby_searching:
+                        continue
+                    loop.create_task(game_client.join_lobby("192.168.0.33",1234,""))
+                    game_client.lobby_searching = True
+                if back.checkForInput(mouse):
+                    pygame.display.set_caption("Map Select")
+                    return False
+
+
+
+        clock.tick(MENU_FPS)
+        pygame.display.update()
+        run_once(loop)
 
 # new menu for when you click play, it should have a "local multiplayer" and a "singleplayer" button
 def menu_play():
@@ -820,10 +884,16 @@ def menu_play():
                 if multiplayer.checkForInput(mouse):
                     pygame.display.set_caption("Multi Player Menu")
                     game_client = GameClient(1234)
-                    print("connecting to server")
-                    game_client.connect("192.168.0.33", 1234, "m")
-                    print(game_client.player_id)
                     game_client.socket.setblocking(False)
+                    if not multi_lobby_menu(game_client):
+                        game_client.socket.close()
+                        return
+                    time.sleep(2)
+                    game_client.join_game("192.168.0.33",game_client.game_port,"m")
+                    # print("connecting to server")
+                    # game_client.connect("192.168.0.33", 1234, "m")
+                    print(game_client.player_id)
+                    #game_client.socket.setblocking(False)
                     multi_char_select(game_client)
                     if not multi_map_select(game_client):
                         break
