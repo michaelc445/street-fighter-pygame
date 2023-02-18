@@ -753,6 +753,7 @@ def multi_map_select(game_client):
                 # make it so that when you click play, it goes to the game loop
                 if play.checkForInput(mouse):
                     pygame.display.set_caption("Game")
+                    print("choice locked in ",p_choice)
                     locked_in = True
                 if back.checkForInput(mouse):
                     pygame.display.set_caption("Map Select")
@@ -767,7 +768,7 @@ def multi_map_select(game_client):
         if leave_menu:
             break
 
-        game_client.send_map_choice(map_choice, locked_in)
+        game_client.send_map_choice(p_choice, locked_in)
         clock.tick(MENU_FPS)
         pygame.display.update()
         run_once(loop)
