@@ -666,6 +666,77 @@ def audio():
         clock.tick(MENU_FPS)
         pygame.display.update()
 
+def multi_map_select(game_client):
+    leave_menu = False
+    clock = pygame.time.Clock()
+    menu_scaled = pygame.transform.scale(menu_bg, (SCREEN_WIDTH, SCREEN_HEIGHT))
+
+    p_choice = 0
+    locked_in = False
+    loop = asyncio.get_event_loop()
+    map_choice = 0
+    locked_in = False
+    while True:
+        loop.create_task(game_client.get_map_choice())
+        screen.blit(menu_scaled, (0, 0))
+        mouse = pygame.mouse.get_pos()
+        if game_client.map_select_done:
+            break
+
+
+
+
+        text = font(35).render("MAP SELECT", True, "#b68f40")
+        rect = text.get_rect(center=(500, 50))
+        screen.blit(text, rect)
+
+        play = Button(image=pygame.image.load(resource_path("game/assets/menu/medium.png")), pos=(700, 525),
+                      text_input="PLAY", font=font(35), base_color="White", hovering_color="Yellow")
+        # map select buttons
+        map1 = Button(image=None, pos=(300, 150),
+                      text_input="map1", font=font(25), base_color="#d7fcd4", hovering_color="Yellow")
+        map2 = Button(image=None, pos=(500, 150),
+                      text_input="map2", font=font(25), base_color="#d7fcd4", hovering_color="Yellow")
+        map3 = Button(image=None, pos=(700, 150),
+                      text_input="map3", font=font(25), base_color="#d7fcd4", hovering_color="Yellow")
+
+        back = Button(image=pygame.image.load(resource_path("game/assets/menu/medium.png")), pos=(300, 525),
+                      text_input="BACK", font=font(35), base_color="White", hovering_color="Yellow")
+
+        for button in [back, play, map1, map2, map3]:
+            button.hover(mouse)
+            button.update(screen)
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    pygame.quit()
+                    sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                # make it so that when you click play, it goes to the game loop
+                if play.checkForInput(mouse):
+                    pygame.display.set_caption("Game")
+                    locked_in = True
+                if back.checkForInput(mouse):
+                    pygame.display.set_caption("Map Select")
+                    leave_menu = True
+                    break
+                if map1.checkForInput(mouse):
+                    p_choice=0
+                if map2.checkForInput(mouse):
+                    p_choice = 1
+                if map3.checkForInput(mouse):
+                    p_choice = 2
+        if leave_menu:
+            break
+
+        game_client.send_map_choice(map_choice, locked_in)
+        clock.tick(MENU_FPS)
+        pygame.display.update()
+        run_once(loop)
 
 #new menu for when you click play, it should have a "local multiplayer" and a "singleplayer" button
 def menu_play():
@@ -720,6 +791,7 @@ def menu_play():
                     print(game_client.player_id)
                     game_client.socket.setblocking(False)
                     multi_char_select(game_client)
+                    multi_map_select(game_client)
                     multi_player_game_loop(game_client)
                 if back.checkForInput(mouse):
                     pygame.display.set_caption("Main Menu")
@@ -847,8 +919,8 @@ def map_select():
     global map
     leave_menu = False
     clock = pygame.time.Clock()
+    menu_scaled = pygame.transform.scale(menu_bg, (SCREEN_WIDTH, SCREEN_HEIGHT))
     while True:
-        menu_scaled = pygame.transform.scale(menu_bg, (SCREEN_WIDTH, SCREEN_HEIGHT))
         screen.blit(menu_scaled, (0, 0))
         mouse = pygame.mouse.get_pos()
 
