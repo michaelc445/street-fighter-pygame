@@ -717,7 +717,10 @@ def multi_map_select(game_client):
         mouse = pygame.mouse.get_pos()
         if game_client.map_select_done:
             break
+
         if not game_client.continue_map_select:
+            game_client.socket.close()
+            break
         text = font(35).render("MAP SELECT", True, "#b68f40")
         rect = text.get_rect(center=(500, 50))
         screen.blit(text, rect)
