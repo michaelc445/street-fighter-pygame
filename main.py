@@ -716,8 +716,11 @@ def multi_map_select(game_client):
         screen.blit(menu_scaled, (0, 0))
         mouse = pygame.mouse.get_pos()
         if game_client.map_select_done:
-            break
+            return True
+
         if not game_client.continue_map_select:
+            game_client.socket.close()
+            return False
         text = font(35).render("MAP SELECT", True, "#b68f40")
         rect = text.get_rect(center=(500, 50))
         screen.blit(text, rect)
@@ -755,16 +758,14 @@ def multi_map_select(game_client):
                     locked_in = True
                 if back.checkForInput(mouse):
                     pygame.display.set_caption("Map Select")
-                    leave_menu = True
-                    break
+                    return False
                 if map1.checkForInput(mouse):
                     p_choice = 0
                 if map2.checkForInput(mouse):
                     p_choice = 1
                 if map3.checkForInput(mouse):
                     p_choice = 2
-        if leave_menu:
-            break
+
 
         game_client.send_map_choice(p_choice, locked_in)
         clock.tick(MENU_FPS)
@@ -824,7 +825,8 @@ def menu_play():
                     print(game_client.player_id)
                     game_client.socket.setblocking(False)
                     multi_char_select(game_client)
-                    multi_map_select(game_client)
+                    if not multi_map_select(game_client):
+                        break
                     multi_player_game_loop(game_client)
                 if back.checkForInput(mouse):
                     pygame.display.set_caption("Main Menu")
