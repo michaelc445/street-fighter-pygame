@@ -59,7 +59,9 @@ class GameClient(object):
             self.game_port = lobby_resp.port
             if lobby_resp.start:
                 break
-
+    def send_map_choice(self,map_choice, locked_in):
+        map_req = pb.MapSelectRequest(playerId=self.player_id,mapId=map_choice,lockedIn=locked_in)
+        self.socket.sendto(map_req.SerializeToString(),(self.server_ip,self.game_port))
     def join_game(self, ip_address, port, name):
         self.server_ip = ip_address
         self.game_port = port
