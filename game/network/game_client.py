@@ -53,21 +53,27 @@ class GameClient(object):
         self.socket.sendto(lobby_req.SerializeToString(), (ip_address, port))
 
     async def check_game_ready(self):
+        lobby_resp = pb.CreateLobbyResponse()
+
         try:
-            lobby_resp = pb.CreateLobbyResponse()
             data, address = self.socket.recvfrom(self.BUFFER_SIZE)
-            lobby_resp.ParseFromString(data)
-            if not lobby_resp.ok:
-                print("failed to join lobby")
-                self.lobby_searching = False
-
-            if not lobby_resp.start:
-                return
-
-            self.game_port = lobby_resp.port
-            self.lobby_ready = True
         except:
-            pass
+
+            return
+
+
+        lobby_resp.ParseFromString(data)
+        if not lobby_resp.ok:
+            print("failed to join lobby")
+            self.lobby_searching = False
+        print(lobby_resp)
+        if not lobby_resp.start:
+            print("lobby not ready")
+            return
+        print("lobby ready")
+        self.game_port = lobby_resp.port
+        self.lobby_ready = True
+
 
     def send_map_choice(self, map_choice, locked_in):
         map_req = pb.MapSelectRequest(playerId=self.player_id, mapId=map_choice, lockedIn=locked_in)

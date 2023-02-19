@@ -1,4 +1,4 @@
-import pygame, asyncio,pygame_textinput
+import pygame, asyncio, pygame_textinput
 from pygame import mixer
 from game.fighter import Fighter
 from game.online_fighter import OnlineFighter
@@ -10,6 +10,7 @@ from game.button import Button
 from game.network.game_client import GameClient
 import sys, os
 import time
+
 
 def draw_bg(scaled_bg_image):
     screen.blit(scaled_bg_image, (0, 0))
@@ -766,11 +767,11 @@ def multi_map_select(game_client):
                 if map3.checkForInput(mouse):
                     p_choice = 2
 
-
         game_client.send_map_choice(p_choice, locked_in)
         clock.tick(MENU_FPS)
         pygame.display.update()
         run_once(loop)
+
 
 def multi_lobby_menu(game_client):
     leave_menu = False
@@ -788,20 +789,19 @@ def multi_lobby_menu(game_client):
     name_in = False
     lobby_pos = (700, 325)
     name_pos = (300, 325)
-    lobby_code_button= Button(image=pygame.image.load(resource_path("game/assets/menu/small.png")), pos=lobby_pos,
-                  text_input="l_code", font=font(10), base_color="White", hovering_color="White")
+    lobby_code_button = Button(image=pygame.image.load(resource_path("game/assets/menu/small.png")), pos=lobby_pos,
+                               text_input="l_code", font=font(10), base_color="White", hovering_color="White")
 
     name_button = Button(image=pygame.image.load(resource_path("game/assets/menu/small.png")), pos=name_pos,
-                  text_input="name", font=font(35), base_color="White", hovering_color="White")
+                         text_input="name", font=font(35), base_color="White", hovering_color="White")
     while True:
         events = pygame.event.get()
         if game_client.lobby_ready:
             return True
 
         if game_client.lobby_searching:
+
             loop.create_task(game_client.check_game_ready())
-
-
 
         screen.blit(menu_scaled, (0, 0))
 
@@ -814,10 +814,8 @@ def multi_lobby_menu(game_client):
         play = Button(image=pygame.image.load(resource_path("game/assets/menu/medium.png")), pos=(700, 525),
                       text_input="PLAY", font=font(35), base_color="White", hovering_color="Yellow")
 
-
         back = Button(image=pygame.image.load(resource_path("game/assets/menu/medium.png")), pos=(300, 525),
                       text_input="BACK", font=font(35), base_color="White", hovering_color="Yellow")
-
 
         if lobby_in:
             lobby_code_input.update(events)
@@ -825,7 +823,7 @@ def multi_lobby_menu(game_client):
         if name_in:
             name_input.update(events)
 
-        for button in [back, play,name_button,lobby_code_button]:
+        for button in [back, play, name_button, lobby_code_button]:
             button.hover(mouse)
             button.update(screen)
 
@@ -843,8 +841,10 @@ def multi_lobby_menu(game_client):
                     pygame.display.set_caption("Game")
                     if game_client.lobby_searching:
                         continue
-                    loop.create_task(game_client.join_lobby("project.michaelc445.container.netsoc.cloud",17023,lobby_code_input.value))
                     game_client.lobby_searching = True
+                    loop.create_task(game_client.join_lobby("192.168.0.33", 1234,
+                                                            lobby_code_input.value))
+
                 if back.checkForInput(mouse):
                     pygame.display.set_caption("Map Select")
                     return False
@@ -864,6 +864,7 @@ def multi_lobby_menu(game_client):
         clock.tick(MENU_FPS)
         pygame.display.update()
         run_once(loop)
+
 
 # new menu for when you click play, it should have a "local multiplayer" and a "singleplayer" button
 def menu_play():
@@ -917,11 +918,11 @@ def menu_play():
                         game_client.socket.close()
                         return
                     time.sleep(2)
-                    game_client.join_game("project.michaelc445.container.netsoc.cloud",game_client.game_port,"m")
+                    game_client.join_game("192.168.0.33", game_client.game_port, "m")
                     # print("connecting to server")
                     # game_client.connect("192.168.0.33", 1234, "m")
                     print(game_client.player_id)
-                    #game_client.socket.setblocking(False)
+                    # game_client.socket.setblocking(False)
                     multi_char_select(game_client)
                     if not multi_map_select(game_client):
                         break
