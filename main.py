@@ -842,7 +842,7 @@ def multi_lobby_menu(game_client):
                     if game_client.lobby_searching:
                         continue
                     game_client.lobby_searching = True
-                    loop.create_task(game_client.join_lobby("project.michaelc445.container.netsoc.cloud", 17023,
+                    loop.create_task(game_client.join_lobby("176.61.91.52", 1234,
                                                             lobby_code_input.value))
 
                 if back.checkForInput(mouse):
@@ -918,7 +918,7 @@ def menu_play():
                         game_client.socket.close()
                         return
                     time.sleep(2)
-                    game_client.join_game("project.michaelc445.container.netsoc.cloud", game_client.game_port, "m")
+                    game_client.join_game("176.61.91.52", game_client.game_port, "m")
                     # print("connecting to server")
                     # game_client.connect("192.168.0.33", 1234, "m")
                     print(game_client.player_id)
