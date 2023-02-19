@@ -4,6 +4,7 @@ from threading import Thread
 from datetime import datetime
 import random
 
+
 class Player(object):
 
     def __init__(self, name, ip, port, id):
@@ -89,8 +90,6 @@ class GameServer(object):
                 self.exit_character_select()
                 return False
 
-
-
             char_select_req = pb.CharacterSelectRequest()
             char_select_req.ParseFromString(data)
             if char_select_req.id < 0 or char_select_req.id > 1:
@@ -148,7 +147,7 @@ class GameServer(object):
                 continue
 
             if map_select_req.lockedIn:
-                print("player: %d picked map: %d"%(map_select_req.playerId,map_select_req.mapId))
+                print("player: %d picked map: %d" % (map_select_req.playerId, map_select_req.mapId))
                 locked_in[map_select_req.playerId] = map_select_req.mapId
 
         votes = [v for _, v in locked_in.items()]
@@ -192,8 +191,8 @@ class GameServer(object):
             return
 
         for player in self.connections:
-            map_response = pb.MapSelectResponse(ok=1, mapId=self.map_pick, start=True )
-            self.socket.sendto(map_response.SerializeToString(),(player.ip,player.port))
+            map_response = pb.MapSelectResponse(ok=1, mapId=self.map_pick, start=True)
+            self.socket.sendto(map_response.SerializeToString(), (player.ip, player.port))
         # start listening for game updates
         self.socket.settimeout(5)
         self.start_game()
@@ -288,28 +287,28 @@ class MatchServer(object):
     def __init__(self, local_port):
         self.BUFFER_SIZE = 1024
         self.port = local_port
-        # self.port_mappings = {1235: 16559,
-        #                       1236: 16670,
-        #                       1237: 16405,
-        #                       1238: 16958,
-        #                       1239: 16961,
-        #                       1240: 17071,
-        #                       1241: 16857,
-        #                       1242: 17241,
-        #                       1243: 16962,
-        #                       1244: 16417
-        #                       }
-        self.port_mappings = {1235: 1235,
-                              1236: 1236,
-                              1237: 1237,
-                              1238: 1238,
-                              1239: 1239,
-                              1240: 1240,
-                              1241: 1241,
-                              1242: 1242,
-                              1243: 1243,
-                              1244: 1244
+        self.port_mappings = {1235: 16559,
+                              1236: 16670,
+                              1237: 16405,
+                              1238: 16958,
+                              1239: 16961,
+                              1240: 17071,
+                              1241: 16857,
+                              1242: 17241,
+                              1243: 16962,
+                              1244: 16417
                               }
+        # self.port_mappings = {1235: 1235,
+        #                       1236: 1236,
+        #                       1237: 1237,
+        #                       1238: 1238,
+        #                       1239: 1239,
+        #                       1240: 1240,
+        #                       1241: 1241,
+        #                       1242: 1242,
+        #                       1243: 1243,
+        #                       1244: 1244
+        #                       }
         self.free_ports = [i for i in range(1235, 1245)]
         self.threads = []
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -326,38 +325,42 @@ class MatchServer(object):
     def start(self):
 
         while True:
+
+            self.free_threads()
             try:
-                self.free_threads()
-
                 data, address = self.socket.recvfrom(self.BUFFER_SIZE)
-                lobby_req = pb.CreateLobbyRequest()
-                lobby_req.ParseFromString(data)
-                response = pb.CreateLobbyResponse(ok=True, port=0, start=True)
-                if lobby_req.lobbyCode not in self.lobby_codes:
-                    self.lobby_codes[lobby_req.lobbyCode] = address
-                    response.start = False
-                    self.socket.sendto(response.SerializeToString(), address)
-                    continue
-
-                if len(self.free_ports) == 0:
-                    continue
-                game_port = self.free_ports.pop(0)
-                print("starting game on port %d\nactive game threads: %d\nfree ports: %s\n%s" % (game_port,
-                                                                                                 len(self.threads),
-                                                                                                 str(self.free_ports),
-                                                                                                 str(self.lobby_codes)))
-
-                response.port = self.port_mappings[game_port]
-                self.socket.sendto(response.SerializeToString(), address)
-                self.socket.sendto(response.SerializeToString(), self.lobby_codes[lobby_req.lobbyCode])
-                del self.lobby_codes[lobby_req.lobbyCode]
-
-                game_thread = GameThread(game_port)
-                self.threads.append(game_thread)
-                game_thread.start()
-
-            except:
+            except TimeoutError:
                 continue
+            except Exception as e:
+                print(e)
+                continue
+
+
+            lobby_req = pb.CreateLobbyRequest()
+            lobby_req.ParseFromString(data)
+            response = pb.CreateLobbyResponse(ok=True, port=0, start=True)
+            if lobby_req.lobbyCode not in self.lobby_codes:
+                self.lobby_codes[lobby_req.lobbyCode] = address
+                response.start = False
+                self.socket.sendto(response.SerializeToString(), address)
+                continue
+
+            if len(self.free_ports) == 0:
+                continue
+            game_port = self.free_ports.pop(0)
+            print("starting game on port %d\nactive game threads: %d\nfree ports: %s\n%s" % (game_port,
+                                                                                             len(self.threads),
+                                                                                             str(self.free_ports),
+                                                                                             str(self.lobby_codes)))
+            opponent = self.lobby_codes[lobby_req.lobbyCode]
+            response.port = self.port_mappings[game_port]
+            self.socket.sendto(response.SerializeToString(), address)
+            self.socket.sendto(response.SerializeToString(), (opponent[0], opponent[1]))
+            del self.lobby_codes[lobby_req.lobbyCode]
+
+            game_thread = GameThread(game_port)
+            self.threads.append(game_thread)
+            game_thread.start()
 
     def free_threads(self):
         for i in range(len(self.threads) - 1, -1, -1):
