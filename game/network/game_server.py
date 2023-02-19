@@ -355,7 +355,11 @@ class MatchServer(object):
             opponent = self.lobby_codes[lobby_req.lobbyCode]
             response.port = self.port_mappings[game_port]
             self.socket.sendto(response.SerializeToString(), address)
+
             self.socket.sendto(response.SerializeToString(), (opponent[0], opponent[1]))
+            print(response)
+            print("sending to : ", address)
+            print("sending to : ", opponent)
             del self.lobby_codes[lobby_req.lobbyCode]
 
             game_thread = GameThread(game_port)
