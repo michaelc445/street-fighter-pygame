@@ -51,7 +51,7 @@ def createNomad(inherit_from, player, x, y, flip, punch_sound, projectile_sound,
                     self.projectile_sound.play()
                     self.projectiles.append(
                         Projectile(self.rect.centerx - (2 * self.rect.width * self.flip), self.rect.y, 2 * self.rect.width,
-                                    self.rect.height // 2, damage, knockback, self, 10 - (20 * self.flip)))
+                                    self.rect.height // 2, damage, knockback, self, 10 - (20 * self.flip),False))
                     self.attack2_cooldown = 100
 
     return Nomad(player, x, y, flip, punch_sound, projectile_sound, hit_sound, controls)

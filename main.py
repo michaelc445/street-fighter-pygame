@@ -209,13 +209,15 @@ def game_loop():
 
 
 
-        # update frames
+        # update pulse
         fighter_1.frameUpdate()
         fighter_2.frameUpdate()
 
         # draw fighters
         fighter_1.draw(screen)
         fighter_2.draw(screen)
+
+
 
 
 

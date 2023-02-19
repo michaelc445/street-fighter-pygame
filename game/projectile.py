@@ -1,7 +1,7 @@
 import pygame
 
 class Projectile():
-    def __init__(self, x, y, width, height, damage, knockback, owner, dx, projectile_img):
+    def __init__(self, x, y, width, height, damage, knockback, owner, dx, projectile_data, ):
         self.rect = pygame.Rect((x, y, width, height))
         self.x = x
         self.y = y
@@ -14,30 +14,42 @@ class Projectile():
         self.owner = owner
         self.dx = dx
         self.direction = self.owner.flip
-        self.projectile_img = self.loadImage(projectile_img)
+        self.animate = True
+        if projectile_data == False:
+            self.animate = False
+        else:
+            self.numFrames = projectile_data[1]
+            self.imgX = projectile_data[2]
+            self.imgY = projectile_data[3]
+            self.projectile_imgs = self.loadImages(projectile_data[0], self.numFrames)
 
 
-    def loadImage(self, img):
-       #images = []
-       #for img in imgs:
-       #    temp_img = pygame.image.load(img)
-       #    temp_img = pygame.transform.scale(temp_img, (self.rect.width, self.rect.height))
-       #    images.append(temp_img)
 
-        image = pygame.image.load(img)
-        image = pygame.transform.scale(image, (self.rect.width, self.rect.height))
-        return image
+        self.updateFrame = pygame.time.get_ticks()
+        self.frame = 0
+
+    def loadImages(self, spriteSheet, numFrames):
+        print(self.numFrames)
+        spriteSheet = pygame.image.load(spriteSheet)
+        animationList = []
+        for frame in range(numFrames):
+            tempImage = spriteSheet.subsurface(frame * self.imgX, 0 * self.imgY, self.imgX, self.imgY)
+            tempImage = pygame.transform.scale(tempImage, (self.rect.height, self.rect.width))
+            animationList.append(tempImage)
+        return animationList
     def draw(self, surface):
-        # Load the image
 
-        # Create a new surface from a rectangular portion of the image
-        #img = pygame.transform.scale(image, (self.rect.width, self.rect.height))
-        img = self.projectile_img
-        # Center the image on the rectangle
-        img_rect = img.get_rect(center=self.rect.center)
-
-        pygame.draw.rect(surface, self.color, self.rect)
-        surface.blit(img, img_rect)
+        animation_cooldown = 80
+        if self.animate == True:
+            if pygame.time.get_ticks() - self.updateFrame > animation_cooldown:
+                if self.frame == self.numFrames:
+                    self.frame = 0
+                img = self.projectile_imgs[self.frame]
+                self.frame += 1
+                #print(self.frame)
+                img_rect = img.get_rect(center=self.rect.center)
+                surface.blit(img, img_rect)
+                self.updateFrame = pygame.time.get_ticks()
 
     def move(self, target, screen_width):
         #keep projectile on screen

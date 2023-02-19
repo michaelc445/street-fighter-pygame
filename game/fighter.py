@@ -265,4 +265,4 @@ class Fighter(object):
         #   self.dy = screen_height - 100 - self.rect.bottom
         #    self.jump = False
 
-
+        
