@@ -130,9 +130,8 @@ class Fighter(object):
 
         else:
             self.actionUpdate(0)
-            animation_cooldown = 120
+            animation_cooldown = 80
 
-        animation_cooldown = 30
         #update image
         self.img = self.animationList[self.action][self.frame]
         #check if enough time has passed since the last update
@@ -165,11 +164,9 @@ class Fighter(object):
     def draw(self, surface, player_name, player_colour):
         #draw player
 
-        font = pygame.font.SysFont("impact", 40)
-        text_surface = font.render(player_name, True, player_colour)
-
-        surface.blit(text_surface, (self.rect.x, self.rect.y - 25))
-
+        font = pygame.font.SysFont("impact", 20)
+        text_surface = font.render(player_name , True, player_colour)
+        surface.blit(text_surface, (self.rect.x, self.rect.y - 20))
         img = pygame.transform.flip(self.img, self.flip, False)
         surface.blit(img, (self.rect.x - self.offset[0] * self.scale, self.rect.y - self.offset[1] * self.scale))
 

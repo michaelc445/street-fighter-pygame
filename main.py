@@ -219,8 +219,8 @@ def game_loop():
         p2_name = "P2"
         p2_colour = (255, 0, 0)
 
-        fighter_1.draw(screen,p1_name , p1_colour )
-        fighter_2.draw(screen, p2_name, p2_colour)
+        fighter_1.draw(screen, p1_name,p1_colour)
+        fighter_2.draw(screen, p2_name, p2_colour )
 
 
 
