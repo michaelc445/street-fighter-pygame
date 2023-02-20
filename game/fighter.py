@@ -129,11 +129,10 @@ class Fighter(object):
             animation_cooldown = 40
 
         else:
-            #idle
             self.actionUpdate(0)
             animation_cooldown = 120
 
-
+        animation_cooldown = 30
         #update image
         self.img = self.animationList[self.action][self.frame]
         #check if enough time has passed since the last update
