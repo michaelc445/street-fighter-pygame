@@ -28,6 +28,9 @@ def createNomad(inherit_from, player, x, y, flip, punch_sound, projectile_sound,
 
 
         def attack(self, surface, target):
+            #animation = [ file, number of frames, x, y, animation cooldown ]
+            wind = ["game/assets/projectiles/Wind_Projectile.png", 5, 32, 32, 40]
+
             if self.attack_type == 1:
                 if self.attack1_cooldown == 0:
                     self.attacking = True
@@ -42,7 +45,6 @@ def createNomad(inherit_from, player, x, y, flip, punch_sound, projectile_sound,
                         target.take_hit(damage, knockback, self.flip)
 
                     pygame.draw.rect(surface, (0, 255, 0), attacking_rect)
-            wind = ["game/assets/projectiles/Wind_Projectile.png", 5, 32, 32]
 
             if self.attack_type == 2:
                 if self.attack2_cooldown == 0:

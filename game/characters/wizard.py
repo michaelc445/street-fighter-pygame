@@ -29,9 +29,10 @@ def createWizard(inherit_from, player, x, y, flip, punch_sound, projectile_sound
             self.img = self.animationList[self.action][self.frame]
 
         def attack(self, surface, target):
-            crossed = ["game/assets/projectiles/crossedSpritesheet.png", 5, 32, 32]
-            pulse = ["game/assets/projectiles/pulseSpritesheet.png", 3, 63, 32]
-            orbSpell = ["game/assets/projectiles/17_felspell_spritesheet.png", 7, 100, 100]
+            #animation = [ file, number of frames, x, y, animation cooldown ]
+            crossed = ["game/assets/projectiles/crossedSpritesheet.png", 5, 32, 32, 40]
+            pulse = ["game/assets/projectiles/pulseSpritesheet.png", 3, 63, 32, 120]
+            orbSpell = ["game/assets/projectiles/17_felspell_spritesheet.png", 7, 100, 100, 50]
 
             if self.attack_type == 1:
                 if self.attack1_cooldown == 0:
