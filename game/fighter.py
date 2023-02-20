@@ -99,24 +99,41 @@ class Fighter(object):
 
     def frameUpdate(self):
         if self.health <= 0:
+            # death
             self.health = 0
             self.alive = False
             self.actionUpdate(3)
+            animation_cooldown = 250
         elif self.hit:
+            # hit
             self.actionUpdate(7)
+            animation_cooldown = 120
+
         elif self.attacking:
+            # attack 1
             if self.attack_type == 1:
                 self.actionUpdate(1)
+                animation_cooldown = 30
+            # attack 2
             elif self.attack_type == 2:
                 self.actionUpdate(2)
-        elif self.jump:
-            self.actionUpdate(5)
-        elif self.running:
-            self.actionUpdate(4)
-        else:
-            self.actionUpdate(0)
+                animation_cooldown = 30
 
-        animation_cooldown = 30
+        elif self.jump:
+            #jumping
+            self.actionUpdate(5)
+            animation_cooldown = 30
+        elif self.running:
+            # running
+            self.actionUpdate(4)
+            animation_cooldown = 40
+
+        else:
+            #idle
+            self.actionUpdate(0)
+            animation_cooldown = 80
+
+
         #update image
         self.img = self.animationList[self.action][self.frame]
         #check if enough time has passed since the last update
