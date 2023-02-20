@@ -131,7 +131,7 @@ class Fighter(object):
         else:
             #idle
             self.actionUpdate(0)
-            animation_cooldown = 80
+            animation_cooldown = 120
 
 
         #update image
@@ -163,8 +163,14 @@ class Fighter(object):
             self.action = newAction
             self.updateFrame = pygame.time.get_ticks()
 
-    def draw(self, surface):
+    def draw(self, surface, player_name, player_colour):
         #draw player
+
+        font = pygame.font.SysFont("impact", 40)
+        text_surface = font.render(player_name, True, player_colour)
+
+        surface.blit(text_surface, (self.rect.x, self.rect.y - 25))
+
         img = pygame.transform.flip(self.img, self.flip, False)
         surface.blit(img, (self.rect.x - self.offset[0] * self.scale, self.rect.y - self.offset[1] * self.scale))
 
