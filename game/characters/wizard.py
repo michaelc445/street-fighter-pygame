@@ -31,6 +31,8 @@ def createWizard(inherit_from, player, x, y, flip, punch_sound, projectile_sound
         def attack(self, surface, target):
             crossed = ["game/assets/projectiles/crossedSpritesheet.png", 5, 32, 32]
             pulse = ["game/assets/projectiles/pulseSpritesheet.png", 3, 63, 32]
+            orbSpell = ["game/assets/projectiles/17_felspell_spritesheet.png", 7, 100, 100]
+
             if self.attack_type == 1:
                 if self.attack1_cooldown == 0:
                     self.attacking = True
@@ -50,7 +52,7 @@ def createWizard(inherit_from, player, x, y, flip, punch_sound, projectile_sound
                     self.projectile_sound.play()
                     self.projectiles.append(
                         Projectile(self.rect.centerx - (2 * self.rect.width * self.flip), self.rect.y, 2 * self.rect.width,
-                                self.rect.height, damage, knockback, self, 5 - (10 * self.flip), crossed))
+                                self.rect.height, damage, knockback, self, 5 - (10 * self.flip), orbSpell))
                     self.attack2_cooldown = 150
 
     return Wizard(player, x, y, flip, punch_sound, projectile_sound, hit_sound,controls)

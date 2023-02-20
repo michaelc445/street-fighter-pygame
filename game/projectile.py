@@ -29,7 +29,6 @@ class Projectile():
         self.frame = 0
 
     def loadImages(self, spriteSheet, numFrames):
-        print(self.numFrames)
         spriteSheet = pygame.image.load(spriteSheet)
         animationList = []
         for frame in range(numFrames):
