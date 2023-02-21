@@ -198,6 +198,9 @@ def game_loop():
 
         # update display
         pygame.display.update()
+    mixer.music.load(resource_path("game/assets/audio/background-menu.wav"))
+    mixer.music.play(-1)
+    #mixer.music.set_volume(0)
 
 async def update_enemy(game_client,local_player,enemy_character):
     for message in game_client.get_updates():
@@ -674,7 +677,7 @@ def menu_play():
                            text_input="SINGLEPLAYER", font=font(35), base_color="#d7fcd4", hovering_color="White")
 
     local = Button(image=pygame.image.load(resource_path("game/assets/menu/long.png")), pos=(500, 275),
-                   text_input="LOCAL MULTI", font=font(35), base_color="#d7fcd4", hovering_color="White")
+                   text_input="LOCAL", font=font(35), base_color="#d7fcd4", hovering_color="White")
 
     multiplayer = Button(image=pygame.image.load(resource_path("game/assets/menu/long.png")), pos=(500, 400),
                          text_input="MULTIPLAYER", font=font(35), base_color="#d7fcd4", hovering_color="White")
@@ -885,6 +888,9 @@ def map_select():
                 #make it so that when you click play, it goes to the game loop
                 if play.checkForInput(mouse):
                     pygame.display.set_caption("Game")
+                    mixer.music.load(resource_path("game/assets/audio/background-game.wav"))
+                    mixer.music.play(-1)
+                    #mixer.music.set_volume(0)
                     game_loop()
                 if back.checkForInput(mouse):
                     pygame.display.set_caption("Character Select")
@@ -1126,9 +1132,6 @@ if __name__ == "__main__":
     menu_bg = pygame.image.load(resource_path("game/assets/menu/main_menu_bg.png")).convert_alpha()
 
     # use mixer to load music and sounds
-    #mixer.music.load("game/assets/audio/main.mp3")
-    #mixer.music.play(-1)
-    mixer.music.set_volume(0)
     punch_fx = mixer.Sound(resource_path("game/assets/audio/punch.wav"))
     projectile_fx = mixer.Sound(resource_path("game/assets/audio/proj.wav"))
     hit_fx = mixer.Sound(resource_path("game/assets/audio/hit.wav"))
@@ -1137,4 +1140,7 @@ if __name__ == "__main__":
     hit_fx.set_volume(0.5)
 
     obstacles = []
+    mixer.music.load(resource_path("game/assets/audio/background-menu.wav"))
+    mixer.music.play(-1)
+    #mixer.music.set_volume(0)
     main_menu()
