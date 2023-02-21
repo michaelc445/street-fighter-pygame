@@ -198,7 +198,7 @@ def game_loop():
 
         # update display
         pygame.display.update()
-    mixer.music.load("game/assets/audio/background-menu.wav")
+    mixer.music.load(resource_path("game/assets/audio/background-menu.wav"))
     mixer.music.play(-1)
     #mixer.music.set_volume(0)
 
@@ -888,7 +888,7 @@ def map_select():
                 #make it so that when you click play, it goes to the game loop
                 if play.checkForInput(mouse):
                     pygame.display.set_caption("Game")
-                    mixer.music.load("game/assets/audio/background-game.wav")
+                    mixer.music.load(resource_path("game/assets/audio/background-game.wav"))
                     mixer.music.play(-1)
                     #mixer.music.set_volume(0)
                     game_loop()
@@ -1140,7 +1140,7 @@ if __name__ == "__main__":
     hit_fx.set_volume(0.5)
 
     obstacles = []
-    mixer.music.load("game/assets/audio/background-menu.wav")
+    mixer.music.load(resource_path("game/assets/audio/background-menu.wav"))
     mixer.music.play(-1)
     #mixer.music.set_volume(0)
     main_menu()
