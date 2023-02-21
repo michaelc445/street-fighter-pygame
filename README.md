@@ -30,13 +30,14 @@ Do the above, then:
     -> in the terminal where main.spec is located
     pyinstaller main.spec
 
-# How To PLay
+# How To Play
 
 - Select your Fighter and the map
 - Win rounds by attacking the opponent until their health bar is depleted
 - First fighter to win 3 rounds wins the game!
 
-# Game modes
+
+# Game Modes
 
 <div align="left">
   <img width="200" alt = "singleplayer" src="game/assets/screenshots/single.jpg"/>
