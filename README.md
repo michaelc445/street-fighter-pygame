@@ -42,8 +42,8 @@ Do the above, then:
 <div align="left">
   <img width="200" alt = "multiplayer" src="game/assets/screenshots/multi.png"/>
   <strong>Queue up for an intense match online!</strong>
-  We use a server provided by NetSoc, which can host up to 10 simultaneous games
 </div>
+We use a server provided by NetSoc, which can host up to 10 simultaneous games.
 
 # Controls
 
