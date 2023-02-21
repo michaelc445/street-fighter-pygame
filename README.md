@@ -31,15 +31,15 @@ Do the above, then:
 
 # Game modes
 
-<div align="center">
+<div align="left">
   <img width="200" alt = "singleplayer" src="game/assets/screenshots/single.jpg"/>
   <strong>Battle against the computer in an intense one on one match!</strong>
 </div>
-<div align="center">
+<div align="left">
   <img width="200" alt = "local" src="game/assets/screenshots/local.png"/>
   <strong>Play your friend locally using the same keyboard!</strong>
 </div>
-<div align="center">
+<div align="left">
   <img width="200" alt = "multiplayer" src="game/assets/screenshots/multi.png"/>
   <strong>Queue up for an intense match online!</strong>
   We use a server provided by NetSoc, which can host up to 10 simultaneous games
