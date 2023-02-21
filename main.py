@@ -674,7 +674,7 @@ def menu_play():
                            text_input="SINGLEPLAYER", font=font(35), base_color="#d7fcd4", hovering_color="White")
 
     local = Button(image=pygame.image.load(resource_path("game/assets/menu/long.png")), pos=(500, 275),
-                   text_input="LOCAL MULTI", font=font(35), base_color="#d7fcd4", hovering_color="White")
+                   text_input="LOCAL", font=font(35), base_color="#d7fcd4", hovering_color="White")
 
     multiplayer = Button(image=pygame.image.load(resource_path("game/assets/menu/long.png")), pos=(500, 400),
                          text_input="MULTIPLAYER", font=font(35), base_color="#d7fcd4", hovering_color="White")
