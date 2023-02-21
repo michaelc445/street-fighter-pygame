@@ -26,9 +26,9 @@ def createWizard(inherit_from, player, x, y, flip, punch_sound, projectile_sound
             self.blockingSizeX = 100
             self.blockingSizeY = 100
             self.blockingScale = 1
-            self.blockingFrames = 5
+            self.blockingSteps = 5
             self.blockingOffset = [85, 40]
-            self.blockingList = self.loadBlockingImages(self.blockAnimation, self.blockingFrames)
+            self.blockingList = self.loadBlockingImages(self.blockAnimation, self.blockingSteps)
 
 
         def attack(self, surface, target):

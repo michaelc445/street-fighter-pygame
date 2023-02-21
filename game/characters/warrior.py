@@ -23,7 +23,15 @@ def createWarrior(inherit_from, player, x, y, flip, punch_sound, projectile_soun
             self.offset = [55, 45]
             self.animationSteps = [10, 4, 4, 9, 6, 2, 2, 3]
             self.animationList = self.loadImages(self.warriorSheet, self.animationSteps)
-            self.img = self.animationList[self.action][self.frame]        
+            self.img = self.animationList[self.action][self.frame]
+
+            self.blockAnimation = pygame.image.load(inherit_from.resource_path("game/assets/blocking2.png"))
+            self.blockingSizeX = 100
+            self.blockingSizeY = 100
+            self.blockingScale = 1
+            self.blockingSteps = 5
+            self.blockingOffset = [85, 40]
+            self.blockingList = self.loadBlockingImages(self.blockAnimation, self.blockingSteps)
 
         def attack(self, surface, target):
             if self.attack_type == 1:

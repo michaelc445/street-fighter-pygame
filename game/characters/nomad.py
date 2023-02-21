@@ -26,6 +26,14 @@ def createNomad(inherit_from, player, x, y, flip, punch_sound, projectile_sound,
             self.animationList = self.loadImages(self.nomadSheet, self.animationSteps)
             self.img = self.animationList[self.action][self.frame]
 
+            self.blockAnimation = pygame.image.load(inherit_from.resource_path("game/assets/blocking2.png"))
+            self.blockingSizeX = 100
+            self.blockingSizeY = 100
+            self.blockingScale = 1
+            self.blockingSteps = 5
+            self.blockingOffset = [85, 40]
+            self.blockingList = self.loadBlockingImages(self.blockAnimation, self.blockingSteps)
+
 
         def attack(self, surface, target):
             #animation = [ file, number of frames, x, y, animation cooldown ]

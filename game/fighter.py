@@ -5,6 +5,7 @@ class Fighter(object):
         self.updateFrame = pygame.time.get_ticks()
         self.action = 0  # 0=idle, 1=attack1, 2=attack2, 3=dying, 4=running, 5=jumping, 6=falling, 7=hit
         self.frame = 0
+        self.blockingFrame = 0
         self.player = player
         self.flip = flip
         self.vel_y = 0
@@ -178,17 +179,18 @@ class Fighter(object):
             self.action = newAction
             self.updateFrame = pygame.time.get_ticks()
 
-    def drawBlockAnimation(self,surface):
+    def drawBlockAnimation(self ,surface):
         animationCooldown = 80
         if pygame.time.get_ticks() - self.updateFrame > animationCooldown:
-            if self.frame >= self.blockingFrames - 1:
-                self.frame = 0
-            self.frame += 1
+            if self.blockingFrame >= self.blockingSteps - 1:
+                self.blockingFrame = 0
+            self.blockingFrame += 1
             self.updateFrame = pygame.time.get_ticks()
-        surface.blit(self.blockingList[self.frame], (self.rect.x - self.blockingOffset[0] * self.scale, self.rect.y - self.blockingOffset[1] * self.scale))
+        img = self.blockingList[self.blockingFrame]
+        img_rect = img.get_rect(center=self.rect.center)
+        #surface.blit(self.blockingList[self.blockingFrame], (self.rect.x - self.blockingOffset[0] * self.scale, self.rect.y - self.blockingOffset[1] * self.scale))
+        surface.blit(img, img_rect)
 
-
-        return
     def draw(self, surface, player_name, player_colour):
         #draw player
 
