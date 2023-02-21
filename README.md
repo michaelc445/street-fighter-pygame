@@ -8,7 +8,7 @@
 
 
 <p align="center">
-  <strong>Welcome to Medieval Fight Club, the online multiplayer fighting game made with pygame.</strong>
+  <strong>Welcome to Martial Mayhem, the online multiplayer fighting game made with pygame.</strong>
 
   <img width="704" alt="Game screenshot" src="game/assets/screenshots/nomadvwizard.png">
 </p>
