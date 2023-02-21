@@ -81,5 +81,5 @@ A specialist of all fighting styles, dangerous at any range!
 
 # Contributing
 
-Feel free to join the discord [Discord channel](https://discord.gg/rrVNskkC) if you want to contribute!
+Feel free to join the [Discord channel](https://discord.gg/rrVNskkC) if you want to contribute!
 
