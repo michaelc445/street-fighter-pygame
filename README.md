@@ -52,18 +52,27 @@ Do the above, then:
 # Characters
 
 ## Wizard
+<p align="center">
+  <img src="game/assets/maps/wizard.png"/>
+</p>
 A zoner with powerful ranged attacks, stay away and poke the enemy from range!
 
     light attack - quick spammable projectile with small damage and knockback
     heavy attack - a large slow projectile with massive damage and knockback
 
 ## Warrior
+<p align="center">
+  <img src="game/assets/maps/warrior.png"/>
+</p>
 A bruiser with ppowerful melee attacks, don't let him get close!
 
     light attack - quick sword swing good for staggering the opponent
     heavy attack - heavy sword swing which does devastating damage
 
 ## Nomad
+<p align="center">
+  <img src="game/assets/maps/nomad.png"/>
+</p>
 A specialist of all fighting styles, dangerous at any range!
 
     light attack - a quick and deadly sword swing with short range
