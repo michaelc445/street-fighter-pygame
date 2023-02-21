@@ -53,7 +53,7 @@ Do the above, then:
 
 ## Wizard
 <p align="center">
-  <img src="game/assets/maps/wizard.png"/>
+  <img src="game/assets/screenshots/wizard.png"/>
 </p>
 A zoner with powerful ranged attacks, stay away and poke the enemy from range!
 
@@ -62,7 +62,7 @@ A zoner with powerful ranged attacks, stay away and poke the enemy from range!
 
 ## Warrior
 <p align="center">
-  <img src="game/assets/maps/warrior.png"/>
+  <img src="game/assets/screenshots/warrior.png"/>
 </p>
 A bruiser with ppowerful melee attacks, don't let him get close!
 
@@ -71,7 +71,7 @@ A bruiser with ppowerful melee attacks, don't let him get close!
 
 ## Nomad
 <p align="center">
-  <img src="game/assets/maps/nomad.png"/>
+  <img src="game/assets/screenshots/nomad.png"/>
 </p>
 A specialist of all fighting styles, dangerous at any range!
 
