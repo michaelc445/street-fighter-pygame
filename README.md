@@ -33,18 +33,26 @@ Do the above, then:
 
 ## Player 1
     W - jump
+
     A - move left
+
     S - block
+
     D - move right
+
 
     R - light attack
     T - heavy attack
 
 ## Player 2
     up arrow - jump
+
     left arrow - move left
+
     down arrow - block
+
     right arrow - move right
+    
 
     N - light attack
     M - heavy attack
