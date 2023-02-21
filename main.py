@@ -198,6 +198,9 @@ def game_loop():
 
         # update display
         pygame.display.update()
+    mixer.music.load("game/assets/audio/background-menu.wav")
+    mixer.music.play(-1)
+    #mixer.music.set_volume(0)
 
 async def update_enemy(game_client,local_player,enemy_character):
     for message in game_client.get_updates():
@@ -1129,9 +1132,6 @@ if __name__ == "__main__":
     menu_bg = pygame.image.load(resource_path("game/assets/menu/main_menu_bg.png")).convert_alpha()
 
     # use mixer to load music and sounds
-    mixer.music.load("game/assets/audio/background-menu.wav")
-    mixer.music.play(-1)
-    #mixer.music.set_volume(0)
     punch_fx = mixer.Sound(resource_path("game/assets/audio/punch.wav"))
     projectile_fx = mixer.Sound(resource_path("game/assets/audio/proj.wav"))
     hit_fx = mixer.Sound(resource_path("game/assets/audio/hit.wav"))
@@ -1140,4 +1140,7 @@ if __name__ == "__main__":
     hit_fx.set_volume(0.5)
 
     obstacles = []
+    mixer.music.load("game/assets/audio/background-menu.wav")
+    mixer.music.play(-1)
+    #mixer.music.set_volume(0)
     main_menu()
