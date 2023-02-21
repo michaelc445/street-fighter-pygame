@@ -26,7 +26,6 @@ class Projectile():
         # load spritesheet
         spriteSheet = pygame.image.load(spriteSheet)
         animationList = []
-
         # load each frame
         for frame in range(numFrames):
             tempImage = spriteSheet.subsurface(frame * self.imgX, 0 * self.imgY, self.imgX, self.imgY)

@@ -13,6 +13,9 @@ class Fighter(object):
         self.running = False
         self.attacking = False
         self.blocking = False
+        #self.blockAnimation = pygame.image.load(self.resource_path("game/assets/projectiles/Wind_Projectile.png"))
+        #self.blockingData = [32, 32]
+        #self.blockingList = self.loadBlockingImages(self.blockAnimation, 5)
         self.hit = False
         self.shooting_projectile = False
         self.projectiles = []
@@ -41,6 +44,16 @@ class Fighter(object):
                 tempImageList.append(tempImage)
             animationList.append(tempImageList)
             y += 1
+        return animationList#
+
+    def loadBlockingImages(self, spriteSheet, animationSteps):
+        y = 0
+        animationList = []
+
+        for x in range(animationSteps):
+            tempImage = spriteSheet.subsurface(x * self.blockingSizeX, 4 * self.blockingSizeY, self.blockingSizeX, self.blockingSizeX)
+            tempImage = pygame.transform.scale(tempImage, (self.sizeX * self.blockingScale, self.sizeY * self.blockingScale))
+            animationList.append(tempImage)
         return animationList
     def reset(self):
         self.rect.x = self._start_x
@@ -128,6 +141,10 @@ class Fighter(object):
             self.actionUpdate(4)
             animation_cooldown = 40
 
+        #elif self.blocking:
+        #    self.drawBlockAnimation(surface)
+        #    animation_cooldown = 40
+
         else:
             self.actionUpdate(0)
             animation_cooldown = 80
@@ -161,14 +178,30 @@ class Fighter(object):
             self.action = newAction
             self.updateFrame = pygame.time.get_ticks()
 
+    def drawBlockAnimation(self,surface):
+        animationCooldown = 80
+        if pygame.time.get_ticks() - self.updateFrame > animationCooldown:
+            if self.frame >= self.blockingFrames - 1:
+                self.frame = 0
+            self.frame += 1
+            self.updateFrame = pygame.time.get_ticks()
+        surface.blit(self.blockingList[self.frame], (self.rect.x - self.blockingOffset[0] * self.scale, self.rect.y - self.blockingOffset[1] * self.scale))
+
+
+        return
     def draw(self, surface, player_name, player_colour):
         #draw player
 
         font = pygame.font.SysFont("impact", 20)
         text_surface = font.render(player_name , True, player_colour)
         surface.blit(text_surface, (self.rect.x, self.rect.y - 20))
+
         img = pygame.transform.flip(self.img, self.flip, False)
         surface.blit(img, (self.rect.x - self.offset[0] * self.scale, self.rect.y - self.offset[1] * self.scale))
+
+        if self.blocking:
+            self.drawBlockAnimation(surface)
+
 
     def take_hit(self, damage, knockback, direction):
         self.hit = True

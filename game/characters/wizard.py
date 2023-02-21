@@ -5,21 +5,15 @@ def createWizard(inherit_from, player, x, y, flip, punch_sound, projectile_sound
     class Wizard(inherit_from):
         def __init__(self, player, x, y, flip, punch_sound, projectile_sound, hit_sound,controls):
             super().__init__(player, x, y, flip, punch_sound, projectile_sound, hit_sound,controls)
-
             #hitbox
             height = 100
             width = 60
             self.rect = pygame.Rect((x, y, width, height))
-
-
-
-
             #character attributes
             self.speed = 8
-
             #load wizard sheet
             self.wizardSheet = pygame.image.load(inherit_from.resource_path("game/assets/wizard/wizard_spritesheet.png"))
-            self.spriteSheet = self.wizardSheet
+            #self.spriteSheet = self.wizardSheet
             self.sizeX = self.wizardSheetX = 231
             self.sizeY = self.wizardSheetY = 190
             self.scale = self.wizardScale = 1.2
@@ -27,6 +21,15 @@ def createWizard(inherit_from, player, x, y, flip, punch_sound, projectile_sound
             self.animationSteps = [5, 7, 7, 6, 7, 1, 1, 3]
             self.animationList = self.loadImages(self.wizardSheet, self.animationSteps)
             self.img = self.animationList[self.action][self.frame]
+
+            self.blockAnimation = pygame.image.load(inherit_from.resource_path("game/assets/blocking2.png"))
+            self.blockingSizeX = 100
+            self.blockingSizeY = 100
+            self.blockingScale = 1
+            self.blockingFrames = 5
+            self.blockingOffset = [85, 40]
+            self.blockingList = self.loadBlockingImages(self.blockAnimation, self.blockingFrames)
+
 
         def attack(self, surface, target):
             #animation = [ file, number of frames, x, y, animation cooldown ]

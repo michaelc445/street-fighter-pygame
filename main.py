@@ -214,7 +214,7 @@ def game_loop():
         fighter_2.frameUpdate()
 
         # draw fighters
-        p1_name = "Keith"
+        p1_name = "P1"
         p1_colour = (0, 0, 255)
         p2_name = "P2"
         p2_colour = (255, 0, 0)
