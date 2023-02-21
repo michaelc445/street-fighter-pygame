@@ -52,7 +52,7 @@ Do the above, then:
 # Characters
 
 ## Wizard
-<p align="center">
+<p align="left">
   <img src="game/assets/screenshots/wizard.png"/>
 </p>
 A zoner with powerful ranged attacks, stay away and poke the enemy from range!
@@ -61,7 +61,7 @@ A zoner with powerful ranged attacks, stay away and poke the enemy from range!
     heavy attack - a large slow projectile with massive damage and knockback
 
 ## Warrior
-<p align="center">
+<p align="left">
   <img src="game/assets/screenshots/warrior.png"/>
 </p>
 A bruiser with ppowerful melee attacks, don't let him get close!
@@ -70,7 +70,7 @@ A bruiser with ppowerful melee attacks, don't let him get close!
     heavy attack - heavy sword swing which does devastating damage
 
 ## Nomad
-<p align="center">
+<p align="left">
   <img src="game/assets/screenshots/nomad.png"/>
 </p>
 A specialist of all fighting styles, dangerous at any range!
