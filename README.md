@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="game/assets/maps/mountain.png"/>
+  <img src="game/assets/screenshots/readme_headerv1.jpg"/>
 </p>
 
 <div align="center">
@@ -79,8 +79,7 @@ A specialist of all fighting styles, dangerous at any range!
     heavy attack - a projectile with big knockback on hit
 
 
-
-## Contributing
+# Contributing
 
 Feel free to join the discord [Discord channel](https://discord.gg/rrVNskkC) if you want to contribute!
 
