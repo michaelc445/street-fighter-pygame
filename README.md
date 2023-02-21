@@ -13,7 +13,7 @@
   <img width="704" alt="Game screenshot" src="game/assets/screenshots/nomadvwizard.png">
 </p>
 
-## Getting Started
+# Getting Started
 
 Go to your favourite terminal, clone the repository, then:
 
@@ -28,6 +28,23 @@ Do the above, then:
     -> be sure to use double backslashes
     -> in the terminal where main.spec is located
     pyinstaller main.spec
+
+<p align="center">
+  <img src="game/assets/screenshots/single.jpg"/>
+  <strong>Battle against the computer in an intense one on one match!</strong>
+</p>
+
+<p align="center">
+  <img src="game/assets/screenshots/local.png"/>
+  <strong>Play your friend locally using the same keyboard!</strong>
+</p>
+
+<p align="center">
+  <img src="game/assets/screenshots/multiplayer.png"/>
+  <strong>Queue up for an intense match online!</strong>
+  We use a server provided by NetSoc, which can host up to 10 simultaneous games
+</p>
+
 
 # Controls
 
