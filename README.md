@@ -102,6 +102,9 @@ A specialist of all fighting styles, dangerous at any range!
     light attack - a quick and deadly sword swing with short range
     heavy attack - a projectile with big knockback on hit
 
+# Credits
+
+Check out the [Credits](CREDITS.md) page and show some love to the artists who let us use their tile sets.
 
 # Contributing
 
