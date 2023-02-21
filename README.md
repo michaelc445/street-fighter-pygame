@@ -33,26 +33,18 @@ Do the above, then:
 
 ## Player 1
     W - jump
-
     A - move left
-
     S - block
-
     D - move right
-
 
     R - light attack
     T - heavy attack
 
 ## Player 2
     up arrow - jump
-
     left arrow - move left
-
     down arrow - block
-
     right arrow - move right
-    
 
     N - light attack
     M - heavy attack
@@ -61,16 +53,19 @@ Do the above, then:
 
 ## Wizard
 A zoner with powerful ranged attacks, stay away and poke the enemy from range!
+
     light attack - quick spammable projectile with small damage and knockback
     heavy attack - a large slow projectile with massive damage and knockback
 
 ## Warrior
 A bruiser with ppowerful melee attacks, don't let him get close!
+
     light attack - quick sword swing good for staggering the opponent
     heavy attack - heavy sword swing which does devastating damage
 
 ## Nomad
 A specialist of all fighting styles, dangerous at any range!
+
     light attack - a quick and deadly sword swing with short range
     heavy attack - a projectile with big knockback on hit
 
