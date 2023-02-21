@@ -29,7 +29,7 @@ def createNomad(inherit_from, player, x, y, flip, punch_sound, projectile_sound,
             self.blockAnimation = pygame.image.load(inherit_from.resource_path("game/assets/blocking2.png"))
             self.blockingSizeX = 100
             self.blockingSizeY = 100
-            self.blockingScale = 1
+            self.blockingScale = 2.7
             self.blockingSteps = 5
             self.blockingOffset = [85, 40]
             self.blockingList = self.loadBlockingImages(self.blockAnimation, self.blockingSteps)

@@ -180,7 +180,7 @@ class Fighter(object):
             self.updateFrame = pygame.time.get_ticks()
 
     def drawBlockAnimation(self ,surface):
-        animationCooldown = 80
+        animationCooldown = 40
         if pygame.time.get_ticks() - self.updateFrame > animationCooldown:
             if self.blockingFrame >= self.blockingSteps - 1:
                 self.blockingFrame = 0
