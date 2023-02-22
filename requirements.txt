@@ -1,2 +1,3 @@
 protobuf==4.21.12
 pygame==2.1.2
+pygame-textinput==1.0.1
