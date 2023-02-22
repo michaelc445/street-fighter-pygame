@@ -265,6 +265,16 @@ class GameServer(object):
                 self.restart_game()
                 continue
 
+            if game_update.y > 1000 and time_in_round.total_seconds() > 5:
+                enemy = (game_update.id+1) % 2
+                scores[enemy] += 1
+                if scores[enemy] == 3:
+                    self.quit_game()
+                    break
+                round_time = datetime.now()
+                self.restart_game()
+                continue
+
             if game_update.quit:
                 self.quit_game()
 
