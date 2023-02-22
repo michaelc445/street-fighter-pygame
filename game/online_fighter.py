@@ -89,7 +89,7 @@ class OnlineFighter(Fighter):
         if pygame.time.get_ticks() - self.updateFrame > animation_cooldown:
             self.frame += 1
             self.updateFrame = pygame.time.get_ticks()
-        #check if the animation has finished
+        #check if the animation has finished h
         if self.frame >= len(self.animationList[self.action]):
             #if the player is dead then end the animation
             if self.alive == False:
@@ -111,8 +111,8 @@ class OnlineFighter(Fighter):
         gravity = 2
         self.dx = 0
         self.dy = 0
-        self.x=x
-        self.y=y
+        self.rect.x=x
+        self.rect.y=y
         self.keybinds(self.controls, surface, target, key)
 
         self.grav(gravity)
@@ -129,7 +129,7 @@ class OnlineFighter(Fighter):
             self.attack2_cooldown -= 1
 
         # check if they fell off the map
-        if self.rect.y > 1000:
-            self.health = -1
+        # if self.rect.y > 1000:
+        #     self.health = -1
 
 
