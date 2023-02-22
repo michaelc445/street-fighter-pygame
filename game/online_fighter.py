@@ -89,7 +89,7 @@ class OnlineFighter(Fighter):
         if pygame.time.get_ticks() - self.updateFrame > animation_cooldown:
             self.frame += 1
             self.updateFrame = pygame.time.get_ticks()
-        #check if the animation has finished
+        #check if the animation has finished h
         if self.frame >= len(self.animationList[self.action]):
             #if the player is dead then end the animation
             if self.alive == False:
