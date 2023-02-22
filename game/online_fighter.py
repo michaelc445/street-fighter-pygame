@@ -111,8 +111,8 @@ class OnlineFighter(Fighter):
         gravity = 2
         self.dx = 0
         self.dy = 0
-        self.x=x
-        self.y=y
+        self.rect.x=x
+        self.rect.y=y
         self.keybinds(self.controls, surface, target, key)
 
         self.grav(gravity)
@@ -129,7 +129,7 @@ class OnlineFighter(Fighter):
             self.attack2_cooldown -= 1
 
         # check if they fell off the map
-        if self.rect.y > 1000:
-            self.health = -1
+        # if self.rect.y > 1000:
+        #     self.health = -1
 
 
