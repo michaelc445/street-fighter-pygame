@@ -28,6 +28,11 @@ class Fighter(object):
         self.controls = controls
         self._start_x = x
         self._start_y = y
+        self.player_x = self._start_x
+        self.player_y = self._start_y
+
+    def return_state(self):
+        return  [self.player_x,self.player_y,self.vel_x,self.vel_y, self.shooting_projectile, self.attacking]
 
     def loadImages(self, spriteSheet, animationSteps):
         # extract images from sprite sheet
@@ -149,6 +154,9 @@ class Fighter(object):
         #draw player
         img = pygame.transform.flip(self.img, self.flip, False)
         surface.blit(img, (self.rect.x - self.offset[0] * self.scale, self.rect.y - self.offset[1] * self.scale))
+        self.player_x = self.rect.x - self.offset[0] * self.scale
+        self.player_y = self.rect.y - self.offset[1] * self.scale
+
 
     def take_hit(self, damage, knockback, direction):
         self.hit = True
@@ -170,10 +178,12 @@ class Fighter(object):
         # get keypresses
         if key is None:
             key = pygame.key.get_pressed()
+
         self.running = False
         #self.jump = False  # uncomment this to fly :)
 
         if not self.blocking and not self.attacking and self.alive:
+
             # move left
             if key[player_controls["left"]]:
                 self.dx = -self.speed

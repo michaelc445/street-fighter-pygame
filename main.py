@@ -23,6 +23,7 @@ class StreetFighter:
         self.player2_controls = {"left": pygame.K_LEFT, "right": pygame.K_RIGHT, "jump": pygame.K_UP,
                             "attack1": pygame.K_n, "attack2": pygame.K_m, "block": pygame.K_DOWN}
 
+
         mixer.init
         pygame.init()
         # create game window
@@ -69,6 +70,7 @@ class StreetFighter:
         self.p1_spawn = [100, 100]
         self.p2_spawn = [850, 100]
         self.map_chosen = "me"
+        self.iteration =0
 
 
     def draw_bg(self, scaled_bg_image):
@@ -966,7 +968,7 @@ class StreetFighter:
                     if map3.checkForInput(mouse):
                         map = "church"
             if leave_menu:
-                break
+                breakself.iteration+=1
             clock.tick(MENU_FPS)
             pygame.display.update()
 '''
@@ -998,7 +1000,13 @@ class StreetFighter:
 
     def ai_loop(self):
         self.ai_test_random_map_character()
+        self.iteration += 1
         self.game_loop()
+
+    def return_state(self):
+        return [self.map, self.p1, self.p2]
+
+
 
     def multi_char_select(game_client):
         global p1, p2
