@@ -2,6 +2,8 @@ import random
 
 import pygame, asyncio
 from pygame import mixer
+
+import agent
 from game.fighter import Fighter
 from game.online_fighter import OnlineFighter
 from game.characters.nomad import createNomad
@@ -10,6 +12,7 @@ from game.characters.wizard import createWizard
 from game.obstacle import Obstacle
 from game.button import Button
 from game.network.game_client import GameClient
+from agent import Agent
 import sys,os
 
 class StreetFighter:
@@ -211,6 +214,8 @@ class StreetFighter:
         scaled_bg = pygame.transform.scale(self.bg_image, (self.SCREEN_WIDTH, self.SCREEN_HEIGHT))
         run = True
         scores = [0,0]
+        agent.train(fighter_1,fighter_2)
+
         while run:
 
             # cap frame rate
