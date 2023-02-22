@@ -1,7 +1,7 @@
 import pygame
 
 class Projectile():
-    def __init__(self, x, y, width, height, damage, knockback, owner, dx, projectile_data ):
+    def __init__(self, x, y, width, height, damage, knockback, owner, dx, projectile_data):
         self.rect = pygame.Rect((x, y, width, height))
         self.x = x
         self.y = y
@@ -18,6 +18,8 @@ class Projectile():
         self.imgX = projectile_data[2]
         self.imgY = projectile_data[3]
         self.animationCooldown = projectile_data[4]
+        self.offSetX = projectile_data[5]
+        self.offSetY = projectile_data[6]
         self.projectile_imgs = self.loadImages(projectile_data[0], self.numFrames)
         self.updateFrame = pygame.time.get_ticks()
         self.frame = 0
@@ -29,7 +31,7 @@ class Projectile():
         # load each frame
         for frame in range(numFrames):
             tempImage = spriteSheet.subsurface(frame * self.imgX, 0 * self.imgY, self.imgX, self.imgY)
-            tempImage = pygame.transform.scale(tempImage, (self.rect.height, self.rect.width))
+            tempImage = pygame.transform.scale(tempImage, (self.rect.height + self.offSetX, self.rect.width + self.offSetY))
             # makes image face correct direction
             tempImage = pygame.transform.flip(tempImage, self.direction, False)
             animationList.append(tempImage)
@@ -47,6 +49,8 @@ class Projectile():
         img = self.projectile_imgs[self.frame]
         img_rect = img.get_rect(center=self.rect.center)
         surface.blit(img, img_rect)
+        # draw hit boxes
+        #pygame.draw.rect(surface, self.color, self.rect)
 
 
 

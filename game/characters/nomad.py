@@ -37,8 +37,8 @@ def createNomad(inherit_from, player, x, y, flip, punch_sound, projectile_sound,
 
         def attack(self, surface, target):
             #animation = [ file, number of frames, x, y, animation cooldown ]
-            wind = ["game/assets/projectiles/Wind_Projectile.png", 5, 32, 32, 40]
-
+            wind = ["game/assets/projectiles/Wind_Projectile.png", 5, 32, 32, 40, 0, 0]
+            tornado = ["game/assets/projectiles/tornado.png", 7, 128, 128, 40, 200, 25]
             if self.attack_type == 1:
                 if self.attack1_cooldown == 0:
                     self.attacking = True
@@ -62,7 +62,7 @@ def createNomad(inherit_from, player, x, y, flip, punch_sound, projectile_sound,
                     self.projectile_sound.play()
                     self.projectiles.append(
                         Projectile(self.rect.centerx - (2 * self.rect.width * self.flip), self.rect.y, 2 * self.rect.width,
-                                    self.rect.height // 2, damage, knockback, self, 10 - (20 * self.flip), wind))
+                                    self.rect.height // 2, damage, knockback, self, 10 - (20 * self.flip), tornado))
                     self.attack2_cooldown = 100
 
     return Nomad(player, x, y, flip, punch_sound, projectile_sound, hit_sound, controls)

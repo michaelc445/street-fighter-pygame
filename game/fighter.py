@@ -195,7 +195,7 @@ class Fighter(object):
         #draw player
 
         font = pygame.font.SysFont("impact", 20)
-        text_surface = font.render(player_name , True, player_colour)
+        text_surface = font.render(player_name, True, player_colour)
         surface.blit(text_surface, (self.rect.x, self.rect.y - 20))
 
         img = pygame.transform.flip(self.img, self.flip, False)
