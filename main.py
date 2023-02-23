@@ -1177,7 +1177,7 @@ def multi_char_select(game_client):
     l_count = 0
     clock = pygame.time.Clock()
     enemy_choice = wizard2
-    p1 = "wizard"
+    p1 = "nomad"
     p2 = "wizard"
 
     while True:
