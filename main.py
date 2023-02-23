@@ -346,8 +346,8 @@ def multi_player_game_loop(game_client):
         local_player.frameUpdate()
         enemy_character.frameUpdate()
         # draw fighters
-        local_player.draw(screen)
-        enemy_character.draw(screen)
+        local_player.draw(screen,"",RED)
+        enemy_character.draw(screen,"",RED)
 
         # draw obstacles
         for obstacle in obstacles:
@@ -1137,15 +1137,33 @@ def multi_char_select(game_client):
     p2_wiz = "#d7fcd4"
     p2_war = "#d7fcd4"
     p2_nom = "#d7fcd4"
+
+    #draw player 1 characters
+    wizard1 = createWizard(Fighter, 1, 285, 175, False, punch_fx, projectile_fx, hit_fx, player1_controls)
+    nomad1 = createNomad(Fighter, 1, 275, 175, False, punch_fx, projectile_fx, hit_fx, player1_controls)
+    warrior1 = createWarrior(Fighter, 1, 265, 175, False, punch_fx, projectile_fx, hit_fx, player1_controls)
+
+
+    #draw player 2 characters
+    wizard2 = createWizard(Fighter, 1, 685, 175, False, punch_fx, projectile_fx, hit_fx, player1_controls)
+    nomad2 = createNomad(Fighter, 1, 675, 175, False, punch_fx, projectile_fx, hit_fx, player1_controls)
+    warrior2 = createWarrior(Fighter, 1, 665, 175, False, punch_fx, projectile_fx, hit_fx, player1_controls)
+
+    p1_color_wizard = "#d7fcd4"
+    p2_color_wizard = "Blue"
+
+    p1_color_warrior = "#d7fcd4"
+    p1_color_nomad = "Yellow"
+
     play = Button(image=pygame.image.load(resource_path("game/assets/menu/medium.png")), pos=(700, 525),
                   text_input="PLAY", font=font(35), base_color="Black", hovering_color="Yellow")
     # character select buttons for player 1
-    p1_wizard = Button(image=None, pos=(300, 275),
-                       text_input="wizard", font=font(25), base_color=default_colour, hovering_color="Yellow")
-    p1_warrior = Button(image=None, pos=(300, 400),
-                        text_input="warrior", font=font(25), base_color=default_colour, hovering_color="Yellow")
-    p1_nomad = Button(image=None, pos=(300, 150),
-                      text_input="nomad", font=font(25), base_color="Yellow", hovering_color="Yellow")
+    p1_wizard = Button(image=None, pos=(175, 350),
+                       text_input="wizard", font=font(16), base_color=p1_color_wizard, hovering_color="Yellow")
+    p1_warrior = Button(image=None, pos=(300, 350),
+                        text_input="warrior", font=font(16), base_color=p1_color_warrior, hovering_color="Yellow")
+    p1_nomad = Button(image=None, pos=(425, 350),
+                      text_input="nomad", font=font(16), base_color=p1_color_nomad, hovering_color="Yellow")
 
     back = Button(image=pygame.image.load(resource_path("game/assets/menu/medium.png")), pos=(300, 525),
                   text_input="BACK", font=font(35), base_color="Black", hovering_color="Yellow")
@@ -1158,6 +1176,10 @@ def multi_char_select(game_client):
     loop = asyncio.get_event_loop()
     l_count = 0
     clock = pygame.time.Clock()
+    enemy_choice = wizard2
+    p1 = "wizard"
+    p2 = "wizard"
+
     while True:
         mouse = pygame.mouse.get_pos()
         screen.blit(menu_scaled, (0, 0))
@@ -1168,38 +1190,56 @@ def multi_char_select(game_client):
                 pass
 
             break
+            # draw wizard
+        if p1 == "wizard":
+            wizard1.frameUpdate()
+            wizard1.draw(screen, "", RED)
+            # draw warrior
+        elif p1 == "warrior":
+            warrior1.frameUpdate()
+            warrior1.draw(screen, "", RED)
+        # draw nomad
+        elif p1 == "nomad":
+            nomad1.frameUpdate()
+            nomad1.draw(screen, "", RED)
 
         for button in [back, play, p1_wizard, p1_warrior, p1_nomad]:
             button.hover(mouse)
             button.update(screen)
             # character select buttons for player 2
-        p2_wizard = Button(image=None, pos=(700, 275),
-                           text_input="wizard", font=font(25), base_color=p2_wiz, hovering_color="Blue")
-        p2_warrior = Button(image=None, pos=(700, 400),
-                            text_input="warrior", font=font(25), base_color=p2_war, hovering_color="Blue")
-        p2_nomad = Button(image=None, pos=(700, 150),
-                          text_input="nomad", font=font(25), base_color=p2_nom, hovering_color="Blue")
+        p2_wizard = Button(image=None, pos=(575, 350),
+                        text_input="wizard", font=font(16), base_color=p2_wiz, hovering_color="Blue")
+        p2_warrior = Button(image=None, pos=(700, 350),
+                        text_input="warrior", font=font(16), base_color=p2_war, hovering_color="Blue")
+        p2_nomad = Button(image=None, pos=(825, 350),
+                        text_input="nomad", font=font(16), base_color=p2_nom, hovering_color="Blue")
         enemy_chars = [p2_nomad, p2_wizard, p2_warrior]
         loop.create_task(game_client.get_enemy_character())
+
         if game_client.enemy_resp is not None:
             if game_client.enemy_char == 0:
                 p2_nom = "Blue"
                 p2_wiz = default_colour
                 p2_war = default_colour
+                enemy_choice = nomad2
             elif game_client.enemy_char == 1:
                 p2_wiz = "Blue"
                 p2_nom = default_colour
                 p2_war = default_colour
+                enemy_choice = wizard2
             else:
                 p2_war = "Blue"
                 p2_wiz = default_colour
                 p2_nom = default_colour
+                enemy_choice = warrior2
 
             if game_client.enemy_resp.start:
                 break
 
             game_client.enemy_resp = None
 
+        enemy_choice.frameUpdate()
+        enemy_choice.draw(screen,"",RED)
         for button in enemy_chars:
             button.update(screen)
 
