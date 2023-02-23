@@ -301,7 +301,11 @@ def multi_player_game_loop(game_client):
     loop = asyncio.get_event_loop()
     quit_game_to_menu = False
     scores = [0, 0]
-
+    intro = 3
+    over = False
+    round_cd = 1500
+    last_tick_update = pygame.time.get_ticks()
+    winner = 0
     while run:
 
         # cap frame rate
@@ -321,6 +325,23 @@ def multi_player_game_loop(game_client):
         loop.create_task(local_player.game_client.send_update(message))
         loop.create_task(game_client.get_update())
 
+        if intro > 0:
+            draw_text(str(intro), font(80), RED, screen, (SCREEN_WIDTH / 2), SCREEN_HEIGHT / 3)
+            # reduce intro by 1 every second using pygame.time.get_ticks()
+            if pygame.time.get_ticks() - last_tick_update >= 1000:
+                intro -= 1
+                last_tick_update = pygame.time.get_ticks()
+
+            local_player.frameUpdate()
+            enemy_character.frameUpdate()
+            # draw fighters
+            local_player.draw(screen)
+            enemy_character.draw(screen)
+            pygame.display.update()
+            run_once(loop)
+            continue
+
+
         for message in game_client.messages:
             if message.quit:
                 local_player.game_client.quit_game()
@@ -329,16 +350,26 @@ def multi_player_game_loop(game_client):
             if message.restart:
                 # when message.restart is true, the id value will contain the winner
                 scores[message.id] +=1
-                local_player.reset()
-                enemy_character.reset()
-
+                winner = message.id
+                # local_player.reset()
+                # enemy_character.reset()
+                over = True
+                over_time = pygame.time.get_ticks()
                 break
 
             enemy_character.move_enemy(SCREEN_WIDTH, SCREEN_HEIGHT, screen, local_player, obstacles, message.keys,
                                        message.x, message.y)
             enemy_character.obstacle_collision(screen, obstacles)
 
-
+        if over:
+            if winner ==0:
+                draw_text("PLAYER 1 WINS", font(50), RED, screen, (SCREEN_WIDTH / 2), SCREEN_HEIGHT / 3)
+            elif winner ==1:
+                draw_text("PLAYER 2 WINS", font(50), RED, screen, (SCREEN_WIDTH / 2), SCREEN_HEIGHT / 3)
+            if pygame.time.get_ticks() - over_time >= round_cd:
+                over = False
+                local_player.reset()
+                enemy_character.reset()
         if quit_game_to_menu:
             break
         enemy_character.draw_projectile(local_player, screen.get_width(), screen)
