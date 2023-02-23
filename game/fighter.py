@@ -32,7 +32,8 @@ class Fighter(object):
         self.player_y = self._start_y
 
     def return_state(self):
-        return  [self.player_x,self.player_y,self.vel_x,self.vel_y, self.shooting_projectile, self.attacking, self.running ]
+        return  [self.player_x,self.player_y,self.vel_x,self.vel_y, self.shooting_projectile, self.attacking,
+                        self.running , self.jump , self.blocking]
 
     def loadImages(self, spriteSheet, animationSteps):
         # extract images from sprite sheet

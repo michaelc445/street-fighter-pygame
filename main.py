@@ -3,8 +3,9 @@ import random
 import pygame, asyncio
 from pygame import mixer
 
-import agent
+
 from game.fighter import Fighter
+from game.fighter_ai import Fighter_ai
 from game.online_fighter import OnlineFighter
 from game.characters.nomad import createNomad
 from game.characters.warrior import createWarrior
@@ -74,6 +75,8 @@ class StreetFighter:
         self.p2_spawn = [850, 100]
         self.map_chosen = "me"
         self.iteration =0
+        self.agent = Agent()
+        self.agent_state=0
 
 
     def draw_bg(self, scaled_bg_image):
@@ -199,13 +202,13 @@ class StreetFighter:
             fighter_1 = createWarrior(Fighter, 1, self.p1_spawn[0], self.p1_spawn[1], False, self.punch_fx, self.projectile_fx, self.hit_fx, self.player1_controls)
 
         if self.p2 == "wizard":
-            fighter_2 = createWizard(Fighter, 2, self.p2_spawn[0], self.p2_spawn[1], True, self.punch_fx, self.projectile_fx, self.hit_fx, self.player2_controls)
+            fighter_2 = createWizard(Fighter_ai, 2, self.p2_spawn[0], self.p2_spawn[1], True, self.punch_fx, self.projectile_fx, self.hit_fx, self.player2_controls)
 
         elif self.p2 == "nomad":
-            fighter_2 = createNomad(Fighter, 2, self.p2_spawn[0], self.p2_spawn[1], True, self.punch_fx, self.projectile_fx, self.hit_fx, self.player2_controls)
+            fighter_2 = createNomad(Fighter_ai, 2, self.p2_spawn[0], self.p2_spawn[1], True, self.punch_fx, self.projectile_fx, self.hit_fx, self.player2_controls)
 
         elif self.p2 == "warrior":
-            fighter_2 = createWarrior(Fighter, 2, self.p2_spawn[0], self.p2_spawn[1], True, self.punch_fx, self.projectile_fx, self.hit_fx, self.player2_controls)
+            fighter_2 = createWarrior(Fighter_ai, 2, self.p2_spawn[0], self.p2_spawn[1], True, self.punch_fx, self.projectile_fx, self.hit_fx, self.player2_controls)
 
 
         #load map
@@ -214,9 +217,18 @@ class StreetFighter:
         scaled_bg = pygame.transform.scale(self.bg_image, (self.SCREEN_WIDTH, self.SCREEN_HEIGHT))
         run = True
         scores = [0,0]
-        agent.train(fighter_1,fighter_2)
+        state = [self.map, self.p1, self.p2]
+
+
+
 
         while run:
+            if self.agent_state == 0:
+                move = self.agent.train(fighter_1, fighter_2, [self.map, self.p1, self.p2])
+                fighter_2.set_moves(move)
+            else:
+                move = self.agent.train_save(fighter_1, fighter_2, [self.map, self.p1, self.p2])
+                fighter_2.set_moves(move)
 
             # cap frame rate
             self.clock.tick(self.GAME_FPS)
