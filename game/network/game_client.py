@@ -38,17 +38,14 @@ class GameClient(object):
                 data, address = self.socket.recvfrom(self.BUFFER_SIZE)
                 self.socket.sendto("ready".encode(), address)
                 self.enemy_address = address
-                print("connected")
             except:
                 continue
-        print(self.enemy_address)
         if self.enemy_address is None:
             raise ConnectionAbortedError
 
     async def join_lobby(self, ip_address, port, lobby_code):
         self.server_ip = ip_address
         self.mm_port = port
-        print("sending create lobby request")
         lobby_req = pb.CreateLobbyRequest(lobbyCode=lobby_code)
         self.socket.sendto(lobby_req.SerializeToString(), (ip_address, port))
 
@@ -64,13 +61,13 @@ class GameClient(object):
 
         lobby_resp.ParseFromString(data)
         if not lobby_resp.ok:
-            print("failed to join lobby")
+
             self.lobby_searching = False
-        print(lobby_resp)
+
         if not lobby_resp.start:
-            print("lobby not ready")
+
             return
-        print("lobby ready")
+
         self.game_port = lobby_resp.port
         self.lobby_ready = True
 
@@ -80,7 +77,6 @@ class GameClient(object):
         self.socket.sendto(map_req.SerializeToString(), (self.server_ip, self.game_port))
 
     def join_game(self, ip_address, port, name):
-        print(ip_address,port,name)
         self.server_ip = ip_address
         self.game_port = port
         join_req = pb.JoinLobbyRequest(name=name)
@@ -94,7 +90,6 @@ class GameClient(object):
                 continue
             join_resp.ParseFromString(data)
             if not join_resp.ok:
-                print("failed to join lobby")
                 self.socket.close()
                 sys.exit(1)
 

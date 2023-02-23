@@ -775,7 +775,6 @@ def multi_map_select(game_client):
                 # make it so that when you click play, it goes to the game loop
                 if play.checkForInput(mouse):
                     pygame.display.set_caption("Game")
-                    print("choice locked in ", p_choice)
                     locked_in = True
                 if back.checkForInput(mouse):
                     pygame.display.set_caption("Map Select")
@@ -941,7 +940,7 @@ def menu_play():
                     game_client.join_game("176.61.91.52", game_client.game_port, "m")
                     # print("connecting to server")
                     # game_client.connect("192.168.0.33", 1234, "m")
-                    print(game_client.player_id)
+                    # print(game_client.player_id)
                     # game_client.socket.setblocking(False)
                     multi_char_select(game_client)
                     if not multi_map_select(game_client):
