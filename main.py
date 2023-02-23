@@ -300,6 +300,8 @@ def multi_player_game_loop(game_client):
     clock = pygame.time.Clock()
     loop = asyncio.get_event_loop()
     quit_game_to_menu = False
+    scores = [0, 0]
+
     while run:
 
         # cap frame rate
@@ -312,7 +314,9 @@ def multi_player_game_loop(game_client):
         draw_health_bar(fighters[0].health, 20, 20)
         draw_health_bar(fighters[1].health, 580, 20)
 
+        draw_scores(scores[0],scores[1])
         # move fighters
+
         message = local_player.move(SCREEN_WIDTH, SCREEN_HEIGHT, screen, enemy_character, obstacles, game_client)
         loop.create_task(local_player.game_client.send_update(message))
         loop.create_task(game_client.get_update())
@@ -323,6 +327,8 @@ def multi_player_game_loop(game_client):
                 quit_game_to_menu = True
             local_player.health = message.enemyHealth
             if message.restart:
+                # when message.restart is true, the id value will contain the winner
+                scores[message.id] +=1
                 local_player.reset()
                 enemy_character.reset()
 
@@ -331,6 +337,8 @@ def multi_player_game_loop(game_client):
             enemy_character.move_enemy(SCREEN_WIDTH, SCREEN_HEIGHT, screen, local_player, obstacles, message.keys,
                                        message.x, message.y)
             enemy_character.obstacle_collision(screen, obstacles)
+
+
         if quit_game_to_menu:
             break
         enemy_character.draw_projectile(local_player, screen.get_width(), screen)
@@ -359,7 +367,15 @@ def multi_player_game_loop(game_client):
         pygame.display.update()
         run_once(loop)
 
-
+def draw_scores(p1_score, p2_score):
+    score = " - "
+    draw_text(score, font(30), WHITE, screen, SCREEN_WIDTH / 2, 35)
+    draw_text(str(p1_score), font(30), WHITE, screen, SCREEN_WIDTH / 2 - 50, 35)
+    draw_text(str(p2_score), font(30), WHITE, screen, SCREEN_WIDTH / 2 + 50, 35)
+def draw_text(text, font, color, surface, x, y):
+    text = font.render(text, True, color)
+    rect = text.get_rect(center=(x, y))
+    screen.blit(text, rect)
 # controls
 def controls():
     leave_menu = False
