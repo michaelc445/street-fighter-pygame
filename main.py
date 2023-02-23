@@ -339,6 +339,7 @@ def multi_player_game_loop(game_client):
             enemy_character.obstacle_collision(screen, obstacles)
 
 
+
         if quit_game_to_menu:
             break
         enemy_character.draw_projectile(local_player, screen.get_width(), screen)
