@@ -145,10 +145,18 @@ class Fighter(object):
             self.action = newAction
             self.updateFrame = pygame.time.get_ticks()
 
-    def draw(self, surface):
-        #draw player
+    def draw(self, surface, player_name, player_colour):
+        # draw player
+
+        font = pygame.font.SysFont("impact", 20)
+        text_surface = font.render(player_name, True, player_colour)
+        surface.blit(text_surface, (self.rect.x, self.rect.y - 20))
+
         img = pygame.transform.flip(self.img, self.flip, False)
         surface.blit(img, (self.rect.x - self.offset[0] * self.scale, self.rect.y - self.offset[1] * self.scale))
+
+        if self.blocking:
+            self.drawBlockAnimation(surface)
 
     def take_hit(self, damage, knockback, direction):
         self.hit = True
