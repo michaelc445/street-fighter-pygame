@@ -15,7 +15,11 @@ def draw_bg(scaled_bg_image):
 
     screen.blit(scaled_bg_image, (0, 0))
 
-
+def draw_text(text, font, color, surface, x, y):
+    text = font.render(text, True, color)
+    rect = text.get_rect(center=(x, y))
+    screen.blit(text, rect)
+        
 # draw health bars
 def draw_health_bar(health, x, y):
     ratio = health / 100
@@ -23,11 +27,17 @@ def draw_health_bar(health, x, y):
     pygame.draw.rect(screen, RED, (x, y, 400, 30))
     pygame.draw.rect(screen, YELLOW, (x, y, 400 * ratio, 30))
 
-
+def draw_scores(p1_score, p2_score):
+    score = " - "
+    draw_text(score, font(30), WHITE, screen, SCREEN_WIDTH / 2, 35)
+    draw_text(str(p1_score), font(30), WHITE, screen, SCREEN_WIDTH / 2 - 50, 35)
+    draw_text(str(p2_score), font(30), WHITE, screen, SCREEN_WIDTH / 2 + 50, 35)
 # font size
 def font(size):
     return pygame.font.Font(resource_path("game/assets/menu/font.ttf"), size)
 
+def locateFighter(fighter):
+    print(fighter.rect.x, fighter.rect.y)
 
 # when a button is pressed, it should change the key that is assigned to that action
 def control_handling(keys, key):
@@ -71,8 +81,8 @@ def sfx_change(level):
 # game loop
 def game_loop():
     if map == "mountain":
-        p1_spawn = [100, 100]
-        p2_spawn = [850, 100]
+        p1_spawn = [100, 134]
+        p2_spawn = [850, 134]
         map_chosen = "game/assets/maps/mountain.png"
         # mountain obstacles
         middle_ground1 = Obstacle(270, 410, 465, 60)
@@ -90,8 +100,8 @@ def game_loop():
                      right_cliff2, right_cliff3, right_cliff4]
 
     elif map == "church":
-        p1_spawn = [80, 100]
-        p2_spawn = [900, 100]
+        p1_spawn = [900, 286]
+        p2_spawn = [56, 286]
         map_chosen = "game/assets/maps/church.png"
         # church obstacles
         middle_floor = Obstacle(150, 530, 700, 80)
@@ -102,8 +112,8 @@ def game_loop():
         obstacles = [middle_floor, left_side, right_side, middle_top]
 
     elif map == "cliffs":
-        p1_spawn = [500, 100]
-        p2_spawn = [500, 400]
+        p1_spawn = [135, 254]
+        p2_spawn = [870, 45]
         map_chosen = "game/assets/maps/cliffs.png"
         # cliffs obstacles
         left_island1 = Obstacle(107, 355, 90, 20)
@@ -143,6 +153,11 @@ def game_loop():
     scaled_bg = pygame.transform.scale(bg_image, (SCREEN_WIDTH, SCREEN_HEIGHT))
     run = True
     scores = [0,0]
+    #round variables
+    intro = 3
+    over = False
+    round_cd = 1500
+    last_tick_update = pygame.time.get_ticks()
     while run:
 
         # cap frame rate
@@ -155,31 +170,59 @@ def game_loop():
         draw_health_bar(fighter_1.health, 20, 20)
         draw_health_bar(fighter_2.health, 580, 20)
 
+        draw_scores(scores[0], scores[1])
+
+
         # move fighters
-        fighter_1.move(SCREEN_WIDTH, SCREEN_HEIGHT, screen, fighter_2, obstacles)
-        fighter_2.move(SCREEN_WIDTH, SCREEN_HEIGHT, screen, fighter_1, obstacles)
+        if intro <= 0:
+            fighter_1.move(SCREEN_WIDTH, SCREEN_HEIGHT, screen, fighter_2, obstacles)
+            fighter_2.move(SCREEN_WIDTH, SCREEN_HEIGHT, screen, fighter_1, obstacles)
+        else:
+            draw_text(str(intro), font(80), RED, screen, (SCREEN_WIDTH / 2), SCREEN_HEIGHT / 3)
+            #reduce intro by 1 every second using pygame.time.get_ticks()
+            if pygame.time.get_ticks() - last_tick_update >= 1000:
+                intro -= 1
+                last_tick_update = pygame.time.get_ticks()
 
-        if fighter_1.health <=0 or fighter_2.health <=0:
-            if fighter_1.health <=0:
-                scores[1] +=1
-            else:
+
+        if over == False:
+            if not fighter_1.alive:
+                scores[1] += 1
+                over = True
+                over_time = pygame.time.get_ticks()
+            elif not fighter_2.alive:
                 scores[0] +=1
-
-            if scores[0] ==3 or scores[1]==3:
+                over = True
+                over_time = pygame.time.get_ticks()
+        else:
+            if scores[0] == 3 or scores[1] == 3:
                 break
+            if fighter_1.alive:    
+                draw_text("PLAYER 1 WINS", font(50), RED, screen, (SCREEN_WIDTH / 2), SCREEN_HEIGHT / 3)
+            elif fighter_2.alive:
+                draw_text("PLAYER 2 WINS", font(50), RED, screen, (SCREEN_WIDTH / 2), SCREEN_HEIGHT / 3)
+            if pygame.time.get_ticks() - over_time >= round_cd:
+                over = False
+                fighter_1.reset()
+                fighter_2.reset()
+                
 
-            fighter_1.reset()
-            fighter_2.reset()
 
 
-
-        # update frames
+        # update pulse
         fighter_1.frameUpdate()
         fighter_2.frameUpdate()
 
         # draw fighters
-        fighter_1.draw(screen)
-        fighter_2.draw(screen)
+        p1_name = "P1"
+        p1_colour = (0, 0, 255)
+        p2_name = "P2"
+        p2_colour = (255, 0, 0)
+
+        fighter_1.draw(screen, p1_name,p1_colour)
+        fighter_2.draw(screen, p2_name, p2_colour )
+
+
 
 
 
@@ -195,7 +238,8 @@ def game_loop():
                     run = False
 
         # if fighter 1 or 2 punches, play the punch.wav sound effect
-
+        #print coordinates of player 1
+        #locateFighter(fighter_1)
         # update display
         pygame.display.update()
     mixer.music.load(resource_path("game/assets/audio/background-menu.wav"))
@@ -862,12 +906,12 @@ def map_select():
         play = Button(image=pygame.image.load(resource_path("game/assets/menu/medium.png")), pos=(700, 525),
                         text_input="PLAY", font=font(35), base_color="White", hovering_color="Yellow")
         #map select buttons
-        map1 = Button(image=None, pos=(300, 150),
-                        text_input="map1", font=font(25), base_color="#d7fcd4", hovering_color="Yellow")
-        map2 = Button(image=None, pos=(500, 150),
-                        text_input="map2", font=font(25), base_color="#d7fcd4", hovering_color="Yellow")
-        map3 = Button(image=None, pos=(700, 150),
-                        text_input="map3", font=font(25), base_color="#d7fcd4", hovering_color="Yellow")
+        map1 = Button(image=None, pos=(500, 150),
+                        text_input="MOUNTAIN", font=font(25), base_color="#d7fcd4", hovering_color="Yellow")
+        map2 = Button(image=None, pos=(500, 250),
+                        text_input="CLIFFS", font=font(25), base_color="#d7fcd4", hovering_color="Yellow")
+        map3 = Button(image=None, pos=(500, 350),
+                        text_input="CHURCH", font=font(25), base_color="#d7fcd4", hovering_color="Yellow")
 
         back = Button(image=pygame.image.load(resource_path("game/assets/menu/medium.png")), pos=(300, 525),
                       text_input="BACK", font=font(35), base_color="White", hovering_color="Yellow")
@@ -1107,6 +1151,7 @@ if __name__ == "__main__":
     SCREEN_WIDTH = 1000
     SCREEN_HEIGHT = 600
 
+
     #default characters
     p1="wizard"
     p2="wizard"
@@ -1126,7 +1171,6 @@ if __name__ == "__main__":
     WHITE = (255, 255, 255)
 
     # load bg image
-
     bg_image = pygame.image.load(resource_path("game/assets/maps/background.png")).convert_alpha()
 
     menu_bg = pygame.image.load(resource_path("game/assets/menu/main_menu_bg.png")).convert_alpha()
