@@ -30,12 +30,30 @@ def createWizard(inherit_from, player, x, y, flip, punch_sound, projectile_sound
             self.blockingOffset = [85, 40]
             self.blockingList = self.loadBlockingImages(self.blockAnimation, self.blockingSteps)
 
+            # attack 1 animation
+            self.projectileAnimation1 = pygame.image.load(inherit_from.resource_path("game/assets/projectiles/pulseSpritesheet.png"))
+            self.projectileSteps1 = 3
+            self.imgWidth1 = 63
+            self.imgHeight1 = 32
+            self.offSetX1 = 0
+            self.offSetY1 = 0
+            self.projectileRect1 = pygame.Rect( self.rect.centerx - (2 * self.rect.width * self.flip), self.rect.y, self.rect.width, self.rect.height)
+            self.projectile_imgs1 = self.loadProjectileImages(self.projectileAnimation1, self.projectileSteps1, self.imgWidth1, self.imgHeight1, self.projectileRect1, self.offSetX1, self.offSetY1)
+            self.animationCooldown1 = 100
+            # attack 2 animation
+            self.projectileAnimation2 = pygame.image.load(inherit_from.resource_path("game/assets/projectiles/17_felspell_spritesheet.png"))
+            self.projectileSteps2 = 7
+            self.imgWidth2 = 100
+            self.imgHeight2 = 100
+            self.offSetX2 = 0
+            self.offSetY2 = 0
+            self.projectileRect2 = pygame.Rect((self.rect.centerx - (2 * self.rect.width * self.flip), self.rect.y, 2 * self.rect.width,self.rect.height))
+            self.projectile_imgs2 = self.loadProjectileImages(self.projectileAnimation2, self.projectileSteps2, self.imgWidth2, self.imgHeight2, self.projectileRect2, self.offSetX2, self.offSetY2)
+            self.animationCooldown2 = 50
+
+
 
         def attack(self, surface, target):
-            #animation = [ file, number of frames, x, y, animation cooldown ]
-            crossed = ["game/assets/projectiles/crossedSpritesheet.png", 5, 32, 32, 40, 0 ,0]
-            pulse = ["game/assets/projectiles/pulseSpritesheet.png", 3, 63, 32, 120, 0 ,0]
-            orbSpell = ["game/assets/projectiles/17_felspell_spritesheet.png", 7, 100, 100, 50, 0 ,0]
 
             if self.attack_type == 1:
                 if self.attack1_cooldown == 0:
@@ -45,7 +63,7 @@ def createWizard(inherit_from, player, x, y, flip, punch_sound, projectile_sound
                     self.projectile_sound.play()
                     self.projectiles.append(
                         Projectile(self.rect.centerx - (2 * self.rect.width * self.flip), self.rect.y, self.rect.width,
-                                self.rect.height // 2, damage, knockback, self, 10 - (20 * self.flip), pulse))
+                                self.rect.height // 2, damage, knockback, self, 10 - (20 * self.flip), self.projectile_imgs1,  self.animationCooldown1, self.projectileSteps1))
                     self.attack1_cooldown = 50
 
             if self.attack_type == 2:
@@ -56,7 +74,7 @@ def createWizard(inherit_from, player, x, y, flip, punch_sound, projectile_sound
                     self.projectile_sound.play()
                     self.projectiles.append(
                         Projectile(self.rect.centerx - (2 * self.rect.width * self.flip), self.rect.y, 2 * self.rect.width,
-                                self.rect.height, damage, knockback, self, 5 - (10 * self.flip), orbSpell))
+                                self.rect.height, damage, knockback, self, 5 - (10 * self.flip), self.projectile_imgs2, self.animationCooldown2, self.projectileSteps2))
                     self.attack2_cooldown = 150
 
     return Wizard(player, x, y, flip, punch_sound, projectile_sound, hit_sound,controls)

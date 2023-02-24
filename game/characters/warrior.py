@@ -1,5 +1,6 @@
 import pygame
 
+
 def createWarrior(inherit_from, player, x, y, flip, punch_sound, projectile_sound, hit_sound,controls):
     class Warrior(inherit_from):
         def __init__(self, player, x, y, flip, punch_sound, projectile_sound, hit_sound,controls):

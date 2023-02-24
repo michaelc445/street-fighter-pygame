@@ -45,7 +45,7 @@ class Fighter(object):
                 tempImageList.append(tempImage)
             animationList.append(tempImageList)
             y += 1
-        return animationList#
+        return animationList
 
     def loadBlockingImages(self, spriteSheet, animationSteps):
         y = 0
@@ -56,6 +56,15 @@ class Fighter(object):
             tempImage = pygame.transform.scale(tempImage, (self.sizeX * self.blockingScale, self.sizeY * self.blockingScale))
             animationList.append(tempImage)
         return animationList
+
+    def loadProjectileImages(self, spriteSheet, numFrames, imgWidth, imgHeight, rect, offSetX, offSetY):
+        animationList = []
+        for frame in range(numFrames):
+            tempImage = spriteSheet.subsurface(frame * imgWidth, 0 * imgHeight, imgWidth, imgHeight)
+            tempImage = pygame.transform.scale(tempImage, (rect.height + offSetX,  rect.width + offSetY))
+            animationList.append(tempImage)
+        return animationList
+
     def reset(self):
         self.rect.x = self._start_x
         self.rect.y = self._start_y
