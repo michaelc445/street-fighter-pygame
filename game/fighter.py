@@ -5,6 +5,7 @@ class Fighter(object):
         self.updateFrame = pygame.time.get_ticks()
         self.action = 0  # 0=idle, 1=attack1, 2=attack2, 3=dying, 4=running, 5=jumping, 6=falling, 7=hit
         self.frame = 0
+        self.blockingFrame = 0
         self.player = player
         self.flip = flip
         self.vel_y = 0
@@ -13,6 +14,9 @@ class Fighter(object):
         self.running = False
         self.attacking = False
         self.blocking = False
+        #self.blockAnimation = pygame.image.load(self.resource_path("game/assets/projectiles/Wind_Projectile.png"))
+        #self.blockingData = [32, 32]
+        #self.blockingList = self.loadBlockingImages(self.blockAnimation, 5)
         self.hit = False
         self.shooting_projectile = False
         self.projectiles = []
@@ -42,6 +46,25 @@ class Fighter(object):
             animationList.append(tempImageList)
             y += 1
         return animationList
+
+    def loadBlockingImages(self, spriteSheet, animationSteps):
+        y = 0
+        animationList = []
+
+        for x in range(animationSteps):
+            tempImage = spriteSheet.subsurface(x * self.blockingSizeX, 4 * self.blockingSizeY, self.blockingSizeX, self.blockingSizeX)
+            tempImage = pygame.transform.scale(tempImage, (self.sizeX * self.blockingScale, self.sizeY * self.blockingScale))
+            animationList.append(tempImage)
+        return animationList
+
+    def loadProjectileImages(self, spriteSheet, numFrames, imgWidth, imgHeight, rect, offSetX, offSetY):
+        animationList = []
+        for frame in range(numFrames):
+            tempImage = spriteSheet.subsurface(frame * imgWidth, 0 * imgHeight, imgWidth, imgHeight)
+            tempImage = pygame.transform.scale(tempImage, (rect.height + offSetX,  rect.width + offSetY))
+            animationList.append(tempImage)
+        return animationList
+
     def reset(self):
         self.rect.x = self._start_x
         self.rect.y = self._start_y
@@ -59,6 +82,7 @@ class Fighter(object):
             base_path = os.path.abspath(".")
 
         return os.path.join(base_path, relative_path)
+
     def move(self, screen_width, screen_height, surface, target, obstacles):
         GRAVITY = 2
         self.dx = 0
@@ -98,24 +122,43 @@ class Fighter(object):
 
     def frameUpdate(self):
         if self.health <= 0:
+            # death
             self.health = 0
             self.alive = False
             self.actionUpdate(3)
+            animation_cooldown = 250
         elif self.hit:
+            # hit
             self.actionUpdate(7)
+            animation_cooldown = 120
+
         elif self.attacking:
+            # attack 1
             if self.attack_type == 1:
                 self.actionUpdate(1)
+                animation_cooldown = 30
+            # attack 2
             elif self.attack_type == 2:
                 self.actionUpdate(2)
+                animation_cooldown = 30
+
         elif self.jump:
+            #jumping
             self.actionUpdate(5)
+            animation_cooldown = 30
         elif self.running:
+            # running
             self.actionUpdate(4)
+            animation_cooldown = 40
+
+        #elif self.blocking:
+        #    self.drawBlockAnimation(surface)
+        #    animation_cooldown = 40
+
         else:
             self.actionUpdate(0)
+            animation_cooldown = 80
 
-        animation_cooldown = 30
         #update image
         self.img = self.animationList[self.action][self.frame]
         #check if enough time has passed since the last update
@@ -145,8 +188,20 @@ class Fighter(object):
             self.action = newAction
             self.updateFrame = pygame.time.get_ticks()
 
+    def drawBlockAnimation(self ,surface):
+        animationCooldown = 40
+        if pygame.time.get_ticks() - self.updateFrame > animationCooldown:
+            if self.blockingFrame >= self.blockingSteps - 1:
+                self.blockingFrame = 0
+            self.blockingFrame += 1
+            self.updateFrame = pygame.time.get_ticks()
+        img = self.blockingList[self.blockingFrame]
+        img_rect = img.get_rect(center=self.rect.center)
+        #surface.blit(self.blockingList[self.blockingFrame], (self.rect.x - self.blockingOffset[0] * self.scale, self.rect.y - self.blockingOffset[1] * self.scale))
+        surface.blit(img, img_rect)
+
     def draw(self, surface, player_name, player_colour):
-        # draw player
+        #draw player
 
         font = pygame.font.SysFont("impact", 20)
         text_surface = font.render(player_name, True, player_colour)
@@ -157,6 +212,7 @@ class Fighter(object):
 
         if self.blocking:
             self.drawBlockAnimation(surface)
+
 
     def take_hit(self, damage, knockback, direction):
         self.hit = True
