@@ -937,6 +937,21 @@ def map_select():
     global map
     leave_menu = False
     clock = pygame.time.Clock()
+
+    #church map preview
+    image = pygame.image.load(resource_path("game/assets/maps/church.png"))
+    image = pygame.transform.scale(image, (200, 200))
+    image_position = (100, 200)
+    #mountain map preview
+    image2 = pygame.image.load(resource_path("game/assets/maps/mountain.png"))
+    image2 = pygame.transform.scale(image2, (200, 200))
+    image_position2 = (400, 200)
+    #cliffs map preview
+    image3 = pygame.image.load(resource_path("game/assets/maps/cliffs.png"))
+    image3 = pygame.transform.scale(image3, (200, 200))
+    image_position3 = (700, 200)
+
+
     while True:
         menu_scaled = pygame.transform.scale(menu_bg, (SCREEN_WIDTH, SCREEN_HEIGHT))
         screen.blit(menu_scaled, (0, 0))
@@ -945,6 +960,9 @@ def map_select():
         text = font(35).render("MAP SELECT", True, "#b68f40")
         rect = text.get_rect(center=(500, 50))
         screen.blit(text, rect)
+        screen.blit(image, image_position)
+        screen.blit(image2, image_position2)
+        screen.blit(image3, image_position3)
 
         play = Button(image=pygame.image.load(resource_path("game/assets/menu/medium.png")), pos=(700, 525),
                         text_input="PLAY", font=font(35), base_color="White", hovering_color="Yellow")
