@@ -939,17 +939,17 @@ def map_select():
     clock = pygame.time.Clock()
 
     #church map preview
-    image = pygame.image.load(resource_path("game/assets/maps/church.png"))
-    image = pygame.transform.scale(image, (200, 200))
-    image_position = (100, 200)
+    image1 = pygame.image.load(resource_path("game/assets/maps/church.png"))
+    image1 = pygame.transform.scale(image1, (200, 200))
+    #image_position = (100, 200)
     #mountain map preview
     image2 = pygame.image.load(resource_path("game/assets/maps/mountain.png"))
     image2 = pygame.transform.scale(image2, (200, 200))
-    image_position2 = (400, 200)
+    #image_position2 = (400, 200)
     #cliffs map preview
     image3 = pygame.image.load(resource_path("game/assets/maps/cliffs.png"))
     image3 = pygame.transform.scale(image3, (200, 200))
-    image_position3 = (700, 200)
+    #image_position3 = (700, 200)
 
 
     while True:
@@ -960,19 +960,33 @@ def map_select():
         text = font(35).render("MAP SELECT", True, "#b68f40")
         rect = text.get_rect(center=(500, 50))
         screen.blit(text, rect)
-        screen.blit(image, image_position)
-        screen.blit(image2, image_position2)
-        screen.blit(image3, image_position3)
+
+        #church text
+        text = font(25).render("Church", True, "#b68f40")
+        rect = text.get_rect(center=(200, 150))
+        screen.blit(text, rect)
+        #mountain text
+        text = font(25).render("Mountain", True, "#b68f40")
+        rect = text.get_rect(center=(500, 150))
+        screen.blit(text, rect)
+        #cliffs text
+        text = font(25).render("Cliffs", True, "#b68f40")
+        rect = text.get_rect(center=(800, 150))
+        screen.blit(text, rect)
+
+        #screen.blit(image, image_position)
+        #screen.blit(image2, image_position2)
+        #screen.blit(image3, image_position3)
 
         play = Button(image=pygame.image.load(resource_path("game/assets/menu/medium.png")), pos=(700, 525),
                         text_input="PLAY", font=font(35), base_color="White", hovering_color="Yellow")
         #map select buttons
-        map1 = Button(image=None, pos=(200, 150),
-                        text_input="Church", font=font(25), base_color="#d7fcd4", hovering_color="Yellow")
-        map2 = Button(image=None, pos=(500, 150),
-                        text_input="Mountain", font=font(25), base_color="#d7fcd4", hovering_color="Yellow")
-        map3 = Button(image=None, pos=(800, 150),
-                        text_input="Cliffs", font=font(25), base_color="#d7fcd4", hovering_color="Yellow")
+        map1 = Button(image=image1, pos=(200, 300),
+                        text_input="", font=font(25), base_color="#d7fcd4", hovering_color="Yellow")
+        map2 = Button(image=image2, pos=(500, 300),
+                        text_input="", font=font(25), base_color="#d7fcd4", hovering_color="Yellow")
+        map3 = Button(image=image3, pos=(800, 300),
+                        text_input="", font=font(25), base_color="#d7fcd4", hovering_color="Yellow")
 
         back = Button(image=pygame.image.load(resource_path("game/assets/menu/medium.png")), pos=(300, 525),
                       text_input="BACK", font=font(35), base_color="White", hovering_color="Yellow")
