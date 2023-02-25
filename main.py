@@ -976,11 +976,12 @@ def map_select():
         rect = text.get_rect(center=(800, 150))
         screen.blit(text, rect)
 
-        #screen.blit(image, image_position)
-        #screen.blit(image2, image_position2)
-        #screen.blit(image3, image_position3)
-
-        pygame.draw.rect(screen, BLUE, (98,198,204,204), width=2)
+        if map == "church":
+            pygame.draw.rect(screen, WHITE, (98,198,204,204), width=2)
+        if map == "mountain":
+            pygame.draw.rect(screen, WHITE, (398,198,204,204), width=2)
+        if map == "cliffs":
+            pygame.draw.rect(screen, WHITE, (698,198,204,204), width=2)
 
         play = Button(image=pygame.image.load(resource_path("game/assets/menu/medium.png")), pos=(700, 525),
                         text_input="PLAY", font=font(35), base_color="White", hovering_color="Yellow")
