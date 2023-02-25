@@ -85,7 +85,6 @@ class Fighter_ai(object):
         self.dy = 0
 
         # check player 1 movement
-
         self.keybinds(self.moves, surface, target,None)
 
         # apply gravity
@@ -163,14 +162,14 @@ class Fighter_ai(object):
         if newAction != self.action:
             self.frame = 0
             self.action = newAction
-            print(newAction)
+
             self.updateFrame = pygame.time.get_ticks()
 
     def draw(self, surface):
         #draw player
         img = pygame.transform.flip(self.img, self.flip, False)
         surface.blit(img, (self.rect.x - self.offset[0] * self.scale, self.rect.y - self.offset[1] * self.scale))
-        print(self.rect.x - self.offset[0] * self.scale, self.rect.y - self.offset[1] * self.scale)
+
         self.player_x = self.rect.x - self.offset[0] * self.scale
         self.player_y = self.rect.y - self.offset[1] * self.scale
     def take_hit(self, damage, knockback, direction):
@@ -195,6 +194,7 @@ class Fighter_ai(object):
 
         if not self.blocking and not self.attacking and self.alive:
             # move left
+
             if moves[0]==1:
                 self.dx = -self.speed
                 #        self.actionUpdate(4)

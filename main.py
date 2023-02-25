@@ -6,14 +6,12 @@ from pygame import mixer
 
 from game.fighter import Fighter
 from game.fighter_ai import Fighter_ai
-from game.online_fighter import OnlineFighter
 from game.characters.nomad import createNomad
 from game.characters.warrior import createWarrior
 from game.characters.wizard import createWizard
 from game.obstacle import Obstacle
 from game.button import Button
-from game.network.game_client import GameClient
-from agent import Agent
+from game.agent import Agent
 import sys,os
 
 class StreetFighter:
@@ -77,6 +75,10 @@ class StreetFighter:
         self.iteration =0
         self.agent = Agent()
         self.agent_state=0
+        self.reward = 0
+        self.fighter1_health=100
+        self.fighter2_health = 100
+        self.damage=0
 
 
     def draw_bg(self, scaled_bg_image):
@@ -223,12 +225,20 @@ class StreetFighter:
 
 
         while run:
+            # damage reward
+            if fighter_1.health<self.fighter1_health:
+                self.damage += self.fighter1_health - fighter_1.health
+                self.reward+=10
+            if fighter_2.health < self.fighter1_health:
+                self.reward += 10
             if self.agent_state == 0:
                 move = self.agent.train(fighter_1, fighter_2, [self.map, self.p1, self.p2])
                 fighter_2.set_moves(move)
+                self.agent_state = 1
             else:
-                move = self.agent.train_save(fighter_1, fighter_2, [self.map, self.p1, self.p2])
-                fighter_2.set_moves(move)
+                self.agent.train_save(fighter_1, fighter_2, [self.map, self.p1, self.p2], self.reward, False, scores[1], self.damage)
+                self.agent_state=0
+                self.reward=0
 
             # cap frame rate
             self.clock.tick(self.GAME_FPS)
@@ -246,12 +256,26 @@ class StreetFighter:
 
             # fighter wins round
             if fighter_1.health <=0 or fighter_2.health <=0:
+                self.damage += self.fighter1_health - fighter_1.health
                 if fighter_1.health <=0:
                     scores[1] +=1
+                    self.reward+=15
+                    self.agent.train_save(fighter_1, fighter_2, [self.map, self.p1, self.p2], self.reward, False,
+                                          scores[1],self.damage)
+                    self.agent_state = 0
+                    self.reward = 0
                 else:
                     scores[0] +=1
+                    self.reward-=10
+                    self.agent.train_save(fighter_1, fighter_2, [self.map, self.p1, self.p2], self.reward, False,
+                                          scores[1],self.damage)
+                    self.agent_state = 0
+                    self.reward = 0
 
                 if scores[0] ==3 or scores[1]==3:
+                    print("here")
+                    self.agent.train_save(fighter_1, fighter_2, [self.map, self.p1, self.p2], self.reward, True,
+                                          scores[1], self.damage)
                     self.ai_loop()
 
                 fighter_1.reset()

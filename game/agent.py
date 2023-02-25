@@ -3,6 +3,9 @@ import random
 import math
 import numpy as np
 from collections import deque
+from game.model import Linear_QNet
+from game.model import Qtrainer
+from game.helper import plot
 
 MAX_MEMORY = 100_000
 BATCH_SIZE = 1000
@@ -13,13 +16,20 @@ class Agent:
     def __init__(self):
         self.num_games=0
         self.epsilon=0  #randomness
-        self.gamma = 0 #discount rate
+        self.gamma = 0.9 #discount rate
         self.memory = deque(maxlen=MAX_MEMORY) #pop left
+        self.model = Linear_QNet(22, 512, 6)
+        self.trainer = Qtrainer(self.model, lr=LR, gamma=self.gamma)
         self.state_old = []
         self.final_move =[]
         self.reward=0
-        self.done=False
-        pass
+
+        self.plot_scores=[]
+        self.plot_mean_scores= []
+        self.plot_damage=[]
+        self.damage=0
+        self.total_score = 0
+        self.record = 0
 
     def get_state(self,  enemy_state,current_state,gamestate):
         current_char_nom=0
@@ -31,7 +41,6 @@ class Agent:
         map_mountain=0
         map_church=0
         map_cliffs=0
-        print(gamestate)
         map = gamestate[0]
         current_char=gamestate[1]
         opponent_char=gamestate[2]
@@ -49,7 +58,6 @@ class Agent:
             map_church = 0
             map_cliffs = 0
         #current char
-        print(gamestate[2]," hey")
         if gamestate[2] == "nomad":
             current_char_nom = 1
             current_char_war = 0
@@ -81,7 +89,6 @@ class Agent:
 
         # d = √((x2 – x1)² + (y2 – y1)²)
         d = math.sqrt(((int(enemy_state[0])-int(current_state[0])))**2+((int(enemy_state[1])-int(current_state[1]))**2))
-        print(d,"  hey ")
         if d < 200:
             opponent_close = 1
         else:
@@ -165,7 +172,7 @@ class Agent:
             jumping,
             block,
         ]
-        print(np.array(states, dtype=int))
+
         return np.array(states, dtype=int)
         pass
 
@@ -194,51 +201,57 @@ class Agent:
 
             move1 = random.randint(0, 5)
             final_move[move1] = 1
-        #else:
-            #state0 = torch.tensor(state, dtype=torch.float)
-            #prediction= self.model.predict(state0)
-            #move = torch.argmax(prediction)#.item()
-            #final_move = move
+        else:
+            state0 = torch.tensor(state, dtype=torch.float)
+            prediction= self.model(state0)
+            move = torch.argmax(prediction)#.item()
+            final_move[move] = 1
         return final_move
 
     def train(self,fighter_1,fighter_2,state):
-        print(fighter_1)
         #mainstate= game.return_state()
         fighter_1_s = fighter_1.return_state()
         fighter_2_s = fighter_2.return_state()
         gameState = state
-        print(fighter_1_s,fighter_2_s,gameState)
         # get old state:
         self.state_old = self.get_state(fighter_1_s,fighter_2_s,gameState)
 
         # get move
         self.final_move = self.get_action(self.state_old)
-        print(self.final_move)
         # perform move
         return self.final_move
         #reward, done ,score = game.playestep(final_move)
 
-    def train_save(self,fighter_1,fighter_2,state):
+    def train_save(self,fighter_1,fighter_2,state, reward, done , score, damage):
         fighter_1_s = fighter_1.return_state()
         fighter_2_s = fighter_2.return_state()
         gameState = state
         state_new = self.get_state(fighter_1_s,fighter_2_s,gameState)
-        self.train_short_memory(self.state_old, self.final_move, self.reward, state_new,self.done)
+        self.train_short_memory(self.state_old, self.final_move, self.reward, state_new,done)
+        self.damage+=damage
+        self.remember(self.state_old, self.final_move, reward, state_new,done)
 
-        self.remember(self.state_old, self.final_move, self.reward, self.state_new,self.done)
 
-        '''
         if done:
             #train long memory plot results
             #game.reset()
-            agent.num_games+=1
-            agent.train_long_memory()
+            self.num_games+=1
+            self.train_long_memory()
 
-            if score>record:
-                record = score
-                #agent.model.save(0)
-            print("game", agent.num_games,"score", score, "record ", record)
-        #TODO: plot'''
-        pass
+            if self.damage/1000>self.record:
+                self.record = self.damage/1000
+                self.model.save()
+
+
+            print("game", self.num_games,"score", score, "record ", self.record)
+            self.plot_scores.append(score)
+            self.total_score+=score
+            mean_score = self.total_score/ self.num_games
+            self.plot_mean_scores.append(mean_score)
+            self.plot_damage.append(damage)
+            self.damage = 0
+            plot(self.plot_scores,self.plot_mean_scores,self.plot_damage)
+
+
 
 
