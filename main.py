@@ -776,7 +776,7 @@ def menu_play():
                     menu_char("Single Player")
                 if local.checkForInput(mouse):
                     pygame.display.set_caption("Local Multiplayer")
-                    menu_char()
+                    menu_char("Local")
                 if multiplayer.checkForInput(mouse):
                     pygame.display.set_caption("Multi Player Menu")
                     game_client = GameClient(1234)

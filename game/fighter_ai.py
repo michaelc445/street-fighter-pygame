@@ -44,15 +44,14 @@ class Fighter_ai(object):
         current_state = [self.player_x,self.player_y,self.vel_x,self.vel_y, self.shooting_projectile, self.attacking,
                         self.running , self.jump , self.blocking]
 
-
+        player_move[4] = 1
         if -150 < (enemy_state[0] - current_state[0]) < 150:  # enemy close
             print("got")
             if -50 < enemy_state[0] - current_state[0] < 50:  # enemy close
+                player_move[4] = 1
                 if enemy_state[1] < current_state[1] and (current_state[1] - enemy_state[1]) > 100:  # jump
                     opponent_up = 1
                     player_move[2] = 1
-                    print("jump")
-                    print(".")
                 if enemy_state[7]:  # enemy attacking
                     player_move[3] = 1  # block
                 else:
@@ -62,22 +61,17 @@ class Fighter_ai(object):
                 if enemy_state[1] < current_state[1] and (current_state[1] - enemy_state[1]) > 100:  # jump
                     opponent_up = 1
                     player_move[2] = 1
-                    print("jump")
-                    print(".")
                 if enemy_state[7]:  # enemy attacking
                     player_move[3] = 1  # block
                 else:
                     player_move[4] = 1
             else:
-                print("2")
                 if enemy_state[0] > current_state[0]:
                     opponent_left = 0
                     player_move[1] = 1
                     if enemy_state[1] < current_state[1] and (current_state[1] - enemy_state[1]) > 100:  # jump
                         opponent_up = 1
                         player_move[2] = 1
-                        print("jump")
-                        print(".")
                     if enemy_state[7]:  # enemy attacking
                         player_move[3] = 1  # block
                     else:
@@ -87,8 +81,6 @@ class Fighter_ai(object):
                     if enemy_state[1] < current_state[1] and (current_state[1] - enemy_state[1]) > 100:  # jump
                         opponent_up = 1
                         player_move[2] = 1
-                        print("jump")
-                        print(".")
                     if enemy_state[7]:  # enemy attacking
                         player_move[3] = 1  # block
                     else:
@@ -114,7 +106,7 @@ class Fighter_ai(object):
                     player_move[2] = 1
                     print("jump")
                     if enemy_state[7]:  # enemy attacking
-                        player_move[4] = 1  # block
+                        player_move[3] = 1  # block
                     else:
                         player_move[4] = 1
 
@@ -349,7 +341,7 @@ class Fighter_ai(object):
                 #self.actionUpdate(5)
 
             # attack
-            if self.moves[4] ==1 or self.moves[5]==1:
+            elif self.moves[4] ==1 or self.moves[5]==1:
                 # determine attack type
                 if self.moves[4] ==1 :
                     self.attack_type = 1
