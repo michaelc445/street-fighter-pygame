@@ -100,8 +100,8 @@ def game_loop():
                      right_cliff2, right_cliff3, right_cliff4]
 
     elif map == "church":
-        p1_spawn = [900, 286]
-        p2_spawn = [56, 286]
+        p1_spawn = [56, 286]
+        p2_spawn = [900, 286]
         map_chosen = "game/assets/maps/church.png"
         # church obstacles
         middle_floor = Obstacle(150, 530, 700, 80)
