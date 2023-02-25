@@ -58,6 +58,7 @@ class Fighter_ai(object):
                 else:
                     player_move[4] = 1
             elif enemy_state[0] < current_state[0]:  # enemy left
+                player_move[0] = 1
                 if enemy_state[1] < current_state[1] and (current_state[1] - enemy_state[1]) > 100:  # jump
                     opponent_up = 1
                     player_move[2] = 1
