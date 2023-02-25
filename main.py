@@ -940,15 +940,15 @@ def map_select():
 
     #church map preview
     image1 = pygame.image.load(resource_path("game/assets/maps/church.png"))
-    image1 = pygame.transform.scale(image1, (200, 200))
+    image1 = pygame.transform.scale(image1, (250, 125))
     #image_position = (100, 200)
     #mountain map preview
     image2 = pygame.image.load(resource_path("game/assets/maps/mountain.png"))
-    image2 = pygame.transform.scale(image2, (200, 200))
+    image2 = pygame.transform.scale(image2, (250, 125))
     #image_position2 = (400, 200)
     #cliffs map preview
     image3 = pygame.image.load(resource_path("game/assets/maps/cliffs.png"))
-    image3 = pygame.transform.scale(image3, (200, 200))
+    image3 = pygame.transform.scale(image3, (250, 125))
     #image_position3 = (700, 200)
 
     BLACK = (0, 0, 0)
@@ -964,29 +964,29 @@ def map_select():
 
         #church text
         text = font(25).render("Church", True, "White")
-        rect = text.get_rect(center=(200, 150))
+        rect = text.get_rect(center=(200, 180))
         screen.blit(text, rect)
         #mountain text
         text = font(25).render("Mountain", True, "White")
-        rect = text.get_rect(center=(500, 150))
+        rect = text.get_rect(center=(500, 180))
         screen.blit(text, rect)
         #cliffs text
         text = font(25).render("Cliffs", True, "White")
-        rect = text.get_rect(center=(800, 150))
+        rect = text.get_rect(center=(800, 180))
         screen.blit(text, rect)
 
         if map == "church":
-            pygame.draw.rect(screen, WHITE, (97,197,206,206), width=3)
+            pygame.draw.rect(screen, WHITE, (72,235,256,131), width=3)
         else:
-            pygame.draw.rect(screen, BLACK, (97,197,206,206), width=3)
+            pygame.draw.rect(screen, BLACK, (72,235,256,131), width=3)
         if map == "mountain":
-            pygame.draw.rect(screen, WHITE, (397,197,206,206), width=3)
+            pygame.draw.rect(screen, WHITE, (372,235,256,131), width=3)
         else:
-            pygame.draw.rect(screen, BLACK, (397,197,206,206), width=3)
+            pygame.draw.rect(screen, BLACK, (372,235,256,131), width=3)
         if map == "cliffs":
-            pygame.draw.rect(screen, WHITE, (697,197,206,206), width=3)
+            pygame.draw.rect(screen, WHITE, (672,235,256,131), width=3)
         else:
-            pygame.draw.rect(screen, BLACK, (697,197,206,206), width=3)
+            pygame.draw.rect(screen, BLACK, (672,235,256,131), width=3)
 
         play = Button(image=pygame.image.load(resource_path("game/assets/menu/medium.png")), pos=(700, 525),
                         text_input="PLAY", font=font(35), base_color="White", hovering_color="Yellow")
