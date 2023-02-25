@@ -1,6 +1,6 @@
 import pygame
 import sys,os
-class Fighter(object):
+class Fighter_ai(object):
     def __init__(self, player, x, y, flip, punch_sound, projectile_sound, hit_sound,controls):
         self.updateFrame = pygame.time.get_ticks()
         self.action = 0  # 0=idle, 1=attack1, 2=attack2, 3=dying, 4=running, 5=jumping, 6=falling, 7=hit
@@ -32,12 +32,93 @@ class Fighter(object):
         self.controls = controls
         self._start_x = x
         self._start_y = y
+        # ai
         self.player_x = x
         self.player_y = y
+        self.moves=[0,0,0,0,0,0]
 
-    def return_state(self):
-        return  [self.player_x,self.player_y,self.vel_x,self.vel_y, self.shooting_projectile, self.attacking,
+    def set_moves(self,enemy_state):
+        enemy_state = enemy_state
+        print(enemy_state)
+        player_move = [0, 0, 0, 0, 0, 0]
+        current_state = [self.player_x,self.player_y,self.vel_x,self.vel_y, self.shooting_projectile, self.attacking,
                         self.running , self.jump , self.blocking]
+
+
+        if -150 < (enemy_state[0] - current_state[0]) < 150:  # enemy close
+            print("got")
+            if -50 < enemy_state[0] - current_state[0] < 50:  # enemy close
+                if enemy_state[1] < current_state[1] and (current_state[1] - enemy_state[1]) > 100:  # jump
+                    opponent_up = 1
+                    player_move[2] = 1
+                    print("jump")
+                    print(".")
+                if enemy_state[7]:  # enemy attacking
+                    player_move[3] = 1  # block
+                else:
+                    player_move[4] = 1
+            elif enemy_state[0] < current_state[0]:  # enemy left
+                if enemy_state[1] < current_state[1] and (current_state[1] - enemy_state[1]) > 100:  # jump
+                    opponent_up = 1
+                    player_move[2] = 1
+                    print("jump")
+                    print(".")
+                if enemy_state[7]:  # enemy attacking
+                    player_move[3] = 1  # block
+                else:
+                    player_move[4] = 1
+            else:
+                print("2")
+                if enemy_state[0] > current_state[0]:
+                    opponent_left = 0
+                    player_move[1] = 1
+                    if enemy_state[1] < current_state[1] and (current_state[1] - enemy_state[1]) > 100:  # jump
+                        opponent_up = 1
+                        player_move[2] = 1
+                        print("jump")
+                        print(".")
+                    if enemy_state[7]:  # enemy attacking
+                        player_move[3] = 1  # block
+                    else:
+                        player_move[5] = 1
+                else:
+                    player_move[0] = 1
+                    if enemy_state[1] < current_state[1] and (current_state[1] - enemy_state[1]) > 100:  # jump
+                        opponent_up = 1
+                        player_move[2] = 1
+                        print("jump")
+                        print(".")
+                    if enemy_state[7]:  # enemy attacking
+                        player_move[3] = 1  # block
+                    else:
+                        player_move[4] = 1
+
+
+        else:
+            if enemy_state[0] > current_state[0]:
+                opponent_left = 0
+                player_move[1] = 1
+                if enemy_state[1] < current_state[1] and (current_state[1] - enemy_state[1]) > 100:  # jump
+                    opponent_up = 1
+                    player_move[2] = 1
+                    print("jump")
+                if enemy_state[7]:  # enemy attacking
+                    player_move[3] = 1  # block
+                else:
+                    player_move[5] = 1
+            else:
+                player_move[0] = 1
+                if enemy_state[1] < current_state[1] and (current_state[1] - enemy_state[1]) > 100:  # jump
+                    opponent_up = 1
+                    player_move[2] = 1
+                    print("jump")
+                    if enemy_state[7]:  # enemy attacking
+                        player_move[4] = 1  # block
+                    else:
+                        player_move[4] = 1
+
+        self.moves=player_move
+
 
     def loadImages(self, spriteSheet, animationSteps):
         # extract images from sprite sheet
@@ -96,7 +177,7 @@ class Fighter(object):
 
         # check player 1 movement
 
-        self.keybinds(self.controls, surface, target,None)
+        self.keybinds(self.moves, surface, target,None)
 
         # apply gravity
         self.grav(GRAVITY)
@@ -247,13 +328,13 @@ class Fighter(object):
 
         if not self.blocking and not self.attacking and self.alive:
             # move left
-            if key[player_controls["left"]]:
+            if self.moves[0] == 1:
                 self.dx = -self.speed
                 #        self.actionUpdate(4)
                 self.running = True
                 self.flip = True
             # move right
-            if key[player_controls["right"]]:
+            if self.moves[1]==1:
                 self.dx = self.speed
                 #       self.actionUpdate(4)
                 self.running = True
@@ -261,24 +342,24 @@ class Fighter(object):
                 self.flip = False
 
             # jump
-            if key[player_controls["jump"]] and not self.jump:
+            if self.moves[2]==1 and not self.jump:
                 self.vel_y = -30
                 self.jump = True
                 #self.actionUpdate(5)
 
             # attack
-            if key[player_controls["attack1"]] or key[player_controls["attack2"]]:
+            if self.moves[4] ==1 or self.moves[5]==1:
                 # determine attack type
-                if key[player_controls["attack1"]]:
+                if self.moves[4] ==1 :
                     self.attack_type = 1
-                if key[player_controls["attack2"]]:
+                if self.moves[4] ==1 :
                     self.attack_type = 2
 
 
                 self.attack(surface, target)
 
         # block
-        if key[player_controls["block"]]:
+        if self.moves[3]:
             self.color = (0, 0, 255)
             self.blocking = True
         else:

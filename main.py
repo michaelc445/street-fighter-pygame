@@ -1,6 +1,7 @@
 import pygame, asyncio
 from pygame import mixer
 from game.fighter import Fighter
+from game.fighter_ai import Fighter_ai
 from game.online_fighter import OnlineFighter
 from game.characters.nomad import createNomad
 from game.characters.warrior import createWarrior
@@ -79,7 +80,7 @@ def sfx_change(level):
 
 
 # game loop
-def game_loop():
+def game_loop(mode):
     if map == "mountain":
         p1_spawn = [100, 134]
         p2_spawn = [850, 134]
@@ -138,14 +139,28 @@ def game_loop():
     elif p1 == "warrior":
         fighter_1 = createWarrior(Fighter, 1, p1_spawn[0], p1_spawn[1], False, punch_fx, projectile_fx, hit_fx, player1_controls)
 
-    if p2 == "wizard":
-        fighter_2 = createWizard(Fighter, 2, p2_spawn[0], p2_spawn[1], True, punch_fx, projectile_fx, hit_fx, player2_controls)
+    if mode == "Single Player":
+        if p2 == "wizard":
+            fighter_2 = createWizard(Fighter_ai, 2, p2_spawn[0], p2_spawn[1], True, punch_fx, projectile_fx, hit_fx,
+                                     player2_controls)
 
-    elif p2 == "nomad":
-        fighter_2 = createNomad(Fighter, 2, p2_spawn[0], p2_spawn[1], True, punch_fx, projectile_fx, hit_fx, player2_controls)
+        elif p2 == "nomad":
+            print("single nomad")
+            fighter_2 = createNomad(Fighter_ai, 2, p2_spawn[0], p2_spawn[1], True, punch_fx, projectile_fx, hit_fx,
+                                    player2_controls)
 
-    elif p2 == "warrior":
-        fighter_2 = createWarrior(Fighter, 2, p2_spawn[0], p2_spawn[1], True, punch_fx, projectile_fx, hit_fx, player2_controls)
+        elif p2 == "warrior":
+            fighter_2 = createWarrior(Fighter_ai, 2, p2_spawn[0], p2_spawn[1], True, punch_fx, projectile_fx, hit_fx,
+                                      player2_controls)
+    else:
+        if p2 == "wizard":
+            fighter_2 = createWizard(Fighter, 2, p2_spawn[0], p2_spawn[1], True, punch_fx, projectile_fx, hit_fx, player2_controls)
+
+        elif p2 == "nomad":
+            fighter_2 = createNomad(Fighter, 2, p2_spawn[0], p2_spawn[1], True, punch_fx, projectile_fx, hit_fx, player2_controls)
+
+        elif p2 == "warrior":
+            fighter_2 = createWarrior(Fighter, 2, p2_spawn[0], p2_spawn[1], True, punch_fx, projectile_fx, hit_fx, player2_controls)
 
 
     #load map
@@ -159,7 +174,10 @@ def game_loop():
     round_cd = 1500
     last_tick_update = pygame.time.get_ticks()
     while run:
-
+        if mode == "Single Player":
+            player_state = fighter_1.return_state()
+            print(player_state)
+            fighter_2.set_moves(player_state)
         # cap frame rate
         clock.tick(GAME_FPS)
 
@@ -755,7 +773,7 @@ def menu_play():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if single_player.checkForInput(mouse):
                     pygame.display.set_caption("Single Player")
-                    menu_char()
+                    menu_char("Single Player")
                 if local.checkForInput(mouse):
                     pygame.display.set_caption("Local Multiplayer")
                     menu_char()
@@ -778,10 +796,10 @@ def menu_play():
         pygame.display.update()
 
 #character select menu
-def menu_char():
+def menu_char(mode):
     global p1
     global p2
-
+    mode = mode
     p1_color_wizard= "#d7fcd4"
     p1_color_warrior= "#d7fcd4"
     p1_color_nomad= "#d7fcd4"
@@ -847,7 +865,7 @@ def menu_char():
                 #make it so that when you click play, it goes to the game loop
                 if play.checkForInput(mouse):
                     pygame.display.set_caption("Map Select")
-                    map_select()
+                    map_select(mode)
                 if back.checkForInput(mouse):
                     pygame.display.set_caption("Main Menu")
                     leave_menu = True
@@ -890,10 +908,11 @@ def menu_char():
 
 
 #create a map select screen
-def map_select():
+def map_select(mode):
     global map
     leave_menu = False
     clock = pygame.time.Clock()
+    mode = mode
     while True:
         menu_scaled = pygame.transform.scale(menu_bg, (SCREEN_WIDTH, SCREEN_HEIGHT))
         screen.blit(menu_scaled, (0, 0))
@@ -935,7 +954,7 @@ def map_select():
                     mixer.music.load(resource_path("game/assets/audio/background-game.wav"))
                     mixer.music.play(-1)
                     #mixer.music.set_volume(0)
-                    game_loop()
+                    game_loop(mode)
                 if back.checkForInput(mouse):
                     pygame.display.set_caption("Character Select")
                     leave_menu = True
