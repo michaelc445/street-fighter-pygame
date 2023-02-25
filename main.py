@@ -967,12 +967,12 @@ def map_select():
         play = Button(image=pygame.image.load(resource_path("game/assets/menu/medium.png")), pos=(700, 525),
                         text_input="PLAY", font=font(35), base_color="White", hovering_color="Yellow")
         #map select buttons
-        map1 = Button(image=None, pos=(500, 150),
-                        text_input="MOUNTAIN", font=font(25), base_color="#d7fcd4", hovering_color="Yellow")
-        map2 = Button(image=None, pos=(500, 250),
-                        text_input="CLIFFS", font=font(25), base_color="#d7fcd4", hovering_color="Yellow")
-        map3 = Button(image=None, pos=(500, 350),
-                        text_input="CHURCH", font=font(25), base_color="#d7fcd4", hovering_color="Yellow")
+        map1 = Button(image=None, pos=(200, 150),
+                        text_input="Church", font=font(25), base_color="#d7fcd4", hovering_color="Yellow")
+        map2 = Button(image=None, pos=(500, 150),
+                        text_input="Mountain", font=font(25), base_color="#d7fcd4", hovering_color="Yellow")
+        map3 = Button(image=None, pos=(800, 150),
+                        text_input="Cliffs", font=font(25), base_color="#d7fcd4", hovering_color="Yellow")
 
         back = Button(image=pygame.image.load(resource_path("game/assets/menu/medium.png")), pos=(300, 525),
                       text_input="BACK", font=font(35), base_color="White", hovering_color="Yellow")
@@ -1002,11 +1002,11 @@ def map_select():
                     leave_menu = True
                     break
                 if map1.checkForInput(mouse):
-                    map = "mountain"
-                if map2.checkForInput(mouse):
-                    map = "cliffs"
-                if map3.checkForInput(mouse):
                     map = "church"
+                if map2.checkForInput(mouse):
+                    map = "mountain"
+                if map3.checkForInput(mouse):
+                    map = "cliffs"
         if leave_menu:
             break
         clock.tick(MENU_FPS)
