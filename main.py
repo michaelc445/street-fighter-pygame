@@ -951,8 +951,7 @@ def map_select():
     image3 = pygame.transform.scale(image3, (200, 200))
     #image_position3 = (700, 200)
 
-
-    BLUE = (0, 0, 255)
+    BLACK = (0, 0, 0)
 
     while True:
         menu_scaled = pygame.transform.scale(menu_bg, (SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -977,11 +976,17 @@ def map_select():
         screen.blit(text, rect)
 
         if map == "church":
-            pygame.draw.rect(screen, WHITE, (98,198,204,204), width=2)
+            pygame.draw.rect(screen, WHITE, (97,197,206,206), width=3)
+        else:
+            pygame.draw.rect(screen, BLACK, (97,197,206,206), width=3)
         if map == "mountain":
-            pygame.draw.rect(screen, WHITE, (398,198,204,204), width=2)
+            pygame.draw.rect(screen, WHITE, (397,197,206,206), width=3)
+        else:
+            pygame.draw.rect(screen, BLACK, (397,197,206,206), width=3)
         if map == "cliffs":
-            pygame.draw.rect(screen, WHITE, (698,198,204,204), width=2)
+            pygame.draw.rect(screen, WHITE, (697,197,206,206), width=3)
+        else:
+            pygame.draw.rect(screen, BLACK, (697,197,206,206), width=3)
 
         play = Button(image=pygame.image.load(resource_path("game/assets/menu/medium.png")), pos=(700, 525),
                         text_input="PLAY", font=font(35), base_color="White", hovering_color="Yellow")
