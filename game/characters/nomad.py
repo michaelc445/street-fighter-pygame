@@ -35,13 +35,14 @@ def createNomad(inherit_from, player, x, y, flip, punch_sound, projectile_sound,
             self.blockingOffset = [85, 40]
             self.blockingList = self.loadBlockingImages(self.blockAnimation, self.blockingSteps)
             # attack 2 animation
+            self.rectAttack2 = [self.rect.centerx - (2 * self.rect.width * self.flip), self.rect.y,  (2 * self.rect.width), (self.rect.height // 2)]
             self.projectileAnimation = pygame.image.load(inherit_from.resource_path("game/assets/projectiles/tornado.png"))
             self.projectileSteps = 7
             self.imgWidth = 128
             self.imgHeight = 128
             self.offSetX = 200
             self.offSetY = 25
-            self.projectileRect = pygame.Rect((self.rect.centerx - (2 * self.rect.width * self.flip), self.rect.y,  2 * self.rect.width, self.rect.height // 2))
+            self.projectileRect = pygame.Rect(self.rectAttack2[0], self.rectAttack2[1], self.rectAttack2[2], self.rectAttack2[3])
             self.projectile_imgs = self.loadProjectileImages(self.projectileAnimation, self.projectileSteps, self.imgWidth, self.imgHeight, self.projectileRect, self.offSetX, self.offSetY)
             self.animationCooldown = 40
 
@@ -71,12 +72,7 @@ def createNomad(inherit_from, player, x, y, flip, punch_sound, projectile_sound,
                     knockback = 10
                     self.projectile_sound.play()
                     self.projectiles.append(
-                        Projectile(self.rect.centerx - (2 * self.rect.width * self.flip),
-                                   self.rect.y,
-                                   2 * self.rect.width,
-                                   self.rect.height // 2,
-                                   damage,
-                                   knockback,
+                        Projectile(self.rectAttack2[0], self.rectAttack2[1], self.rectAttack2[2], self.rectAttack2[3], damage, knockback,
                                    self, 10 - (20 * self.flip),
                                    self.projectile_imgs,
                                    self.animationCooldown,

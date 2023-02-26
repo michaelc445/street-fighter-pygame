@@ -206,9 +206,12 @@ class Fighter(object):
         font = pygame.font.SysFont("impact", 20)
         text_surface = font.render(player_name, True, player_colour)
         surface.blit(text_surface, (self.rect.x, self.rect.y - 20))
+        #draw hit box
+        #pygame.draw.rect(surface, (230, 176, 30), self.rect)
 
         img = pygame.transform.flip(self.img, self.flip, False)
         surface.blit(img, (self.rect.x - self.offset[0] * self.scale, self.rect.y - self.offset[1] * self.scale))
+
 
         if self.blocking:
             self.drawBlockAnimation(surface)
