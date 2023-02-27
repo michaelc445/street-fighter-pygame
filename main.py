@@ -100,8 +100,8 @@ def game_loop():
                      right_cliff2, right_cliff3, right_cliff4]
 
     elif map == "church":
-        p1_spawn = [900, 286]
-        p2_spawn = [56, 286]
+        p1_spawn = [56, 286]
+        p2_spawn = [900, 286]
         map_chosen = "game/assets/maps/church.png"
         # church obstacles
         middle_floor = Obstacle(150, 530, 700, 80)
@@ -1001,6 +1001,22 @@ def menu_char():
     p2_color_wizard= "#d7fcd4"
     p2_color_warrior= "#d7fcd4"
     p2_color_nomad= "#d7fcd4"
+
+
+    #draw player 1 characters
+    wizard1 = createWizard(Fighter, 1, 285, 175, False, punch_fx, projectile_fx, hit_fx, player1_controls)
+    nomad1 = createNomad(Fighter, 1, 275, 175, False, punch_fx, projectile_fx, hit_fx, player1_controls)
+    warrior1 = createWarrior(Fighter, 1, 265, 175, False, punch_fx, projectile_fx, hit_fx, player1_controls)
+
+
+    #draw player 2 characters
+    wizard2 = createWizard(Fighter, 1, 685, 175, False, punch_fx, projectile_fx, hit_fx, player1_controls)
+    nomad2 = createNomad(Fighter, 1, 675, 175, False, punch_fx, projectile_fx, hit_fx, player1_controls)
+    warrior2 = createWarrior(Fighter, 1, 665, 175, False, punch_fx, projectile_fx, hit_fx, player1_controls)
+
+    p1_color_wizard = "Yellow"
+    p2_color_wizard = "Yellow"
+
     menu_scaled = pygame.transform.scale(menu_bg, (SCREEN_WIDTH, SCREEN_HEIGHT))
     leave_menu = False
     clock = pygame.time.Clock()
@@ -1013,32 +1029,59 @@ def menu_char():
         rect = text.get_rect(center=(500, 50))
         screen.blit(text, rect)
 
+        #draw wizard
+        if p1=="wizard":
+            wizard1.frameUpdate()
+            wizard1.draw(screen, "", RED)
+        #draw warrior
+        if p1=="warrior":
+            warrior1.frameUpdate()
+            warrior1.draw(screen, "", RED)
+        #draw nomad
+        if p1=="nomad":
+            nomad1.frameUpdate()
+            nomad1.draw(screen, "", RED)
+
+
+        #draw wizard
+        if p2=="wizard":
+            wizard2.frameUpdate()
+            wizard2.draw(screen, "", RED)
+        #draw warrior
+        if p2=="warrior":
+            warrior2.frameUpdate()
+            warrior2.draw(screen, "", RED)
+        #draw nomad
+        if p2=="nomad":
+            nomad2.frameUpdate()
+            nomad2.draw(screen, "", RED)    
+
         #player 1
         text = font(15).render("PLAYER 1", True, "#b68f40")
-        rect = text.get_rect(center=(300, 100))
+        rect = text.get_rect(center=(300, 125))
         screen.blit(text, rect)
 
         #player 2
         text = font(15).render("PLAYER 2", True, "#b68f40")
-        rect = text.get_rect(center=(700, 100))
+        rect = text.get_rect(center=(700, 125))
         screen.blit(text, rect)
 
         play = Button(image=pygame.image.load(resource_path("game/assets/menu/medium.png")), pos=(700, 525),
                         text_input="PLAY", font=font(35), base_color="Black", hovering_color="Yellow")
         #character select buttons for player 1
-        p1_wizard = Button(image=None, pos=(300, 275),
-                        text_input="wizard", font=font(25), base_color=p1_color_wizard, hovering_color="Yellow")
-        p1_warrior = Button(image=None, pos=(300, 400),
-                        text_input="warrior", font=font(25), base_color=p1_color_warrior, hovering_color="Yellow")
-        p1_nomad = Button(image=None, pos=(300, 150),
-                        text_input="nomad", font=font(25), base_color=p1_color_nomad, hovering_color="Yellow")
+        p1_wizard = Button(image=None, pos=(175, 350),
+                        text_input="wizard", font=font(16), base_color=p1_color_wizard, hovering_color="Yellow")
+        p1_warrior = Button(image=None, pos=(300, 350),
+                        text_input="warrior", font=font(16), base_color=p1_color_warrior, hovering_color="Yellow")
+        p1_nomad = Button(image=None, pos=(425, 350),
+                        text_input="nomad", font=font(16), base_color=p1_color_nomad, hovering_color="Yellow")
         #character select buttons for player 2
-        p2_wizard = Button(image=None, pos=(700, 275),
-                        text_input="wizard", font=font(25), base_color=p2_color_wizard, hovering_color="Blue")
-        p2_warrior = Button(image=None, pos=(700, 400),
-                        text_input="warrior", font=font(25), base_color=p2_color_warrior, hovering_color="Blue")
-        p2_nomad = Button(image=None, pos=(700, 150),
-                        text_input="nomad", font=font(25), base_color=p2_color_nomad, hovering_color="Blue")
+        p2_wizard = Button(image=None, pos=(575, 350),
+                        text_input="wizard", font=font(16), base_color=p2_color_wizard, hovering_color="Blue")
+        p2_warrior = Button(image=None, pos=(700, 350),
+                        text_input="warrior", font=font(16), base_color=p2_color_warrior, hovering_color="Blue")
+        p2_nomad = Button(image=None, pos=(825, 350),
+                        text_input="nomad", font=font(16), base_color=p2_color_nomad, hovering_color="Blue")
 
         back = Button(image=pygame.image.load(resource_path("game/assets/menu/medium.png")), pos=(300, 525),
                       text_input="BACK", font=font(35), base_color="Black", hovering_color="Yellow")
@@ -1106,6 +1149,22 @@ def map_select():
     global map
     leave_menu = False
     clock = pygame.time.Clock()
+
+    #church map preview
+    image1 = pygame.image.load(resource_path("game/assets/maps/church.png"))
+    image1 = pygame.transform.scale(image1, (250, 125))
+    #image_position = (100, 200)
+    #mountain map preview
+    image2 = pygame.image.load(resource_path("game/assets/maps/mountain.png"))
+    image2 = pygame.transform.scale(image2, (250, 125))
+    #image_position2 = (400, 200)
+    #cliffs map preview
+    image3 = pygame.image.load(resource_path("game/assets/maps/cliffs.png"))
+    image3 = pygame.transform.scale(image3, (250, 125))
+    #image_position3 = (700, 200)
+
+    BLACK = (0, 0, 0)
+
     while True:
         menu_scaled = pygame.transform.scale(menu_bg, (SCREEN_WIDTH, SCREEN_HEIGHT))
         screen.blit(menu_scaled, (0, 0))
@@ -1115,15 +1174,41 @@ def map_select():
         rect = text.get_rect(center=(500, 50))
         screen.blit(text, rect)
 
+        #church text
+        text = font(25).render("Church", True, "White")
+        rect = text.get_rect(center=(200, 180))
+        screen.blit(text, rect)
+        #mountain text
+        text = font(25).render("Mountain", True, "White")
+        rect = text.get_rect(center=(500, 180))
+        screen.blit(text, rect)
+        #cliffs text
+        text = font(25).render("Cliffs", True, "White")
+        rect = text.get_rect(center=(800, 180))
+        screen.blit(text, rect)
+
+        if map == "church":
+            pygame.draw.rect(screen, WHITE, (72,235,256,131), width=3)
+        else:
+            pygame.draw.rect(screen, BLACK, (72,235,256,131), width=3)
+        if map == "mountain":
+            pygame.draw.rect(screen, WHITE, (372,235,256,131), width=3)
+        else:
+            pygame.draw.rect(screen, BLACK, (372,235,256,131), width=3)
+        if map == "cliffs":
+            pygame.draw.rect(screen, WHITE, (672,235,256,131), width=3)
+        else:
+            pygame.draw.rect(screen, BLACK, (672,235,256,131), width=3)
+
         play = Button(image=pygame.image.load(resource_path("game/assets/menu/medium.png")), pos=(700, 525),
                         text_input="PLAY", font=font(35), base_color="White", hovering_color="Yellow")
         #map select buttons
-        map1 = Button(image=None, pos=(500, 150),
-                        text_input="MOUNTAIN", font=font(25), base_color="#d7fcd4", hovering_color="Yellow")
-        map2 = Button(image=None, pos=(500, 250),
-                        text_input="CLIFFS", font=font(25), base_color="#d7fcd4", hovering_color="Yellow")
-        map3 = Button(image=None, pos=(500, 350),
-                        text_input="CHURCH", font=font(25), base_color="#d7fcd4", hovering_color="Yellow")
+        map1 = Button(image=image1, pos=(200, 300),
+                        text_input="", font=font(25), base_color="#d7fcd4", hovering_color="Yellow")
+        map2 = Button(image=image2, pos=(500, 300),
+                        text_input="", font=font(25), base_color="#d7fcd4", hovering_color="Yellow")
+        map3 = Button(image=image3, pos=(800, 300),
+                        text_input="", font=font(25), base_color="#d7fcd4", hovering_color="Yellow")
 
         back = Button(image=pygame.image.load(resource_path("game/assets/menu/medium.png")), pos=(300, 525),
                       text_input="BACK", font=font(35), base_color="White", hovering_color="Yellow")
@@ -1153,11 +1238,11 @@ def map_select():
                     leave_menu = True
                     break
                 if map1.checkForInput(mouse):
-                    map = "mountain"
-                if map2.checkForInput(mouse):
-                    map = "cliffs"
-                if map3.checkForInput(mouse):
                     map = "church"
+                if map2.checkForInput(mouse):
+                    map = "mountain"
+                if map3.checkForInput(mouse):
+                    map = "cliffs"
         if leave_menu:
             break
         clock.tick(MENU_FPS)
