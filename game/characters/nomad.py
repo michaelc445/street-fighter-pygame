@@ -41,11 +41,19 @@ def createNomad(inherit_from, player, x, y, flip, punch_sound, projectile_sound,
             self.imgHeight = 128
             self.offSetX = 200
             self.offSetY = 25
-            self.projectileRect = pygame.Rect((self.rect.centerx - (2 * self.rect.width * self.flip), self.rect.y,  2 * self.rect.width, self.rect.height // 2))
+            self.projectileRect = pygame.Rect(self.getProjectile2X(), self.getProjectile2Y(), self.getProjectile2Width(), self.getProjectile2Height())
             self.projectile_imgs = self.loadProjectileImages(self.projectileAnimation, self.projectileSteps, self.imgWidth, self.imgHeight, self.projectileRect, self.offSetX, self.offSetY)
             self.animationCooldown = 40
 
-
+        # (self.rect.centerx - (2 * self.rect.width * self.flip), self.rect.y,  2 * self.rect.width, self.rect.height // 2)
+        def getProjectile2X(self):
+            return self.rect.centerx - (2 * self.rect.width * self.flip)
+        def getProjectile2Y(self):
+            return self.rect.y
+        def getProjectile2Width(self):
+            return 2 * self.rect.width
+        def getProjectile2Height(self):
+            return self.rect.height // 2
 
         def attack(self, surface, target):
             if self.attack_type == 1:
@@ -71,10 +79,7 @@ def createNomad(inherit_from, player, x, y, flip, punch_sound, projectile_sound,
                     knockback = 10
                     self.projectile_sound.play()
                     self.projectiles.append(
-                        Projectile(self.rect.centerx - (2 * self.rect.width * self.flip),
-                                   self.rect.y,
-                                   2 * self.rect.width,
-                                   self.rect.height // 2,
+                        Projectile(self.getProjectile2X(), self.getProjectile2Y(), self.getProjectile2Width(), self.getProjectile2Height(),
                                    damage,
                                    knockback,
                                    self, 10 - (20 * self.flip),
