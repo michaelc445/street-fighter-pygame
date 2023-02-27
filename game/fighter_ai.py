@@ -39,14 +39,12 @@ class Fighter_ai(object):
 
     def set_moves(self,enemy_state):
         enemy_state = enemy_state
-        print(enemy_state)
         player_move = [0, 0, 0, 0, 0, 0]
         current_state = [self.player_x,self.player_y,self.vel_x,self.vel_y, self.shooting_projectile, self.attacking,
                         self.running , self.jump , self.blocking]
 
         player_move[4] = 1
         if -150 < (enemy_state[0] - current_state[0]) < 150:  # enemy close
-            print("got")
             if -50 < enemy_state[0] - current_state[0] < 50:  # enemy close
                 player_move[4] = 1
                 if enemy_state[1] < current_state[1] and (current_state[1] - enemy_state[1]) > 100:  # jump
@@ -94,7 +92,6 @@ class Fighter_ai(object):
                 if enemy_state[1] < current_state[1] and (current_state[1] - enemy_state[1]) > 100:  # jump
                     opponent_up = 1
                     player_move[2] = 1
-                    print("jump")
                 if enemy_state[7]:  # enemy attacking
                     player_move[3] = 1  # block
                 else:
@@ -104,7 +101,6 @@ class Fighter_ai(object):
                 if enemy_state[1] < current_state[1] and (current_state[1] - enemy_state[1]) > 100:  # jump
                     opponent_up = 1
                     player_move[2] = 1
-                    print("jump")
                     if enemy_state[7]:  # enemy attacking
                         player_move[3] = 1  # block
                     else:
