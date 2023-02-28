@@ -43,10 +43,10 @@ class GameClient(object):
         if self.enemy_address is None:
             raise ConnectionAbortedError
 
-    async def join_lobby(self, ip_address, port, lobby_code):
+    async def join_lobby(self, ip_address, port, lobby_code,name):
         self.server_ip = ip_address
         self.mm_port = port
-        lobby_req = pb.CreateLobbyRequest(lobbyCode=lobby_code)
+        lobby_req = pb.CreateLobbyRequest(lobbyCode=lobby_code,operation=0,name=name)
         self.socket.sendto(lobby_req.SerializeToString(), (ip_address, port))
 
     async def check_game_ready(self):
@@ -92,7 +92,8 @@ class GameClient(object):
             if not join_resp.ok:
                 self.socket.close()
                 sys.exit(1)
-
+            self.enemy_name = join_resp.enemyName
+            print(self.enemy_name)
             self.player_id = join_resp.playerId
             if join_resp.start:
                 break
@@ -125,7 +126,7 @@ class GameClient(object):
         self.socket.sendto(message.SerializeToString(), (self.server_ip, self.game_port))
 
     async def connect(self, ip, port, name, lobbycode=""):
-        self.join_lobby(ip, port, lobbycode)
+        self.join_lobby(ip, port, lobbycode,name)
         time.sleep(2)
         self.join_game(ip, self.game_port, name)
         self.game_ready = True
