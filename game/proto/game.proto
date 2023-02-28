@@ -52,6 +52,8 @@ message JoinLobbyResponse{
   required bool playerId = 2;
   //character select ready if true
   required bool start = 3;
+  //enemy name
+  required string enemyName = 4;
 }
 
 message CharacterSelectRequest{

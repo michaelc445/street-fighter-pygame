@@ -43,11 +43,6 @@ class GameServer(object):
                 data, address = self.socket.recvfrom(self.BUFFER_SIZE)
                 join_req = pb.JoinLobbyRequest()
                 join_req.ParseFromString(data)
-                if join_req.name == "":
-                    resp = pb.JoinLobbyResponse(ok=0, playerId=0)
-                    self.socket.sendto(resp.SerializeToString(), address)
-                    raise ValueError
-
                 self.connections.append(Player(join_req.name, address[0], address[1], len(self.connections)))
                 return True
             except Exception as e:
@@ -166,7 +161,9 @@ class GameServer(object):
 
         # tell clients character select is ready
         for i, person in enumerate(self.connections):
-            resp = pb.JoinLobbyResponse(ok=1, playerId=person.id, start=True)
+            enemy = (i+1) % 2
+            enemy_name = self.connections[enemy].name
+            resp = pb.JoinLobbyResponse(ok=1, playerId=person.id, start=True,enemyName=enemy_name)
             self.socket.sendto(resp.SerializeToString(), (person.ip, person.port))
 
         # get character selections
