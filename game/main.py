@@ -22,8 +22,8 @@ class Main:
         self.player2_controls = {"left": pygame.K_LEFT, "right": pygame.K_RIGHT, "jump": pygame.K_UP,
                             "attack1": pygame.K_n, "attack2": pygame.K_m, "block": pygame.K_DOWN}
 
-        mixer.init
-        pygame.init()
+        mixer.init()
+        #pygame.init()
         # create game window
         self.SCREEN_WIDTH = 1000
         self.SCREEN_HEIGHT = 600
@@ -336,10 +336,10 @@ class Main:
         #print coordinates of player 1
         #locateFighter(fighter_1)
         # update display
-        pygame.display.update()
-        mixer.music.load(self.resource_path("assets/audio/background-menu.wav"))
-        mixer.music.play(-1)
-        mixer.music.set_volume(1)
+
+        #mixer.music.load(self.resource_path("assets/audio/background-menu.wav"))
+        #mixer.music.play(-1)
+        #mixer.music.set_volume(0)
 
     async def update_enemy(self,game_client,local_player,enemy_character):
         for message in game_client.get_updates():
