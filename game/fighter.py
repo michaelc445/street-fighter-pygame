@@ -24,6 +24,8 @@ class Fighter(object):
         self.health = 100
         self.attack1_cooldown = 0
         self.attack2_cooldown = 0
+        self.block_cooldown = 0
+        self.block_duration = 0
         self.color = (255, 0, 0)
         self.punch_sound = punch_sound
         self.projectile_sound = projectile_sound
@@ -102,14 +104,10 @@ class Fighter(object):
         #keep player from phasing through obstacles
         self.obstacle_collision(surface, obstacles)
 
-        # count attack cooldown
-        if self.attack1_cooldown > 0:
-            self.attack1_cooldown -= 1
+        # count down cooldowns
+        self.tick_cooldowns()
 
-        # count projectile cooldown
-        if self.attack2_cooldown > 0:
-            self.attack2_cooldown -= 1
-
+        # die if not on the map
         if self.rect.y > 1000:
             self.health = -1
         # update projectiles
@@ -119,6 +117,25 @@ class Fighter(object):
                 projectile.draw(surface)
                 if not projectile.exists:
                     self.projectiles.remove(projectile)
+
+
+    def tick_cooldowns(self):
+        # count attack cooldown
+        if self.attack1_cooldown > 0:
+            self.attack1_cooldown -= 1
+
+        # count projectile cooldown
+        if self.attack2_cooldown > 0:
+            self.attack2_cooldown -= 1
+
+        # count block cooldown
+        if self.block_cooldown > 0:
+            self.block_cooldown -=1
+
+        # count block duration
+        if self.block_duration > 0:
+            self.block_duration -=1
+
 
     def frameUpdate(self):
         if self.health <= 0:
@@ -146,6 +163,7 @@ class Fighter(object):
             #jumping
             self.actionUpdate(5)
             animation_cooldown = 30
+            
         elif self.running:
             # running
             self.actionUpdate(4)
@@ -210,7 +228,7 @@ class Fighter(object):
         img = pygame.transform.flip(self.img, self.flip, False)
         surface.blit(img, (self.rect.x - self.offset[0] * self.scale, self.rect.y - self.offset[1] * self.scale))
 
-        if self.blocking:
+        if self.block_duration > 0:
             self.drawBlockAnimation(surface)
 
 
@@ -237,7 +255,7 @@ class Fighter(object):
         self.running = False
         #self.jump = False  # uncomment this to fly :)
 
-        if not self.blocking and not self.attacking and self.alive:
+        if not self.attacking and self.alive:
             # move left
             if key[player_controls["left"]]:
                 self.dx = -self.speed
@@ -266,14 +284,15 @@ class Fighter(object):
                 if key[player_controls["attack2"]]:
                     self.attack_type = 2
 
-
                 self.attack(surface, target)
 
         # block
-        if key[player_controls["block"]]:
+        if key[player_controls["block"]] and self.block_cooldown == 0 :
+            self.block_cooldown = 200
+            self.block_duration = 50
             self.color = (0, 0, 255)
             self.blocking = True
-        else:
+        elif self.block_duration == 0:
             self.blocking = False
 
     def grav(self, gravity):
