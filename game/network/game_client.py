@@ -12,6 +12,8 @@ class GameClient(object):
         self.server_ip = None
         self.player_id = None
         self.server_port = None
+        self.player_name = ""
+        self.enemy_name = ""
         self.local_port = local_port
         self.BUFFER_SIZE = 1024
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -93,7 +95,6 @@ class GameClient(object):
                 self.socket.close()
                 sys.exit(1)
             self.enemy_name = join_resp.enemyName
-            print(self.enemy_name)
             self.player_id = join_resp.playerId
             if join_resp.start:
                 break
