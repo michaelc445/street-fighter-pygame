@@ -353,114 +353,7 @@ class Main:
         loop.call_soon(loop.stop)
         loop.run_forever()
 
-    def multi_player_game_loop(self,game_client):
-        #gameKeys = [pygame.K_a, pygame.K_d, pygame.K_w, pygame.K_r, pygame.K_t]
-        pygame.init()
 
-        p1_spawn = [100, 100]
-        p2_spawn = [850, 100]
-        map_chosen = "game/assets/maps/mountain.png"
-        # mountain obstacles
-        middle_ground1 = Obstacle(270, 410, 465, 60)
-        middle_ground2 = Obstacle(290, 470, 425, 60)
-        left_cliff1 = Obstacle(0, 235, 240, 60)
-        left_cliff2 = Obstacle(0, 295, 205, 60)
-        left_cliff3 = Obstacle(0, 355, 150, 60)
-        left_cliff4 = Obstacle(0, 405, 125, 300)
-        right_cliff1 = Obstacle(760, 235, 240, 60)
-        right_cliff2 = Obstacle(800, 295, 205, 60)
-        right_cliff3 = Obstacle(850, 355, 150, 60)
-        right_cliff4 = Obstacle(875, 405, 125, 300)
-
-        obstacles = [middle_ground1, middle_ground2, left_cliff1, left_cliff2, left_cliff3, left_cliff4, right_cliff1,
-                     right_cliff2, right_cliff3, right_cliff4]
-
-        pygame.display.set_caption("Team 5 Project")
-        char_dict = {0: createNomad, 1: createWizard, 2: createWarrior}
-        if game_client.player_id == 0:
-        # create fighters
-            f1 = char_dict[game_client.local_char](OnlineFighter, 1, p1_spawn[0], p1_spawn[1], False, self.punch_fx, self.projectile_fx, self.hit_fx,self.player1_controls)
-            f2 = char_dict[game_client.enemy_char](OnlineFighter, 2, p2_spawn[0], p2_spawn[1], True, self.punch_fx, self.projectile_fx, self.hit_fx,self.player1_controls)
-        else:
-            f1 = char_dict[game_client.enemy_char](OnlineFighter, 1, p1_spawn[0], p1_spawn[1], False, self.punch_fx, self.projectile_fx, self.hit_fx, self.player1_controls)
-            f2 = char_dict[game_client.local_char](OnlineFighter, 2, p2_spawn[0], p2_spawn[1], True, self.punch_fx, self.projectile_fx, self.hit_fx, self.player1_controls)
-
-        fighters = [f1, f2]
-        pick = int(game_client.player_id)
-
-        local_player = fighters[pick]
-        local_player.game_client = game_client
-        enemy = (pick + 1) % 2
-        enemy_character = fighters[enemy]
-
-
-
-        self.bg_image = pygame.image.load(self.resource_path(map_chosen)).convert_alpha()
-        scaled_bg = pygame.transform.scale(self.bg_image, (self.SCREEN_WIDTH, self.SCREEN_HEIGHT))
-        run = True
-        clock = pygame.time.Clock()
-        loop = asyncio.get_event_loop()
-        quit_game_to_menu = False
-        while run:
-
-            # cap frame rate
-            clock.tick(self.GAME_FPS)
-
-            # draw background
-            self.draw_bg(scaled_bg)
-
-            # draw health bars
-            self.draw_health_bar(fighters[0].health, 20, 20)
-            self.draw_health_bar(fighters[1].health, 580, 20)
-
-            # move fighters
-            message = local_player.move(self.SCREEN_WIDTH, self.SCREEN_HEIGHT, self.screen, enemy_character, obstacles, game_client)
-            loop.create_task(local_player.game_client.send_update(message))
-            loop.create_task(game_client.get_update())
-
-            for message in game_client.messages:
-                if message.quit:
-                    local_player.game_client.quit_game()
-                    quit_game_to_menu = True
-                local_player.health = message.enemyHealth
-                if message.restart:
-                    local_player.reset()
-                    enemy_character.reset()
-
-                    break
-
-                enemy_character.move_enemy(self.SCREEN_WIDTH,self.SCREEN_HEIGHT,self.screen,local_player,obstacles,message.keys,message.x,message.y)
-                enemy_character.obstacle_collision(self.screen, obstacles)
-            if quit_game_to_menu:
-                break
-            enemy_character.draw_projectile(local_player,self.screen.get_width(),self.screen)
-            local_player.frameUpdate()
-            enemy_character.frameUpdate()
-            # draw fighters
-            local_player.draw(self.screen)
-            enemy_character.draw(self.screen)
-
-
-
-            # draw obstacles
-            for obstacle in self.obstacles:
-                obstacle.draw(self.screen)
-
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-
-                    local_player.game_client.quit_game()
-
-                    run = False
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_ESCAPE:
-                        run = False
-
-            # if fighter 1 or 2 punches, play the punch.wav sound effect
-
-            # update display
-            pygame.display.update()
-            self.run_once(loop)
 
 
 
@@ -815,16 +708,15 @@ class Main:
     #new menu for when you click play, it should have a "local multiplayer" and a "singleplayer" button
     def menu_play(self):
         menu_scaled = pygame.transform.scale(self.menu_bg, (self.SCREEN_WIDTH, self.SCREEN_HEIGHT))
-        single_player = Button(image=pygame.image.load(self.resource_path("assets/menu/long.png")), pos=(500, 150),
+        single_player = Button(image=pygame.image.load(self.resource_path("assets/menu/long.png")), pos=(500, 215),
                                text_input="SINGLEPLAYER", font=self.font(35), base_color="#d7fcd4", hovering_color="White")
 
-        local = Button(image=pygame.image.load(self.resource_path("assets/menu/long.png")), pos=(500, 275),
+        local = Button(image=pygame.image.load(self.resource_path("assets/menu/long.png")), pos=(500, 345),
                        text_input="LOCAL", font=self.font(35), base_color="#d7fcd4", hovering_color="White")
 
-        multiplayer = Button(image=pygame.image.load(self.resource_path("assets/menu/long.png")), pos=(500, 400),
-                             text_input="MULTIPLAYER", font=self.font(35), base_color="#d7fcd4", hovering_color="White")
 
-        back = Button(image=pygame.image.load(self.resource_path("assets/menu/medium.png")), pos=(500, 525),
+
+        back = Button(image=pygame.image.load(self.resource_path("assets/menu/medium.png")), pos=(500, 465),
                       text_input="BACK", font=self.font(35), base_color="#d7fcd4", hovering_color="White")
         leave_menu = False
         #clock = pygame.time.Clock()
@@ -837,7 +729,7 @@ class Main:
         self.screen.blit(text, rect)
 
 
-        for button in [single_player, local, multiplayer, back]:
+        for button in [single_player, local, back]:
             button.hover(mouse)
             button.update(self.screen)
 
@@ -857,15 +749,7 @@ class Main:
                 if local.checkForInput(mouse):
                     pygame.display.set_caption("Local Multiplayer")
                     self.game_state = "menu_char"
-                if multiplayer.checkForInput(mouse):
-                    pygame.display.set_caption("Multi Player Menu")
-                    game_client = GameClient(1234)
-                    print("connecting to server")
-                    game_client.connect("project.michaelc445.container.netsoc.cloud", 17023, "m")
-                    print(game_client.player_id)
-                    game_client.socket.setblocking(False)
-                    self.multi_char_select(game_client)
-                    self.multi_player_game_loop(game_client)
+
                 if back.checkForInput(mouse):
                     pygame.display.set_caption("Main Menu")
                     self.game_state = "main_menu"
