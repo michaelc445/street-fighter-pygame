@@ -69,11 +69,8 @@ nav a{
  }
  
 .game_container{
-    width: 1000px; 
-    height: 450px;
-    overflow: hidden;
+
     margin-top:100px;
     padding-top: 100px;
-    position:absolute;
     bottom:0;
 }

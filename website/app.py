@@ -83,7 +83,7 @@ def Download():
     return render_template("Download.html",status=status)
 
 @app.route("/about", methods=["GET","POST"])
-def Download():
+def about():
     status = log_status()
     return render_template("about.html",status=status)
 
