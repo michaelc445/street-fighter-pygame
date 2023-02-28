@@ -939,7 +939,7 @@ def multi_lobby_menu(game_client):
                         continue
                     game_client.lobby_searching = True
                     loop.create_task(game_client.join_lobby("176.61.91.52", 1234,
-                                                            lobby_code_input.value),name_input.value)
+                                                            lobby_code_input.value,name_input.value))
 
                 if back.checkForInput(mouse):
                     pygame.display.set_caption("Map Select")
