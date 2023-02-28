@@ -1,3 +1,4 @@
 protobuf==4.21.12
 pygame==2.1.2
 pyinstaller==5.8.0
+pygame_textinput==1.0.1
