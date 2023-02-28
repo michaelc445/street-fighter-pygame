@@ -79,7 +79,12 @@ class Main:
         self.round_cd = 1500
         self.last_tick_update = pygame.time.get_ticks()
         self.scaled_bg = pygame.transform.scale(self.bg_image, (self.SCREEN_WIDTH, self.SCREEN_HEIGHT))
-
+        self.p1_color_warrior = "#d7fcd4"
+        self.p1_color_wizard = "#d7fcd4"
+        self.p1_color_nomad = "#d7fcd4"
+        self.p2_color_wizard = "#d7fcd4"
+        self.p2_color_warrior = "#d7fcd4"
+        self.p2_color_nomad = "#d7fcd4"
 
 
 
@@ -361,127 +366,126 @@ class Main:
     def controls(self):
         leave_menu = False
         clock = pygame.time.Clock()
-        while True:
 
-            controls_mouse = pygame.mouse.get_pos()
 
-            menu_scaled = pygame.transform.scale(self.menu_bg, (self.SCREEN_WIDTH, self.SCREEN_HEIGHT))
-            self.screen.blit(menu_scaled, (0, 0))
+        controls_mouse = pygame.mouse.get_pos()
 
-            controls_text = self.font(50).render("CONTROLS", True, "#b68f40")
-            controls_rect = controls_text.get_rect(center=(500, 65))
-            self.screen.blit(controls_text, controls_rect)
+        menu_scaled = pygame.transform.scale(self.menu_bg, (self.SCREEN_WIDTH, self.SCREEN_HEIGHT))
+        self.screen.blit(menu_scaled, (0, 0))
 
-            # make player 1 controls with a button
-            controls_player1 = Button(image=pygame.image.load(self.resource_path("assets/menu/medium.png")), pos=(500, 175),
-                                      text_input="Player 1", font=self.font(35), base_color="#d7fcd4", hovering_color="White")
+        controls_text = self.font(50).render("CONTROLS", True, "#b68f40")
+        controls_rect = controls_text.get_rect(center=(500, 65))
+        self.screen.blit(controls_text, controls_rect)
 
-            controls_player2 = Button(image=pygame.image.load(self.resource_path("assets/menu/medium.png")), pos=(500, 325),
-                                      text_input="Player 2", font=self.font(35), base_color="#d7fcd4", hovering_color="White")
+        # make player 1 controls with a button
+        controls_player1 = Button(image=pygame.image.load(self.resource_path("assets/menu/medium.png")), pos=(500, 175),
+                                  text_input="Player 1", font=self.font(35), base_color="#d7fcd4", hovering_color="White")
 
-            controls_back = Button(image=pygame.image.load(self.resource_path("assets/menu/medium.png")), pos=(500, 475),
-                                   text_input="BACK", font=self.font(35), base_color="#d7fcd4", hovering_color="White")
+        controls_player2 = Button(image=pygame.image.load(self.resource_path("assets/menu/medium.png")), pos=(500, 325),
+                                  text_input="Player 2", font=self.font(35), base_color="#d7fcd4", hovering_color="White")
 
-            for button in [controls_back, controls_player1, controls_player2]:
-                button.hover(controls_mouse)
-                button.update(self.screen)
+        controls_back = Button(image=pygame.image.load(self.resource_path("assets/menu/medium.png")), pos=(500, 475),
+                               text_input="BACK", font=self.font(35), base_color="#d7fcd4", hovering_color="White")
 
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
+        for button in [controls_back, controls_player1, controls_player2]:
+            button.hover(controls_mouse)
+            button.update(self.screen)
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
                     pygame.quit()
                     sys.exit()
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_ESCAPE:
-                        pygame.quit()
-                        sys.exit()
-                if event.type == pygame.MOUSEBUTTONDOWN:
-                    if controls_back.checkForInput(controls_mouse):
-                        leave_menu = True
-                        break
-                    if controls_player1.checkForInput(controls_mouse):
-                        self.player1()
-                    if controls_player2.checkForInput(controls_mouse):
-                        self.player2()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if controls_back.checkForInput(controls_mouse):
+                    self.game_state = "Options"
+                    break
+                if controls_player1.checkForInput(controls_mouse):
+                    self.game_state="player1"
+                if controls_player2.checkForInput(controls_mouse):
+                    self.game_state="player2"
             if leave_menu:
                 break
             self.clock.tick(self.MENU_FPS)
-            pygame.display.update()
+
 
 
     # fighter1 controls displayed and mutable
     def player1(self):
-        global player1_controls
+
         # player1_keys = {"left": "a", "right": "d", "jump": "w", "block": "s", "attack1": "r", "attack2": "t"}
         leave_menu = False
         clock = pygame.time.Clock()
-        while True:
 
-            player1_mouse = pygame.mouse.get_pos()
+        player1_mouse = pygame.mouse.get_pos()
 
-            menu_scaled = pygame.transform.scale(self.menu_bg, (self.SCREEN_WIDTH, self.SCREEN_HEIGHT))
-            self.screen.blit(menu_scaled, (0, 0))
+        menu_scaled = pygame.transform.scale(self.menu_bg, (self.SCREEN_WIDTH, self.SCREEN_HEIGHT))
+        self.screen.blit(menu_scaled, (0, 0))
 
-            player1_text = self.font(50).render("PLAYER 1", True, "#b68f40")
-            player1_rect = player1_text.get_rect(center=(500, 65))
-            self.screen.blit(player1_text, player1_rect)
+        player1_text = self.font(50).render("PLAYER 1", True, "#b68f40")
+        player1_rect = player1_text.get_rect(center=(500, 65))
+        self.screen.blit(player1_text, player1_rect)
 
-            # make player 1 controls with a button
-            player1_up = Button(image=None, pos=(500, 150),
-                                text_input="Jump : " + pygame.key.name(player1_controls["jump"]), font=self.font(15),
-                                base_color="#d7fcd4", hovering_color="White")
+        # make player 1 controls with a button
+        player1_up = Button(image=None, pos=(500, 150),
+                            text_input="Jump : " + pygame.key.name(self.player1_controls["jump"]), font=self.font(15),
+                            base_color="#d7fcd4", hovering_color="White")
 
-            player1_down = Button(image=None, pos=(500, 200),
-                                  text_input="Block : " + pygame.key.name(player1_controls["block"]),
-                                  font=self.font(15), base_color="#d7fcd4", hovering_color="White")
+        player1_down = Button(image=None, pos=(500, 200),
+                              text_input="Block : " + pygame.key.name(self.player1_controls["block"]),
+                              font=self.font(15), base_color="#d7fcd4", hovering_color="White")
 
-            player1_left = Button(image=None, pos=(500, 250),
-                                  text_input="Left : " + pygame.key.name(player1_controls["left"]), font=self.font(15),
-                                  base_color="#d7fcd4", hovering_color="White")
+        player1_left = Button(image=None, pos=(500, 250),
+                              text_input="Left : " + pygame.key.name(self.player1_controls["left"]), font=self.font(15),
+                              base_color="#d7fcd4", hovering_color="White")
 
-            player1_right = Button(image=None, pos=(500, 300),
-                                   text_input="Right : " + pygame.key.name(player1_controls["right"]),
-                                   font=self.font(15), base_color="#d7fcd4", hovering_color="White")
+        player1_right = Button(image=None, pos=(500, 300),
+                               text_input="Right : " + pygame.key.name(self.player1_controls["right"]),
+                               font=self.font(15), base_color="#d7fcd4", hovering_color="White")
 
-            player1_attack1 = Button(image=None, pos=(500, 350),
-                                     text_input="Punch : " + pygame.key.name(player1_controls["attack1"]),
-                                     font=self.font(15), base_color="#d7fcd4", hovering_color="White")
+        player1_attack1 = Button(image=None, pos=(500, 350),
+                                 text_input="Punch : " + pygame.key.name(self.player1_controls["attack1"]),
+                                 font=self.font(15), base_color="#d7fcd4", hovering_color="White")
 
-            player1_attack2 = Button(image=None, pos=(500, 400),
-                                     text_input="Projectile : " + pygame.key.name(player1_controls["attack2"]),
-                                     font=self.font(15), base_color="#d7fcd4", hovering_color="White")
+        player1_attack2 = Button(image=None, pos=(500, 400),
+                                 text_input="Projectile : " + pygame.key.name(self.player1_controls["attack2"]),
+                                 font=self.font(15), base_color="#d7fcd4", hovering_color="White")
 
-            player1_back = Button(image=pygame.image.load(self.resource_path("assets/menu/medium.png")), pos=(500, 475),
-                                  text_input="BACK", font=self.font(35), base_color="#d7fcd4", hovering_color="White")
+        player1_back = Button(image=pygame.image.load(self.resource_path("assets/menu/medium.png")), pos=(500, 475),
+                              text_input="BACK", font=self.font(35), base_color="#d7fcd4", hovering_color="White")
 
-            for button in [player1_back, player1_up, player1_down, player1_left, player1_right, player1_attack1,
-                           player1_attack2]:
-                button.hover(player1_mouse)
-                button.update(self.screen)
+        for button in [player1_back, player1_up, player1_down, player1_left, player1_right, player1_attack1,
+                       player1_attack2]:
+            button.hover(player1_mouse)
+            button.update(self.screen)
 
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
                     pygame.quit()
                     sys.exit()
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_ESCAPE:
-                        pygame.quit()
-                        sys.exit()
-                if event.type == pygame.MOUSEBUTTONDOWN:
-                    if player1_back.checkForInput(player1_mouse):
-                        leave_menu = True
-                        break
-                    if player1_up.checkForInput(player1_mouse):
-                        self.control_handling(player1_controls, "jump")
-                    if player1_down.checkForInput(player1_mouse):
-                        self.control_handling(player1_controls, "block")
-                    if player1_left.checkForInput(player1_mouse):
-                        self.control_handling(player1_controls, "left")
-                    if player1_right.checkForInput(player1_mouse):
-                        self.control_handling(player1_controls, "right")
-                    if player1_attack1.checkForInput(player1_mouse):
-                        self.control_handling(player1_controls, "attack1")
-                    if player1_attack2.checkForInput(player1_mouse):
-                        self.control_handling(player1_controls, "attack2")
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if player1_back.checkForInput(player1_mouse):
+                    self.game_state="Options"
+                    break
+                if player1_up.checkForInput(player1_mouse):
+                    self.control_handling(self.player1_controls, "jump")
+                if player1_down.checkForInput(player1_mouse):
+                    self.control_handling(self.player1_controls, "block")
+                if player1_left.checkForInput(player1_mouse):
+                    self.control_handling(self.player1_controls, "left")
+                if player1_right.checkForInput(player1_mouse):
+                    self.control_handling(self.player1_controls, "right")
+                if player1_attack1.checkForInput(player1_mouse):
+                    self.control_handling(self.player1_controls, "attack1")
+                if player1_attack2.checkForInput(player1_mouse):
+                    self.control_handling(self.player1_controls, "attack2")
             if leave_menu:
                 break
             clock.tick(self.MENU_FPS)
@@ -490,77 +494,78 @@ class Main:
 
     # fighter2 controls displayed and mutable
     def player2(self):
-        global player2_controls
+
+
         leave_menu = False
         clock = pygame.time.Clock()
-        while True:
-            player2_mouse = pygame.mouse.get_pos()
 
-            menu_scaled = pygame.transform.scale(self.menu_bg, (self.SCREEN_WIDTH, self.SCREEN_HEIGHT))
-            self.screen.blit(menu_scaled, (0, 0))
+        player2_mouse = pygame.mouse.get_pos()
 
-            player2_text = self.font(50).render("PLAYER 2", True, "#b68f40")
-            player2_rect = player2_text.get_rect(center=(500, 65))
-            self.screen.blit(player2_text, player2_rect)
+        menu_scaled = pygame.transform.scale(self.menu_bg, (self.SCREEN_WIDTH, self.SCREEN_HEIGHT))
+        self.screen.blit(menu_scaled, (0, 0))
 
-            # make player 2 controls with a button
-            player2_up = Button(image=None, pos=(500, 150),
-                                text_input="Jump : " + pygame.key.name(player2_controls["jump"]), font=self.font(15),
-                                base_color="#d7fcd4", hovering_color="White")
+        player2_text = self.font(50).render("PLAYER 2", True, "#b68f40")
+        player2_rect = player2_text.get_rect(center=(500, 65))
+        self.screen.blit(player2_text, player2_rect)
 
-            player2_down = Button(image=None, pos=(500, 200),
-                                  text_input="Block : " + pygame.key.name(player2_controls["block"]),
-                                  font=self.font(15), base_color="#d7fcd4", hovering_color="White")
+        # make player 2 controls with a button
+        player2_up = Button(image=None, pos=(500, 150),
+                            text_input="Jump : " + pygame.key.name(self.player2_controls["jump"]), font=self.font(15),
+                            base_color="#d7fcd4", hovering_color="White")
 
-            player2_left = Button(image=None, pos=(500, 250),
-                                  text_input="Left : " + pygame.key.name(player2_controls["left"]), font=self.font(15),
-                                  base_color="#d7fcd4", hovering_color="White")
+        player2_down = Button(image=None, pos=(500, 200),
+                              text_input="Block : " + pygame.key.name(self.player2_controls["block"]),
+                              font=self.font(15), base_color="#d7fcd4", hovering_color="White")
 
-            player2_right = Button(image=None, pos=(500, 300),
-                                   text_input="Right : " + pygame.key.name(player2_controls["right"]),
-                                   font=self.font(15), base_color="#d7fcd4", hovering_color="White")
+        player2_left = Button(image=None, pos=(500, 250),
+                              text_input="Left : " + pygame.key.name(self.player2_controls["left"]), font=self.font(15),
+                              base_color="#d7fcd4", hovering_color="White")
 
-            player2_attack1 = Button(image=None, pos=(500, 350),
-                                     text_input="Punch : " + pygame.key.name(player2_controls["attack1"]),
-                                     font=self.font(15), base_color="#d7fcd4", hovering_color="White")
+        player2_right = Button(image=None, pos=(500, 300),
+                               text_input="Right : " + pygame.key.name(self.player2_controls["right"]),
+                               font=self.font(15), base_color="#d7fcd4", hovering_color="White")
 
-            player2_attack2 = Button(image=None, pos=(500, 400),
-                                     text_input="Projectile : " + pygame.key.name(player2_controls["attack2"]),
-                                     font=self.font(15), base_color="#d7fcd4", hovering_color="White")
+        player2_attack1 = Button(image=None, pos=(500, 350),
+                                 text_input="Punch : " + pygame.key.name(self.player2_controls["attack1"]),
+                                 font=self.font(15), base_color="#d7fcd4", hovering_color="White")
 
-            player2_back = Button(image=pygame.image.load(self.resource_path("assets/menu/medium.png")), pos=(500, 475),
-                                  text_input="BACK", font=self.font(35), base_color="#d7fcd4", hovering_color="White")
+        player2_attack2 = Button(image=None, pos=(500, 400),
+                                 text_input="Projectile : " + pygame.key.name(self.player2_controls["attack2"]),
+                                 font=self.font(15), base_color="#d7fcd4", hovering_color="White")
 
-            for button in [player2_back, player2_up, player2_down, player2_left, player2_right, player2_attack1,
-                           player2_attack2]:
-                button.hover(player2_mouse)
-                button.update(self.screen)
+        player2_back = Button(image=pygame.image.load(self.resource_path("assets/menu/medium.png")), pos=(500, 475),
+                              text_input="BACK", font=self.font(35), base_color="#d7fcd4", hovering_color="White")
 
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
+        for button in [player2_back, player2_up, player2_down, player2_left, player2_right, player2_attack1,
+                       player2_attack2]:
+            button.hover(player2_mouse)
+            button.update(self.screen)
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
                     pygame.quit()
                     sys.exit()
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_ESCAPE:
-                        pygame.quit()
-                        sys.exit()
-                if event.type == pygame.MOUSEBUTTONDOWN:
-                    if player2_back.checkForInput(player2_mouse):
-                        leave_menu = True
-                        break
-                    if player2_up.checkForInput(player2_mouse):
-                        self.control_handling(player2_controls, "jump")
-                        self.control_handling(player2_controls, "jump")
-                    if player2_down.checkForInput(player2_mouse):
-                        self.control_handling(player2_controls, "block")
-                    if player2_left.checkForInput(player2_mouse):
-                        self.control_handling(player2_controls, "left")
-                    if player2_right.checkForInput(player2_mouse):
-                        self.control_handling(player2_controls, "right")
-                    if player2_attack1.checkForInput(player2_mouse):
-                        self.control_handling(player2_controls, "attack1")
-                    if player2_attack2.checkForInput(player2_mouse):
-                        self.control_handling(player2_controls, "attack2")
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if player2_back.checkForInput(player2_mouse):
+                    self.game_state = "Options"
+                    break
+                if player2_up.checkForInput(player2_mouse):
+                    self.control_handling(self.player2_controls, "jump")
+                    self.control_handling(self.player2_controls, "jump")
+                if player2_down.checkForInput(player2_mouse):
+                    self.control_handling(self.player2_controls, "block")
+                if player2_left.checkForInput(player2_mouse):
+                    self.control_handling(self.player2_controls, "left")
+                if player2_right.checkForInput(player2_mouse):
+                    self.control_handling(self.player2_controls, "right")
+                if player2_attack1.checkForInput(player2_mouse):
+                    self.control_handling(self.player2_controls, "attack1")
+                if player2_attack2.checkForInput(player2_mouse):
+                    self.control_handling(self.player2_controls, "attack2")
             if leave_menu:
                 break
             clock.tick(self.MENU_FPS)
@@ -572,46 +577,45 @@ class Main:
         menu_scaled = pygame.transform.scale(self.menu_bg, (self.SCREEN_WIDTH, self.SCREEN_HEIGHT))
         leave_menu = False
         clock = pygame.time.Clock()
-        while True:
-            opt_mouse = pygame.mouse.get_pos()
+
+        opt_mouse = pygame.mouse.get_pos()
 
 
-            self.screen.blit(menu_scaled, (0, 0))
+        self.screen.blit(menu_scaled, (0, 0))
 
-            opt_text = self.font(50).render("OPTIONS", True, "#b68f40")
-            opt_rect = opt_text.get_rect(center=(500, 65))
-            self.screen.blit(opt_text, opt_rect)
+        opt_text = self.font(50).render("OPTIONS", True, "#b68f40")
+        opt_rect = opt_text.get_rect(center=(500, 65))
+        self.screen.blit(opt_text, opt_rect)
 
-            opt_controls = Button(image=pygame.image.load(self.resource_path("assets/menu/medium.png")), pos=(500, 175),
-                                  text_input="CONTROLS", font=self.font(35), base_color="#d7fcd4", hovering_color="White")
-            opt_audio = Button(image=pygame.image.load(self.resource_path("assets/menu/medium.png")), pos=(500, 325),
-                               text_input="AUDIO", font=self.font(35), base_color="#d7fcd4", hovering_color="White")
-            opt_back = Button(image=pygame.image.load(self.resource_path("assets/menu/medium.png")), pos=(500, 475),
-                              text_input="BACK", font=self.font(35), base_color="#d7fcd4", hovering_color="White")
+        opt_controls = Button(image=pygame.image.load(self.resource_path("assets/menu/medium.png")), pos=(500, 175),
+                              text_input="CONTROLS", font=self.font(35), base_color="#d7fcd4", hovering_color="White")
+        opt_audio = Button(image=pygame.image.load(self.resource_path("assets/menu/medium.png")), pos=(500, 325),
+                           text_input="AUDIO", font=self.font(35), base_color="#d7fcd4", hovering_color="White")
+        opt_back = Button(image=pygame.image.load(self.resource_path("assets/menu/medium.png")), pos=(500, 475),
+                          text_input="BACK", font=self.font(35), base_color="#d7fcd4", hovering_color="White")
 
-            for button in [opt_controls, opt_audio, opt_back]:
-                button.hover(opt_mouse)
-                button.update(self.screen)
+        for button in [opt_controls, opt_audio, opt_back]:
+            button.hover(opt_mouse)
+            button.update(self.screen)
 
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
                     pygame.quit()
                     sys.exit()
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_ESCAPE:
-                        pygame.quit()
-                        sys.exit()
-                if event.type == pygame.MOUSEBUTTONDOWN:
-                    if opt_back.checkForInput(opt_mouse):
-                        pygame.display.set_caption("Main Menu")
-                        leave_menu = True
-                        break
-                    if opt_controls.checkForInput(opt_mouse):
-                        pygame.display.set_caption("Controls")
-                        self.controls()
-                    if opt_audio.checkForInput(opt_mouse):
-                        pygame.display.set_caption("Audio")
-                        self.audio()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if opt_back.checkForInput(opt_mouse):
+                    pygame.display.set_caption("Main Menu")
+                    self.game_state="main_menu"
+                if opt_controls.checkForInput(opt_mouse):
+                    pygame.display.set_caption("Controls")
+                    self.game_state="Controls"
+                if opt_audio.checkForInput(opt_mouse):
+                    pygame.display.set_caption("Audio")
+                    self.game_state="Audio"
             if leave_menu:
                 break
             clock.tick(self.MENU_FPS)
@@ -620,85 +624,84 @@ class Main:
 
     # create a function to handle audio levels using buttons for sound effects and music
     def audio(self):
-        menu_scaled = pygame.transform.scale(self.menu_bg, (self.CREEN_WIDTH, self.SCREEN_HEIGHT))
+        menu_scaled = pygame.transform.scale(self.menu_bg, (self.SCREEN_WIDTH, self.SCREEN_HEIGHT))
         leave_menu = False
         clock = pygame.time.Clock()
-        while True:
-            audio_mouse = pygame.mouse.get_pos()
-            self.screen.blit(menu_scaled, (0, 0))
+        audio_mouse = pygame.mouse.get_pos()
+        self.screen.blit(menu_scaled, (0, 0))
 
-            audio_text = self.font(50).render("AUDIO VOLUME", True, "#b68f40")
-            audio_rect = audio_text.get_rect(center=(500, 65))
-            self.screen.blit(audio_text, audio_rect)
-            music_text = self.font(40).render("MUSIC", True, "#b68f40")
-            music_rect = music_text.get_rect(center=(200, 175))
-            self.screen.blit(music_text, music_rect)
-            audio_back = Button(image=pygame.image.load(self.resource_path("assets/menu/medium.png")), pos=(500, 475),
-                                text_input="BACK", font=self.font(35), base_color="#d7fcd4", hovering_color="White")
-            # make 4 buttons for music volume, 1 for each quarter
-            music_0 = Button(image=None, pos=(400, 175),
-                             text_input="0%", font=self.font(25), base_color="#d7fcd4", hovering_color="White")
-            music_1 = Button(image=None, pos=(510, 175),
-                             text_input="25%", font=self.font(25), base_color="#d7fcd4", hovering_color="White")
-            music_2 = Button(image=None, pos=(620, 175),
-                             text_input="50%", font=self.font(25), base_color="#d7fcd4", hovering_color="White")
-            music_3 = Button(image=None, pos=(730, 175),
-                             text_input="75%", font=self.font(25), base_color="#d7fcd4", hovering_color="White")
-            music_4 = Button(image=None, pos=(840, 175),
-                             text_input="100%", font=self.font(25), base_color="#d7fcd4", hovering_color="White")
+        audio_text = self.font(50).render("AUDIO VOLUME", True, "#b68f40")
+        audio_rect = audio_text.get_rect(center=(500, 65))
+        self.screen.blit(audio_text, audio_rect)
+        music_text = self.font(40).render("MUSIC", True, "#b68f40")
+        music_rect = music_text.get_rect(center=(200, 175))
+        self.screen.blit(music_text, music_rect)
+        audio_back = Button(image=pygame.image.load(self.resource_path("assets/menu/medium.png")), pos=(500, 475),
+                            text_input="BACK", font=self.font(35), base_color="#d7fcd4", hovering_color="White")
+        # make 4 buttons for music volume, 1 for each quarter
+        music_0 = Button(image=None, pos=(400, 175),
+                         text_input="0%", font=self.font(25), base_color="#d7fcd4", hovering_color="White")
+        music_1 = Button(image=None, pos=(510, 175),
+                         text_input="25%", font=self.font(25), base_color="#d7fcd4", hovering_color="White")
+        music_2 = Button(image=None, pos=(620, 175),
+                         text_input="50%", font=self.font(25), base_color="#d7fcd4", hovering_color="White")
+        music_3 = Button(image=None, pos=(730, 175),
+                         text_input="75%", font=self.font(25), base_color="#d7fcd4", hovering_color="White")
+        music_4 = Button(image=None, pos=(840, 175),
+                         text_input="100%", font=self.font(25), base_color="#d7fcd4", hovering_color="White")
 
-            # create same buttons as music for sound effects
-            sfx_text = self.font(40).render("SFX", True, "#b68f40")
-            sfx_rect = sfx_text.get_rect(center=(200, 325))
-            self.screen.blit(sfx_text, sfx_rect)
-            sfx_0 = Button(image=None, pos=(400, 325),
-                           text_input="0%", font=self.font(25), base_color="#d7fcd4", hovering_color="White")
-            sfx_1 = Button(image=None, pos=(510, 325),
-                           text_input="25%", font=self.font(25), base_color="#d7fcd4", hovering_color="White")
-            sfx_2 = Button(image=None, pos=(620, 325),
-                           text_input="50%", font=self.font(25), base_color="#d7fcd4", hovering_color="White")
-            sfx_3 = Button(image=None, pos=(730, 325),
-                           text_input="75%", font=self.font(25), base_color="#d7fcd4", hovering_color="White")
-            sfx_4 = Button(image=None, pos=(840, 325),
-                           text_input="100%", font=self.font(25), base_color="#d7fcd4", hovering_color="White")
+        # create same buttons as music for sound effects
+        sfx_text = self.font(40).render("SFX", True, "#b68f40")
+        sfx_rect = sfx_text.get_rect(center=(200, 325))
+        self.screen.blit(sfx_text, sfx_rect)
+        sfx_0 = Button(image=None, pos=(400, 325),
+                       text_input="0%", font=self.font(25), base_color="#d7fcd4", hovering_color="White")
+        sfx_1 = Button(image=None, pos=(510, 325),
+                       text_input="25%", font=self.font(25), base_color="#d7fcd4", hovering_color="White")
+        sfx_2 = Button(image=None, pos=(620, 325),
+                       text_input="50%", font=self.font(25), base_color="#d7fcd4", hovering_color="White")
+        sfx_3 = Button(image=None, pos=(730, 325),
+                       text_input="75%", font=self.font(25), base_color="#d7fcd4", hovering_color="White")
+        sfx_4 = Button(image=None, pos=(840, 325),
+                       text_input="100%", font=self.font(25), base_color="#d7fcd4", hovering_color="White")
 
-            for button in [audio_back, music_0, music_1, music_2, music_3, music_4, sfx_0, sfx_1, sfx_2, sfx_3, sfx_4]:
-                button.hover(audio_mouse)
-                button.update(self.screen)
+        for button in [audio_back, music_0, music_1, music_2, music_3, music_4, sfx_0, sfx_1, sfx_2, sfx_3, sfx_4]:
+            button.hover(audio_mouse)
+            button.update(self.screen)
 
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
                     pygame.quit()
                     sys.exit()
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_ESCAPE:
-                        pygame.quit()
-                        sys.exit()
-                if event.type == pygame.MOUSEBUTTONDOWN:
-                    if audio_back.checkForInput(audio_mouse):
-                        pygame.display.set_caption("Options")
-                        leave_menu = True
-                        break
-                    if music_0.checkForInput(audio_mouse):
-                        mixer.music.set_volume(0)
-                    if music_1.checkForInput(audio_mouse):
-                        mixer.music.set_volume(0.25)
-                    if music_2.checkForInput(audio_mouse):
-                        mixer.music.set_volume(0.5)
-                    if music_3.checkForInput(audio_mouse):
-                        mixer.music.set_volume(0.75)
-                    if music_4.checkForInput(audio_mouse):
-                        mixer.music.set_volume(1)
-                    if sfx_0.checkForInput(audio_mouse):
-                        self.sfx_change(0)
-                    if sfx_1.checkForInput(audio_mouse):
-                        self.sfx_change(1)
-                    if sfx_2.checkForInput(audio_mouse):
-                        self.sfx_change(2)
-                    if sfx_3.checkForInput(audio_mouse):
-                        self.sfx_change(3)
-                    if sfx_4.checkForInput(audio_mouse):
-                        self.sfx_change(4)
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if audio_back.checkForInput(audio_mouse):
+                    pygame.display.set_caption("Options")
+                    self.game_state="Options"
+                    break
+                if music_0.checkForInput(audio_mouse):
+                    mixer.music.set_volume(0)
+                if music_1.checkForInput(audio_mouse):
+                    mixer.music.set_volume(0.25)
+                if music_2.checkForInput(audio_mouse):
+                    mixer.music.set_volume(0.5)
+                if music_3.checkForInput(audio_mouse):
+                    mixer.music.set_volume(0.75)
+                if music_4.checkForInput(audio_mouse):
+                    mixer.music.set_volume(1)
+                if sfx_0.checkForInput(audio_mouse):
+                    self.sfx_change(0)
+                if sfx_1.checkForInput(audio_mouse):
+                    self.sfx_change(1)
+                if sfx_2.checkForInput(audio_mouse):
+                    self.sfx_change(2)
+                if sfx_3.checkForInput(audio_mouse):
+                    self.sfx_change(3)
+                if sfx_4.checkForInput(audio_mouse):
+                    self.sfx_change(4)
             if leave_menu:
                 break
             clock.tick(self.MENU_FPS)
@@ -762,13 +765,7 @@ class Main:
         global p1
         global p2
 
-        p1_color_wizard= "#d7fcd4"
-        p1_color_warrior= "#d7fcd4"
-        p1_color_nomad= "#d7fcd4"
 
-        p2_color_wizard= "#d7fcd4"
-        p2_color_warrior= "#d7fcd4"
-        p2_color_nomad= "#d7fcd4"
         menu_scaled = pygame.transform.scale(self.menu_bg, (self.SCREEN_WIDTH, self.SCREEN_HEIGHT))
         leave_menu = False
         #clock = pygame.time.Clock()
@@ -794,18 +791,18 @@ class Main:
                       text_input="PLAY", font=self.font(35), base_color="Black", hovering_color="Yellow")
         #character select buttons for player 1
         p1_wizard = Button(image=None, pos=(300, 275),
-                        text_input="wizard", font=self.font(25), base_color=p1_color_wizard, hovering_color="Yellow")
+                        text_input="wizard", font=self.font(25), base_color=self.p1_color_wizard, hovering_color="Yellow")
         p1_warrior = Button(image=None, pos=(300, 400),
-                        text_input="warrior", font=self.font(25), base_color=p1_color_warrior, hovering_color="Yellow")
+                        text_input="warrior", font=self.font(25), base_color=self.p1_color_warrior, hovering_color="Yellow")
         p1_nomad = Button(image=None, pos=(300, 150),
-                        text_input="nomad", font=self.font(25), base_color=p1_color_nomad, hovering_color="Yellow")
+                        text_input="nomad", font=self.font(25), base_color=self.p1_color_nomad, hovering_color="Yellow")
         #character select buttons for player 2
         p2_wizard = Button(image=None, pos=(700, 275),
-                        text_input="wizard", font=self.font(25), base_color=p2_color_wizard, hovering_color="Blue")
+                        text_input="wizard", font=self.font(25), base_color=self.p2_color_wizard, hovering_color="Blue")
         p2_warrior = Button(image=None, pos=(700, 400),
-                        text_input="warrior", font=self.font(25), base_color=p2_color_warrior, hovering_color="Blue")
+                        text_input="warrior", font=self.font(25), base_color=self.p2_color_warrior, hovering_color="Blue")
         p2_nomad = Button(image=None, pos=(700, 150),
-                        text_input="nomad", font=self.font(25), base_color=p2_color_nomad, hovering_color="Blue")
+                        text_input="nomad", font=self.font(25), base_color=self.p2_color_nomad, hovering_color="Blue")
 
         back = Button(image=pygame.image.load(self.resource_path("assets/menu/medium.png")), pos=(300, 525),
                       text_input="BACK", font=self.font(35), base_color="Black", hovering_color="Yellow")
@@ -829,37 +826,36 @@ class Main:
                     self.game_state = "map_select"
                 if back.checkForInput(mouse):
                     pygame.display.set_caption("Main Menu")
-                    leave_menu = True
-                    break
+                    self.game_state="main_menu"
                 if p1_wizard.checkForInput(mouse):
-                    p1_color_warrior = "#d7fcd4"
-                    p1_color_wizard = "Yellow"
-                    p1_color_nomad = "#d7fcd4"
+                    self.p1_color_warrior = "#d7fcd4"
+                    self.p1_color_wizard = "Yellow"
+                    self.p1_color_nomad = "#d7fcd4"
                     self.p1= "wizard"
                 if p1_warrior.checkForInput(mouse):
-                    p1_color_warrior = "Yellow"
-                    p1_color_wizard = "#d7fcd4"
-                    p1_color_nomad = "#d7fcd4"
+                    self.p1_color_warrior = "Yellow"
+                    self.p1_color_wizard = "#d7fcd4"
+                    self.p1_color_nomad = "#d7fcd4"
                     self.p1= "warrior"
                 if p1_nomad.checkForInput(mouse):
-                    p1_color_nomad = "Yellow"
-                    p1_color_wizard = "#d7fcd4"
-                    p1_color_warrior = "#d7fcd4"
+                    self.p1_color_nomad = "Yellow"
+                    self.p1_color_wizard = "#d7fcd4"
+                    self.p1_color_warrior = "#d7fcd4"
                     self.p1= "nomad"
                 if p2_wizard.checkForInput(mouse):
-                    p2_color_wizard = "Blue"
-                    p2_color_warrior = "#d7fcd4"
-                    p2_color_nomad = "#d7fcd4"
+                    self.p2_color_wizard = "Blue"
+                    self.p2_color_warrior = "#d7fcd4"
+                    self.p2_color_nomad = "#d7fcd4"
                     self.p2= "wizard"
                 if p2_warrior.checkForInput(mouse):
-                    p2_color_warrior = "Blue"
-                    p2_color_nomad = "#d7fcd4"
-                    p2_color_wizard = "#d7fcd4"
+                    self.p2_color_warrior = "Blue"
+                    self.p2_color_nomad = "#d7fcd4"
+                    self.p2_color_wizard = "#d7fcd4"
                     self.p2= "warrior"
                 if p2_nomad.checkForInput(mouse):
-                    p2_color_nomad = "Blue"
-                    p2_color_wizard = "#d7fcd4"
-                    p2_color_warrior = "#d7fcd4"
+                    self.p2_color_nomad = "Blue"
+                    self.p2_color_wizard = "#d7fcd4"
+                    self.p2_color_warrior = "#d7fcd4"
                     self.p2= "nomad"
 
             if leave_menu:
@@ -916,7 +912,7 @@ class Main:
                     self.game_state = "game_loop"
                 if back.checkForInput(mouse):
                     pygame.display.set_caption("Character Select")
-                    leave_menu = True
+                    self.game_state="menu_char"
                     break
                 if map1.checkForInput(mouse):
                     self.map = "mountain"
@@ -1093,7 +1089,7 @@ class Main:
                     self.game_state = "menu_play"
                 if options.checkForInput(mouse):
                     pygame.display.set_caption("Options")
-                    self.opt()
+                    self.game_state="Options"
                 if quit.checkForInput(mouse):
                     pygame.quit()
                     sys.exit()
@@ -1110,9 +1106,13 @@ class Main:
         return os.path.join(base_path, relative_path)
 
     async def main(self):
+        self.game_state="main_menu"
         pygame.init()
         state_map = {"main_menu": self.main_menu, "menu_play": self.menu_play,
-                     "menu_char": self.menu_char, "game_loop": self.game_loop, "map_select":self.map_select,"game_run":self.game_run}
+                     "menu_char": self.menu_char, "game_loop": self.game_loop,
+                     "map_select":self.map_select,"game_run":self.game_run,
+                     "Options":self.opt,"Audio":self.audio,"Controls":self.controls,"player1":self.player1,
+                     "player2":self.player2}
         self.run = True
         while self.run:
             draw_func = state_map[self.game_state]
