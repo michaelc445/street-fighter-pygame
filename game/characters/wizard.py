@@ -73,7 +73,7 @@ def createWizard(inherit_from, player, x, y, flip, punch_sound, projectile_sound
                     knockback = 10
                     self.projectile_sound.play()
                     self.projectiles.append(
-                        Projectile(self.rect.centerx - (2 * self.rect.width * self.flip), self.rect.y, 2 * self.rect.width,
+                        Projectile(self.rect.centerx - (2 * self.rect.width * self.flip), self.rect.y,  self.rect.width,
                                 self.rect.height, damage, knockback, self, 5 - (10 * self.flip), self.projectile_imgs2, self.animationCooldown2, self.projectileSteps2))
                     self.attack2_cooldown = 150
 

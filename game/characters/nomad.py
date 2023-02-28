@@ -56,13 +56,13 @@ def createNomad(inherit_from, player, x, y, flip, punch_sound, projectile_sound,
                     knockback = 10
                     attacking_rect = pygame.Rect(self.rect.centerx - (2 * self.rect.width * self.flip),
                                                  self.rect.y, 2 * self.rect.width,
-                                                 self.rect.height // 2)
+                                                 self.rect.height)
                     self.attack1_cooldown = 20
 
                     if attacking_rect.colliderect(target.rect) and not target.blocking:
                         target.take_hit(damage, knockback, self.flip)
 
-                    pygame.draw.rect(surface, (0, 255, 0), attacking_rect)
+                    #pygame.draw.rect(surface, (0, 255, 0), attacking_rect)
 
             if self.attack_type == 2:
                 if self.attack2_cooldown == 0:
@@ -73,8 +73,8 @@ def createNomad(inherit_from, player, x, y, flip, punch_sound, projectile_sound,
                     self.projectiles.append(
                         Projectile(self.rect.centerx - (2 * self.rect.width * self.flip),
                                    self.rect.y,
-                                   2 * self.rect.width,
-                                   self.rect.height // 2,
+                                   self.rect.width,
+                                   self.rect.height,
                                    damage,
                                    knockback,
                                    self, 10 - (20 * self.flip),
