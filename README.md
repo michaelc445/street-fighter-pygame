@@ -88,7 +88,7 @@ A zoner with powerful ranged attacks, stay away and poke the enemy from range!
 <p align="left">
   <img src="game/assets/screenshots/warriorchar.png"/>
 </p>
-A bruiser with ppowerful melee attacks, don't let him get close!
+A bruiser with powerful melee attacks, don't let him get close!
 
     light attack - quick sword swing good for staggering the opponent
     heavy attack - heavy sword swing which does devastating damage
