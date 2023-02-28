@@ -341,7 +341,13 @@ def multi_player_game_loop(game_client):
     loop = asyncio.get_event_loop()
     quit_game_to_menu = False
     scores = [0, 0]
-
+    local_name = game_client.player_name
+    if local_name == "":
+        local_name = "YOU"
+    local_colour = (0, 0, 255)
+    enemy_name = game_client.enemy_name
+    if enemy_name == "":
+        enemy_name = "ENEMY"
     while run:
 
         # cap frame rate
@@ -386,8 +392,8 @@ def multi_player_game_loop(game_client):
         local_player.frameUpdate()
         enemy_character.frameUpdate()
         # draw fighters
-        local_player.draw(screen,"",RED)
-        enemy_character.draw(screen,"",RED)
+        local_player.draw(screen,local_name,local_colour)
+        enemy_character.draw(screen,enemy_name,RED)
 
         # draw obstacles
         for obstacle in obstacles:
