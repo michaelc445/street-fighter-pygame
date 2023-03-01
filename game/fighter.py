@@ -34,6 +34,7 @@ class Fighter(object):
         self.controls = controls
         self._start_x = x
         self._start_y = y
+        self.jump_height = 20
 
     def loadImages(self, spriteSheet, animationSteps):
         # extract images from sprite sheet
@@ -86,7 +87,7 @@ class Fighter(object):
         return os.path.join(base_path, relative_path)
     
     def move(self, screen_width, screen_height, surface, target, obstacles):
-        GRAVITY = 2
+        GRAVITY = 1
         self.dx = 0
         self.dy = 0
 
@@ -220,6 +221,7 @@ class Fighter(object):
 
     def draw(self, surface, player_name, player_colour):
         #draw player
+        pygame.draw.rect(surface, self.color, self.rect)
 
         font = pygame.font.SysFont("impact", 20)
         text_surface = font.render(player_name, True, player_colour)
@@ -272,7 +274,7 @@ class Fighter(object):
 
             # jump
             if key[player_controls["jump"]] and not self.jump:
-                self.vel_y = -30
+                self.vel_y = -self.jump_height
                 self.jump = True
                 #self.actionUpdate(5)
 

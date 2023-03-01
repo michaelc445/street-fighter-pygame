@@ -14,7 +14,7 @@ def createNomad(inherit_from, player, x, y, flip, punch_sound, projectile_sound,
             self.rect = pygame.Rect((x, y, width, height))
 
             #character attributes
-            self.speed = 10
+            self.speed = 7
 
             #load nomad sheet
             self.nomadSheet = pygame.image.load(inherit_from.resource_path("game/assets/nomad/nomad_spritesheet.png"))

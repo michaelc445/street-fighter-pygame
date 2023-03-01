@@ -10,7 +10,7 @@ def createWizard(inherit_from, player, x, y, flip, punch_sound, projectile_sound
             width = 60
             self.rect = pygame.Rect((x, y, width, height))
             #character attributes
-            self.speed = 8
+            self.speed = 7
             #load wizard sheet
             self.wizardSheet = pygame.image.load(inherit_from.resource_path("game/assets/wizard/wizard_spritesheet.png"))
             #self.spriteSheet = self.wizardSheet

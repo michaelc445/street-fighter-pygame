@@ -12,7 +12,7 @@ def createWarrior(inherit_from, player, x, y, flip, punch_sound, projectile_soun
             self.rect = pygame.Rect((x, y, width, height))
 
             #character attributes
-            self.speed = 8
+            self.speed = 5
 
             #load warrior sheet
             self.warriorSheet = pygame.image.load(inherit_from.resource_path("game/assets/warrior/warrior_spritesheet.png"))
