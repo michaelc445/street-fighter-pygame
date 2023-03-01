@@ -88,6 +88,11 @@ def about():
     return render_template("about.html",status=status)
 
 
+@app.route("/characters", methods=["GET","POST"])
+def characters():
+    status = log_status()
+    return render_template("characters.html",status=status)
+
 
 #####################################################################################################
 #####################################################################################################
