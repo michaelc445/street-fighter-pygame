@@ -221,7 +221,7 @@ class Fighter(object):
 
     def draw(self, surface, player_name, player_colour):
         #draw player
-        pygame.draw.rect(surface, self.color, self.rect)
+        #pygame.draw.rect(surface, self.color, self.rect)
 
         font = pygame.font.SysFont("impact", 20)
         text_surface = font.render(player_name, True, player_colour)
