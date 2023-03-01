@@ -17,6 +17,7 @@ body{
     padding-bottom: 5em;
     margin:auto;
     background-color: #575753;
+ 
 }
 
 a {
@@ -28,7 +29,6 @@ nav{
     display: inline-block;
     box-sizing: border-box;
     border:black;
-    position:fixed;
     border-style: solid;
     font-size: large;
     color:white;
