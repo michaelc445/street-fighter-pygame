@@ -5,28 +5,58 @@
 {% endblock %}
 {% block main_content %}
     <!--  wrote random stuff to see how things looked  -->
-    <section id="home">
-        <h1>Welcome to Martial Mayhem, the online multiplayer fighting game made with pygame.</h1>
-        <img src="../images/nomadvwizard"/>
-    </section>
-    <article>
-        <h1>
-            Gettiing Started.
-        </h1>
-        <h3>
-            There are two ways to play!!
-        </h3>
-        <ul>
-            <li>
-                Single player and local player are available from this website in the browser
-            </li>
-            <li>
-                All game modes including multiplayer are available through the download link on this website or the project github
-            </li>
-        </ul>
-        <p>
+    <article class="mb-4">
+        <div class="container px-4 px-lg-5">
+            <h1 class="section-heading">Welcome to Martial Mayhem, the online multiplayer fighting game made with pygame.</h1>
+                <div class="row gx-4 gx-lg-5 justify-content-center">
+                    <div class="col-md-10 col-lg-8 col-xl-7">
+                        <img  class="img-fluid" src="./images/nomadvwizard.png"/>
+                    </div>
+                </div>
+                <h1 class="section-heading">
+                    Gettiing Started.
+                </h1>
+                <p>&nbsp</p>
+                <h3 class="post-subtitle">
 
-        </p>
+                    There are two ways to play!!
+                </h3>
+                <ul>
+                    <li>
+                        1. Single player and local player are available from this website in the browser
+                    </li>
+
+                    <li>
+                        2. All game modes including multiplayer are available through the download link on this website or the project github
+                    </li>
+                </ul>
+                <p>&nbsp</p>
+                <h3 class="post-subtitle">
+                    Option 1: Playing on this website.
+                </h3>
+                <p>
+                    All you have to do to begin playing the game in single player is click on the game link at the top of this page.
+                    you will have two options available to you single player and local player where you and your friends can play on the same keyboard!!
+                    But to play in multi-player you will have to download the game to do this follow the steps for option 2.
+                </p>
+                <p>&nbsp</p>
+                <h3 class="post-subtitle">
+                    Option 2: Download from this website or from our GitHub.
+                </h3>
+                <p>
+                    To download from this website simply click the download link at the top of the page or click here <a href="{{  url_for('Download')   }}">Download</a></li>
+                    If you would prefer to download from our GitHub please follow the following steps.
+                <ul>
+                    <li>
+                        1. Go to your favourite terminal, clone the repository at this link <a href="https://github.com/michaelc445/street-fighter-pygame">github.com/michaelc445/street-fighter-pygame</a></li>
+                    </li>
+
+                    <li>
+                        2. All game modes including multiplayer are available through the download link on this website or the project github
+                    </li>
+                </ul>
+                </p>
+        </div>
     </article>
 
 
