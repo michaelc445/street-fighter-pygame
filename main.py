@@ -145,7 +145,6 @@ def game_loop(mode):
                                      player2_controls,True)
 
         elif p2 == "nomad":
-            print("single nomad")
             fighter_2 = createNomad(Fighter_ai, 2, p2_spawn[0], p2_spawn[1], True, punch_fx, projectile_fx, hit_fx,
                                     player2_controls,True)
 
@@ -176,7 +175,7 @@ def game_loop(mode):
     while run:
         if mode == "Single Player":
             player_state = fighter_1.return_state()
-            print(player_state)
+
             fighter_2.set_moves(player_state)
         # cap frame rate
         clock.tick(GAME_FPS)
