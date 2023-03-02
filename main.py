@@ -80,7 +80,7 @@ def sfx_change(level):
 
 
 # game loop
-def game_loop(mode):
+def game_loop():
     if map == "mountain":
         p1_spawn = [100, 134]
         p2_spawn = [850, 134]
@@ -134,7 +134,7 @@ def game_loop(mode):
         fighter_1 = createWizard(Fighter, 1, p1_spawn[0], p1_spawn[1], False, punch_fx, projectile_fx, hit_fx, player1_controls,False)
 
     elif p1 == "nomad":
-        fighter_1 = createNomad(Fighter, 1, p1_spawn[0], p1_spawn[1], False, punch_fx, projectile_fx, hit_fx, player1_controls,False)
+        fighter_1 = createNomad(Fighter, 1, p1_spawn[0], p1_spawn[1], False, punch_fx, projectile_fx, hit_fx, player1_controls)
 
     elif p1 == "warrior":
         fighter_1 = createWarrior(Fighter, 1, p1_spawn[0], p1_spawn[1], False, punch_fx, projectile_fx, hit_fx, player1_controls,False)
@@ -772,10 +772,10 @@ def menu_play():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if single_player.checkForInput(mouse):
                     pygame.display.set_caption("Single Player")
-                    menu_char("Single Player")
+                    menu_char()
                 if local.checkForInput(mouse):
                     pygame.display.set_caption("Local Multiplayer")
-                    menu_char("Local")
+                    menu_char()
                 if multiplayer.checkForInput(mouse):
                     pygame.display.set_caption("Multi Player Menu")
                     game_client = GameClient(1234)
@@ -795,10 +795,10 @@ def menu_play():
         pygame.display.update()
 
 #character select menu
-def menu_char(mode):
+def menu_char():
     global p1
     global p2
-    mode = mode
+
     p1_color_wizard= "#d7fcd4"
     p1_color_warrior= "#d7fcd4"
     p1_color_nomad= "#d7fcd4"
@@ -864,7 +864,7 @@ def menu_char(mode):
                 #make it so that when you click play, it goes to the game loop
                 if play.checkForInput(mouse):
                     pygame.display.set_caption("Map Select")
-                    map_select(mode)
+                    map_select()
                 if back.checkForInput(mouse):
                     pygame.display.set_caption("Main Menu")
                     leave_menu = True
@@ -907,11 +907,26 @@ def menu_char(mode):
 
 
 #create a map select screen
-def map_select(mode):
+def map_select():
     global map
     leave_menu = False
     clock = pygame.time.Clock()
-    mode = mode
+
+    #church map preview
+    image1 = pygame.image.load(resource_path("game/assets/maps/church.png"))
+    image1 = pygame.transform.scale(image1, (250, 125))
+    #image_position = (100, 200)
+    #mountain map preview
+    image2 = pygame.image.load(resource_path("game/assets/maps/mountain.png"))
+    image2 = pygame.transform.scale(image2, (250, 125))
+    #image_position2 = (400, 200)
+    #cliffs map preview
+    image3 = pygame.image.load(resource_path("game/assets/maps/cliffs.png"))
+    image3 = pygame.transform.scale(image3, (250, 125))
+    #image_position3 = (700, 200)
+
+    BLACK = (0, 0, 0)
+
     while True:
         menu_scaled = pygame.transform.scale(menu_bg, (SCREEN_WIDTH, SCREEN_HEIGHT))
         screen.blit(menu_scaled, (0, 0))
@@ -921,15 +936,41 @@ def map_select(mode):
         rect = text.get_rect(center=(500, 50))
         screen.blit(text, rect)
 
+        #church text
+        text = font(25).render("Church", True, "White")
+        rect = text.get_rect(center=(200, 180))
+        screen.blit(text, rect)
+        #mountain text
+        text = font(25).render("Mountain", True, "White")
+        rect = text.get_rect(center=(500, 180))
+        screen.blit(text, rect)
+        #cliffs text
+        text = font(25).render("Cliffs", True, "White")
+        rect = text.get_rect(center=(800, 180))
+        screen.blit(text, rect)
+
+        if map == "church":
+            pygame.draw.rect(screen, WHITE, (72,235,256,131), width=3)
+        else:
+            pygame.draw.rect(screen, BLACK, (72,235,256,131), width=3)
+        if map == "mountain":
+            pygame.draw.rect(screen, WHITE, (372,235,256,131), width=3)
+        else:
+            pygame.draw.rect(screen, BLACK, (372,235,256,131), width=3)
+        if map == "cliffs":
+            pygame.draw.rect(screen, WHITE, (672,235,256,131), width=3)
+        else:
+            pygame.draw.rect(screen, BLACK, (672,235,256,131), width=3)
+
         play = Button(image=pygame.image.load(resource_path("game/assets/menu/medium.png")), pos=(700, 525),
                         text_input="PLAY", font=font(35), base_color="White", hovering_color="Yellow")
         #map select buttons
-        map1 = Button(image=None, pos=(500, 150),
-                        text_input="MOUNTAIN", font=font(25), base_color="#d7fcd4", hovering_color="Yellow")
-        map2 = Button(image=None, pos=(500, 250),
-                        text_input="CLIFFS", font=font(25), base_color="#d7fcd4", hovering_color="Yellow")
-        map3 = Button(image=None, pos=(500, 350),
-                        text_input="CHURCH", font=font(25), base_color="#d7fcd4", hovering_color="Yellow")
+        map1 = Button(image=image1, pos=(200, 300),
+                        text_input="", font=font(25), base_color="#d7fcd4", hovering_color="Yellow")
+        map2 = Button(image=image2, pos=(500, 300),
+                        text_input="", font=font(25), base_color="#d7fcd4", hovering_color="Yellow")
+        map3 = Button(image=image3, pos=(800, 300),
+                        text_input="", font=font(25), base_color="#d7fcd4", hovering_color="Yellow")
 
         back = Button(image=pygame.image.load(resource_path("game/assets/menu/medium.png")), pos=(300, 525),
                       text_input="BACK", font=font(35), base_color="White", hovering_color="Yellow")
@@ -953,17 +994,17 @@ def map_select(mode):
                     mixer.music.load(resource_path("game/assets/audio/background-game.wav"))
                     mixer.music.play(-1)
                     #mixer.music.set_volume(0)
-                    game_loop(mode)
+                    game_loop()
                 if back.checkForInput(mouse):
                     pygame.display.set_caption("Character Select")
                     leave_menu = True
                     break
                 if map1.checkForInput(mouse):
-                    map = "mountain"
-                if map2.checkForInput(mouse):
-                    map = "cliffs"
-                if map3.checkForInput(mouse):
                     map = "church"
+                if map2.checkForInput(mouse):
+                    map = "mountain"
+                if map3.checkForInput(mouse):
+                    map = "cliffs"
         if leave_menu:
             break
         clock.tick(MENU_FPS)
