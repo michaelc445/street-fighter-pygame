@@ -80,7 +80,7 @@ def sfx_change(level):
 
 
 # game loop
-def game_loop():
+def game_loop(mode):
     if map == "mountain":
         p1_spawn = [100, 134]
         p2_spawn = [850, 134]
@@ -134,7 +134,7 @@ def game_loop():
         fighter_1 = createWizard(Fighter, 1, p1_spawn[0], p1_spawn[1], False, punch_fx, projectile_fx, hit_fx, player1_controls,False)
 
     elif p1 == "nomad":
-        fighter_1 = createNomad(Fighter, 1, p1_spawn[0], p1_spawn[1], False, punch_fx, projectile_fx, hit_fx, player1_controls)
+        fighter_1 = createNomad(Fighter, 1, p1_spawn[0], p1_spawn[1], False, punch_fx, projectile_fx, hit_fx, player1_controls,False)
 
     elif p1 == "warrior":
         fighter_1 = createWarrior(Fighter, 1, p1_spawn[0], p1_spawn[1], False, punch_fx, projectile_fx, hit_fx, player1_controls,False)
@@ -772,10 +772,10 @@ def menu_play():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if single_player.checkForInput(mouse):
                     pygame.display.set_caption("Single Player")
-                    menu_char()
+                    menu_char("Single Player")
                 if local.checkForInput(mouse):
                     pygame.display.set_caption("Local Multiplayer")
-                    menu_char()
+                    menu_char("Local")
                 if multiplayer.checkForInput(mouse):
                     pygame.display.set_caption("Multi Player Menu")
                     game_client = GameClient(1234)
@@ -795,10 +795,10 @@ def menu_play():
         pygame.display.update()
 
 #character select menu
-def menu_char():
+def menu_char(mode):
     global p1
     global p2
-
+    mode = mode
     p1_color_wizard= "#d7fcd4"
     p1_color_warrior= "#d7fcd4"
     p1_color_nomad= "#d7fcd4"
@@ -864,7 +864,7 @@ def menu_char():
                 #make it so that when you click play, it goes to the game loop
                 if play.checkForInput(mouse):
                     pygame.display.set_caption("Map Select")
-                    map_select()
+                    map_select(mode)
                 if back.checkForInput(mouse):
                     pygame.display.set_caption("Main Menu")
                     leave_menu = True
@@ -907,11 +907,11 @@ def menu_char():
 
 
 #create a map select screen
-def map_select():
+def map_select(mode):
     global map
     leave_menu = False
     clock = pygame.time.Clock()
-
+    mode=mode
     #church map preview
     image1 = pygame.image.load(resource_path("game/assets/maps/church.png"))
     image1 = pygame.transform.scale(image1, (250, 125))
@@ -994,7 +994,7 @@ def map_select():
                     mixer.music.load(resource_path("game/assets/audio/background-game.wav"))
                     mixer.music.play(-1)
                     #mixer.music.set_volume(0)
-                    game_loop()
+                    game_loop(mode)
                 if back.checkForInput(mouse):
                     pygame.display.set_caption("Character Select")
                     leave_menu = True
