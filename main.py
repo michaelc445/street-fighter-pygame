@@ -342,7 +342,13 @@ def multi_player_game_loop(game_client):
     loop = asyncio.get_event_loop()
     quit_game_to_menu = False
     scores = [0, 0]
-
+    local_name = game_client.player_name
+    if local_name == "":
+        local_name = "YOU"
+    local_colour = (0, 0, 255)
+    enemy_name = game_client.enemy_name
+    if enemy_name == "":
+        enemy_name = "ENEMY"
     while run:
 
         # cap frame rate
@@ -387,8 +393,8 @@ def multi_player_game_loop(game_client):
         local_player.frameUpdate()
         enemy_character.frameUpdate()
         # draw fighters
-        local_player.draw(screen,"",RED)
-        enemy_character.draw(screen,"",RED)
+        local_player.draw(screen,local_name,local_colour)
+        enemy_character.draw(screen,enemy_name,RED)
 
         # draw obstacles
         for obstacle in obstacles:
@@ -948,8 +954,9 @@ def multi_lobby_menu(game_client):
                     if game_client.lobby_searching:
                         continue
                     game_client.lobby_searching = True
+                    game_client.player_name = name_input.value
                     loop.create_task(game_client.join_lobby("176.61.91.52", 1234,
-                                                            lobby_code_input.value))
+                                                            lobby_code_input.value,name_input.value))
 
                 if back.checkForInput(mouse):
                     pygame.display.set_caption("Map Select")
@@ -1025,7 +1032,9 @@ def menu_play():
                         game_client.socket.close()
                         return
                     time.sleep(2)
-                    game_client.join_game("176.61.91.52", game_client.game_port, "m")
+
+                    game_client.join_game("176.61.91.52", game_client.game_port, game_client.player_name)
+
                     # print("connecting to server")
                     # game_client.connect("192.168.0.33", 1234, "m")
                     # print(game_client.player_id)

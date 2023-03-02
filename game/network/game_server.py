@@ -43,11 +43,6 @@ class GameServer(object):
                 data, address = self.socket.recvfrom(self.BUFFER_SIZE)
                 join_req = pb.JoinLobbyRequest()
                 join_req.ParseFromString(data)
-                if join_req.name == "":
-                    resp = pb.JoinLobbyResponse(ok=0, playerId=0)
-                    self.socket.sendto(resp.SerializeToString(), address)
-                    raise ValueError
-
                 self.connections.append(Player(join_req.name, address[0], address[1], len(self.connections)))
                 return True
             except Exception as e:
@@ -166,7 +161,9 @@ class GameServer(object):
 
         # tell clients character select is ready
         for i, person in enumerate(self.connections):
-            resp = pb.JoinLobbyResponse(ok=1, playerId=person.id, start=True)
+            enemy = (i+1) % 2
+            enemy_name = self.connections[enemy].name
+            resp = pb.JoinLobbyResponse(ok=1, playerId=person.id, start=True,enemyName=enemy_name)
             self.socket.sendto(resp.SerializeToString(), (person.ip, person.port))
 
         # get character selections
@@ -206,7 +203,7 @@ class GameServer(object):
 
         return False
 
-    def quit_game(self):
+    def quit_game(self,winner):
         message = pb.Update(health=0,
                             enemyMove=0,
                             moving=False,
@@ -215,14 +212,14 @@ class GameServer(object):
                             x=0,
                             y=0,
                             keys={},
-                            id=0,
+                            id=winner,
                             quit=True,
                             restart=False
                             )
         for player in self.connections:
             self.socket.sendto(message.SerializeToString(), (player.ip, player.port))
 
-    def restart_game(self):
+    def restart_game(self, winner):
         message = pb.Update(health=0,
                             enemyMove=0,
                             moving=False,
@@ -231,7 +228,7 @@ class GameServer(object):
                             x=0,
                             y=0,
                             keys={},
-                            id=0,
+                            id=winner,
                             restart=True,
                             quit=False
                             )
@@ -245,7 +242,7 @@ class GameServer(object):
         while True:
 
             if self.player_timeout(t):
-                self.quit_game()
+                self.quit_game(0)
                 break
 
             try:
@@ -259,24 +256,24 @@ class GameServer(object):
             if game_update.enemyHealth <= 0 and time_in_round.total_seconds() > 5:
                 scores[game_update.id] += 1
                 if scores[game_update.id] == 3:
-                    self.quit_game()
+                    self.quit_game(game_update.id)
                     break
                 round_time = datetime.now()
-                self.restart_game()
+                self.restart_game(game_update.id)
                 continue
-
+            enemy = (game_update.id + 1) % 2
             if game_update.y > 1000 and time_in_round.total_seconds() > 5:
-                enemy = (game_update.id+1) % 2
+
                 scores[enemy] += 1
                 if scores[enemy] == 3:
-                    self.quit_game()
+                    self.quit_game(enemy)
                     break
                 round_time = datetime.now()
-                self.restart_game()
+                self.restart_game(enemy)
                 continue
 
             if game_update.quit:
-                self.quit_game()
+                self.quit_game(enemy)
 
             t[int(game_update.id)] = datetime.now()
             enemy = (game_update.id + 1) % 2
