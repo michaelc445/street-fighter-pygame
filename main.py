@@ -681,6 +681,7 @@ def opt():
 def audio():
     leave_menu = False
     clock = pygame.time.Clock()
+    global background_music_volume
 
 
     audio_back = Button(image=pygame.image.load(button_med), pos=(500, 475),
@@ -749,15 +750,20 @@ def audio():
                     leave_menu = True
                     break
                 if music_0.checkForInput(audio_mouse):
-                    mixer.music.set_volume(0)
+                    background_music_volume = 0
+                    mixer.music.set_volume(background_music_volume)
                 if music_1.checkForInput(audio_mouse):
-                    mixer.music.set_volume(0.25)
+                    background_music_volume = 0.25
+                    mixer.music.set_volume(background_music_volume)
                 if music_2.checkForInput(audio_mouse):
-                    mixer.music.set_volume(0.5)
+                    background_music_volume = 0.5
+                    mixer.music.set_volume(background_music_volume)
                 if music_3.checkForInput(audio_mouse):
-                    mixer.music.set_volume(0.75)
+                    background_music_volume = 0.75
+                    mixer.music.set_volume(background_music_volume)
                 if music_4.checkForInput(audio_mouse):
-                    mixer.music.set_volume(1)
+                    background_music_volume = 1
+                    mixer.music.set_volume(background_music_volume)
                 if sfx_0.checkForInput(audio_mouse):
                     sfx_change(0)
                 if sfx_1.checkForInput(audio_mouse):
@@ -1005,6 +1011,7 @@ def menu_play():
     back = Button(image=pygame.image.load(button_med), pos=(500, 525),
                   text_input="BACK", font=font(35), base_color="#d7fcd4", hovering_color="White")
     leave_menu = False
+
     clock = pygame.time.Clock()
     
     while True:
@@ -1062,7 +1069,7 @@ def menu_play():
             break
         clock.tick(MENU_FPS)
         pygame.display.update()
-
+    
 
 # character select menu
 def menu_char():
@@ -1307,7 +1314,7 @@ def map_select():
                     pygame.display.set_caption("Game")
                     mixer.music.load(resource_path("game/assets/audio/background-game.wav"))
                     mixer.music.play(-1)
-                    #mixer.music.set_volume(0)
+                    mixer.music.set_volume(background_music_volume)
                     game_loop()
                 if back.checkForInput(mouse):
                     pygame.display.set_caption("Character Select")
@@ -1591,9 +1598,11 @@ if __name__ == "__main__":
     menu_bg = pygame.image.load(resource_path("game/assets/menu/main_menu_bg.png")).convert_alpha()
 
     # use mixer to load music and sounds
-    # mixer.music.load("game/assets/audio/main.mp3")
-    # mixer.music.play(-1)
-    mixer.music.set_volume(0)
+    background_music_volume = 0.5
+    mixer.music.load(resource_path("game/assets/audio/background-menu.wav"))
+    mixer.music.play(-1)
+    mixer.music.set_volume(background_music_volume)
+
     punch_fx = mixer.Sound(resource_path("game/assets/audio/punch.wav"))
     projectile_fx = mixer.Sound(resource_path("game/assets/audio/proj.wav"))
     hit_fx = mixer.Sound(resource_path("game/assets/audio/hit.wav"))
@@ -1602,9 +1611,6 @@ if __name__ == "__main__":
     hit_fx.set_volume(0.5)
 
     obstacles = []
-    mixer.music.load(resource_path("game/assets/audio/background-menu.wav"))
-    mixer.music.play(-1)
-    #mixer.music.set_volume(0)
 
     # load buttons
     button_long = resource_path("game/assets/menu/long.png")
@@ -1612,4 +1618,6 @@ if __name__ == "__main__":
 
     #scale the menu background to fit the screen resolution
     menu_scaled = pygame.transform.scale(menu_bg, (SCREEN_WIDTH, SCREEN_HEIGHT))
+
+    
     main_menu()
