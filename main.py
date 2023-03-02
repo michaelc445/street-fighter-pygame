@@ -914,6 +914,9 @@ def multi_lobby_menu(game_client):
 
     name_button = Button(image=pygame.image.load(resource_path("game/assets/menu/small.png")), pos=name_pos,
                          text_input="name", font=font(25), base_color="White", hovering_color="White")
+    
+
+
     while True:
         events = pygame.event.get()
         if game_client.lobby_ready:
@@ -929,6 +932,15 @@ def multi_lobby_menu(game_client):
 
         text = font(35).render("Lobby Menu", True, "#b68f40")
         rect = text.get_rect(center=(500, 50))
+        screen.blit(text, rect)
+
+        
+        text = font(15).render("Player Name", True, "#b68f40")
+        rect = text.get_rect(center=(500, 125))
+        screen.blit(text, rect)
+
+        text = font(15).render("Lobby Code", True, "#b68f40")
+        rect = text.get_rect(center=(500, 275))
         screen.blit(text, rect)
 
         play = Button(image=pygame.image.load(button_med), pos=(700, 525),
