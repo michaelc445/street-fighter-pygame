@@ -98,7 +98,7 @@ class Fighter(object):
 
         # check player 1 movement
         if self.ai:  # if ai instance call fighter ai func
-            self.keyAi(self.controls, surface, target,None)
+            self.keyAi( surface, target,None)
         else:
             self.keybinds(self.controls, surface, target,None)
 

@@ -15,7 +15,7 @@ class Fighter_ai(Fighter):
 
         player_move[4] = 1
         if -150 < (enemy_state[0] - current_state[0]) < 150:  # enemy close
-            if -50 < enemy_state[0] - current_state[0] < 50:  # enemy close
+            if -50 < enemy_state[0] - current_state[0] < 50:  # enemy next to
                 player_move[4] = 1
                 if enemy_state[1] < current_state[1] and (current_state[1] - enemy_state[1]) > 100:  # jump
                     opponent_up = 1
@@ -79,12 +79,10 @@ class Fighter_ai(Fighter):
         self.moves=player_move
 
 
-    def keyAi(self, player_controls, surface, target,key):
-        # get keypresses
+    def keyAi(self, surface, target,key):
         if key is None:
             key = pygame.key.get_pressed()
         self.running = False
-        #self.jump = False  # uncomment this to fly :)
 
         if not self.blocking and not self.attacking and self.alive:
             # move left
@@ -96,7 +94,7 @@ class Fighter_ai(Fighter):
             # move right
             if self.moves[1]==1:
                 self.dx = self.speed
-                #       self.actionUpdate(4)
+
                 self.running = True
 
                 self.flip = False
@@ -105,7 +103,7 @@ class Fighter_ai(Fighter):
             if self.moves[2]==1 and not self.jump:
                 self.vel_y = -30
                 self.jump = True
-                #self.actionUpdate(5)
+
 
             # attack
             elif self.moves[4] ==1 or self.moves[5]==1:
