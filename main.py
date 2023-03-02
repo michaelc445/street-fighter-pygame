@@ -299,11 +299,11 @@ def multi_player_game_loop(game_client):
     char_dict = {0: createNomad, 1: createWizard, 2: createWarrior}
     if game_client.player_id == 0:
     # create fighters
-        f1 = char_dict[game_client.local_char](OnlineFighter, 1, p1_spawn[0], p1_spawn[1], False, punch_fx, projectile_fx, hit_fx,player1_controls)
-        f2 = char_dict[game_client.enemy_char](OnlineFighter, 2, p2_spawn[0], p2_spawn[1], True, punch_fx, projectile_fx, hit_fx,player1_controls)
+        f1 = char_dict[game_client.local_char](OnlineFighter, 1, p1_spawn[0], p1_spawn[1], False, punch_fx, projectile_fx, hit_fx,player1_controls,False)
+        f2 = char_dict[game_client.enemy_char](OnlineFighter, 2, p2_spawn[0], p2_spawn[1], True, punch_fx, projectile_fx, hit_fx,player1_controls,False)
     else:
-        f1 = char_dict[game_client.enemy_char](OnlineFighter, 1, p1_spawn[0], p1_spawn[1], False, punch_fx, projectile_fx, hit_fx, player1_controls)
-        f2 = char_dict[game_client.local_char](OnlineFighter, 2, p2_spawn[0], p2_spawn[1], True, punch_fx, projectile_fx, hit_fx, player1_controls)
+        f1 = char_dict[game_client.enemy_char](OnlineFighter, 1, p1_spawn[0], p1_spawn[1], False, punch_fx, projectile_fx, hit_fx, player1_controls,False)
+        f2 = char_dict[game_client.local_char](OnlineFighter, 2, p2_spawn[0], p2_spawn[1], True, punch_fx, projectile_fx, hit_fx, player1_controls,False)
 
     fighters = [f1, f2]
     pick = int(game_client.player_id)
