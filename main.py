@@ -899,13 +899,15 @@ def multi_lobby_menu(game_client):
     lobby_searching = False
     lobby_in = False
     name_in = False
-    lobby_pos = (700, 325)
-    name_pos = (300, 325)
+    lobby_pos = (500, 350)
+    name_pos = (500, 200)
+
+
     lobby_code_button = Button(image=pygame.image.load(resource_path("game/assets/menu/small.png")), pos=lobby_pos,
-                               text_input="l_code", font=font(10), base_color="White", hovering_color="White")
+                               text_input="lobby code", font=font(25), base_color="White", hovering_color="White")
 
     name_button = Button(image=pygame.image.load(resource_path("game/assets/menu/small.png")), pos=name_pos,
-                         text_input="name", font=font(35), base_color="White", hovering_color="White")
+                         text_input="name", font=font(25), base_color="White", hovering_color="White")
     while True:
         events = pygame.event.get()
         if game_client.lobby_ready:
@@ -932,8 +934,22 @@ def multi_lobby_menu(game_client):
         if lobby_in:
             lobby_code_input.update(events)
 
+
+            if len(lobby_code_input.value) > 6:
+                lobby_code_button = Button(image=pygame.image.load(resource_path("game/assets/menu/small.png")), pos=lobby_pos,
+                            text_input=lobby_code_input.value[:13], font=font(25), base_color="White", hovering_color="White")
+            else:
+                lobby_code_button = Button(image=pygame.image.load(resource_path("game/assets/menu/small.png")), pos=lobby_pos,
+                            text_input=lobby_code_input.value, font=font(35), base_color="White", hovering_color="White")
+
         if name_in:
             name_input.update(events)
+            if len(name_input.value) > 6:
+                name_button = Button(image=pygame.image.load(resource_path("game/assets/menu/small.png")), pos=name_pos,
+                            text_input=name_input.value[:13], font=font(25), base_color="White", hovering_color="White")
+            else:
+                name_button = Button(image=pygame.image.load(resource_path("game/assets/menu/small.png")), pos=name_pos,
+                            text_input=name_input.value, font=font(35), base_color="White", hovering_color="White")
 
         for button in [back, play, name_button, lobby_code_button]:
             button.hover(mouse)
@@ -964,15 +980,10 @@ def multi_lobby_menu(game_client):
                 if lobby_code_button.checkForInput(mouse):
                     lobby_in = True
                     name_in = False
-                elif name_button.checkForInput(mouse):
+                if name_button.checkForInput(mouse):
+                    #check if backspace was clicked, if yes, delete last character from name_input.value
                     lobby_in = False
                     name_in = True
-                else:
-                    lobby_in = False
-                    name_in = False
-
-        screen.blit(lobby_code_input.surface, lobby_pos)
-        screen.blit(name_input.surface, name_pos)
 
         clock.tick(MENU_FPS)
         pygame.display.update()
