@@ -1,10 +1,10 @@
 import pygame
 
 
-def createWarrior(inherit_from, player, x, y, flip, punch_sound, projectile_sound, hit_sound,controls):
+def createWarrior(inherit_from, player, x, y, flip, punch_sound, projectile_sound, hit_sound,controls,ai):
     class Warrior(inherit_from):
-        def __init__(self, player, x, y, flip, punch_sound, projectile_sound, hit_sound,controls):
-            super().__init__(player, x, y, flip, punch_sound, projectile_sound, hit_sound,controls)
+        def __init__(self, player, x, y, flip, punch_sound, projectile_sound, hit_sound,controls,ai):
+            super().__init__(player, x, y, flip, punch_sound, projectile_sound, hit_sound,controls,ai)
 
             #hitbox
             height = 100
@@ -33,6 +33,7 @@ def createWarrior(inherit_from, player, x, y, flip, punch_sound, projectile_soun
             self.blockingSteps = 5
             self.blockingOffset = [85, 40]
             self.blockingList = self.loadBlockingImages(self.blockAnimation, self.blockingSteps)
+            self.ai = ai
 
         def attack(self, surface, target):
             if self.attack_type == 1:
@@ -67,4 +68,4 @@ def createWarrior(inherit_from, player, x, y, flip, punch_sound, projectile_soun
 
                     pygame.draw.rect(surface, (0, 255, 0), attacking_rect)
 
-    return Warrior(player, x, y, flip, punch_sound, projectile_sound, hit_sound,controls)
+    return Warrior(player, x, y, flip, punch_sound, projectile_sound, hit_sound,controls,ai)

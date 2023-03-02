@@ -3,10 +3,10 @@ import pygame
 from game import projectile
 from game.projectile import Projectile
 
-def createNomad(inherit_from, player, x, y, flip, punch_sound, projectile_sound, hit_sound, controls):
+def createNomad(inherit_from, player, x, y, flip, punch_sound, projectile_sound, hit_sound, controls,ai):
     class Nomad(inherit_from):
-        def __init__(self, player, x, y, flip, punch_sound, projectile_sound, hit_sound, controls):
-            super().__init__(player, x, y, flip, punch_sound, projectile_sound, hit_sound, controls)
+        def __init__(self, player, x, y, flip, punch_sound, projectile_sound, hit_sound, controls,ai):
+            super().__init__(player, x, y, flip, punch_sound, projectile_sound, hit_sound, controls,ai)
 
             #hitbox
             height = 100
@@ -44,6 +44,7 @@ def createNomad(inherit_from, player, x, y, flip, punch_sound, projectile_sound,
             self.projectileRect = pygame.Rect((self.rect.centerx - (2 * self.rect.width * self.flip), self.rect.y,  2 * self.rect.width, self.rect.height // 2))
             self.projectile_imgs = self.loadProjectileImages(self.projectileAnimation, self.projectileSteps, self.imgWidth, self.imgHeight, self.projectileRect, self.offSetX, self.offSetY)
             self.animationCooldown = 40
+            self.ai = ai
 
 
 
@@ -83,4 +84,4 @@ def createNomad(inherit_from, player, x, y, flip, punch_sound, projectile_sound,
                                    self.projectileSteps))
                     self.attack2_cooldown = 100
 
-    return Nomad(player, x, y, flip, punch_sound, projectile_sound, hit_sound, controls)
+    return Nomad(player, x, y, flip, punch_sound, projectile_sound, hit_sound, controls,ai)

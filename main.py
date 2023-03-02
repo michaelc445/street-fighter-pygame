@@ -131,36 +131,36 @@ def game_loop(mode):
         obstacles = [left_island1, left_island2, middle_island1, middle_island2, right_cliff1, right_cliff2, right_cliff3, right_cliff4, right_cliff5, right_cliff6]
 
     if p1 == "wizard":
-        fighter_1 = createWizard(Fighter, 1, p1_spawn[0], p1_spawn[1], False, punch_fx, projectile_fx, hit_fx, player1_controls)
+        fighter_1 = createWizard(Fighter, 1, p1_spawn[0], p1_spawn[1], False, punch_fx, projectile_fx, hit_fx, player1_controls,False)
 
     elif p1 == "nomad":
-        fighter_1 = createNomad(Fighter, 1, p1_spawn[0], p1_spawn[1], False, punch_fx, projectile_fx, hit_fx, player1_controls)
+        fighter_1 = createNomad(Fighter, 1, p1_spawn[0], p1_spawn[1], False, punch_fx, projectile_fx, hit_fx, player1_controls,False)
 
     elif p1 == "warrior":
-        fighter_1 = createWarrior(Fighter, 1, p1_spawn[0], p1_spawn[1], False, punch_fx, projectile_fx, hit_fx, player1_controls)
+        fighter_1 = createWarrior(Fighter, 1, p1_spawn[0], p1_spawn[1], False, punch_fx, projectile_fx, hit_fx, player1_controls,False)
 
     if mode == "Single Player":
         if p2 == "wizard":
             fighter_2 = createWizard(Fighter_ai, 2, p2_spawn[0], p2_spawn[1], True, punch_fx, projectile_fx, hit_fx,
-                                     player2_controls)
+                                     player2_controls,True)
 
         elif p2 == "nomad":
             print("single nomad")
             fighter_2 = createNomad(Fighter_ai, 2, p2_spawn[0], p2_spawn[1], True, punch_fx, projectile_fx, hit_fx,
-                                    player2_controls)
+                                    player2_controls,True)
 
         elif p2 == "warrior":
             fighter_2 = createWarrior(Fighter_ai, 2, p2_spawn[0], p2_spawn[1], True, punch_fx, projectile_fx, hit_fx,
-                                      player2_controls)
+                                      player2_controls, True)
     else:
         if p2 == "wizard":
-            fighter_2 = createWizard(Fighter, 2, p2_spawn[0], p2_spawn[1], True, punch_fx, projectile_fx, hit_fx, player2_controls)
+            fighter_2 = createWizard(Fighter, 2, p2_spawn[0], p2_spawn[1], True, punch_fx, projectile_fx, hit_fx, player2_controls,False)
 
         elif p2 == "nomad":
-            fighter_2 = createNomad(Fighter, 2, p2_spawn[0], p2_spawn[1], True, punch_fx, projectile_fx, hit_fx, player2_controls)
+            fighter_2 = createNomad(Fighter, 2, p2_spawn[0], p2_spawn[1], True, punch_fx, projectile_fx, hit_fx, player2_controls,False)
 
         elif p2 == "warrior":
-            fighter_2 = createWarrior(Fighter, 2, p2_spawn[0], p2_spawn[1], True, punch_fx, projectile_fx, hit_fx, player2_controls)
+            fighter_2 = createWarrior(Fighter, 2, p2_spawn[0], p2_spawn[1], True, punch_fx, projectile_fx, hit_fx, player2_controls,False)
 
 
     #load map

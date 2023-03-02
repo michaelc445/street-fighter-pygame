@@ -1,7 +1,7 @@
 import pygame
 import sys,os
 class Fighter(object):
-    def __init__(self, player, x, y, flip, punch_sound, projectile_sound, hit_sound,controls):
+    def __init__(self, player, x, y, flip, punch_sound, projectile_sound, hit_sound,controls,ai):
         self.updateFrame = pygame.time.get_ticks()
         self.action = 0  # 0=idle, 1=attack1, 2=attack2, 3=dying, 4=running, 5=jumping, 6=falling, 7=hit
         self.frame = 0
@@ -34,6 +34,8 @@ class Fighter(object):
         self._start_y = y
         self.player_x = x
         self.player_y = y
+        self.ai = ai
+        self.moves = [0,0,0,0,0,0]
 
     def return_state(self):
         return  [self.player_x,self.player_y,self.vel_x,self.vel_y, self.shooting_projectile, self.attacking,
@@ -95,8 +97,10 @@ class Fighter(object):
         self.dy = 0
 
         # check player 1 movement
-
-        self.keybinds(self.controls, surface, target,None)
+        if self.ai:  # if ai instance call fighter ai func
+            self.keyAi(self.controls, surface, target,None)
+        else:
+            self.keybinds(self.controls, surface, target,None)
 
         # apply gravity
         self.grav(GRAVITY)
