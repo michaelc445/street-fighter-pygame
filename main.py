@@ -1072,6 +1072,9 @@ def menu_play():
                     multi_char_select(game_client)
                     if not multi_map_select(game_client):
                         break
+                    mixer.music.load(resource_path("game/assets/audio/background-game.wav"))
+                    mixer.music.play(-1)
+                    mixer.music.set_volume(background_music_volume)
                     multi_player_game_loop(game_client)
                 if back.checkForInput(mouse):
                     pygame.display.set_caption("Main Menu")

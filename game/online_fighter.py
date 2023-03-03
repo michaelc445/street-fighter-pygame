@@ -60,8 +60,6 @@ class OnlineFighter(Fighter):
             self.health = 0
             self.alive = False
             self.actionUpdate(3)
-        elif self.hit:
-            self.actionUpdate(7)
         elif self.attacking:
             if self.attack_type == 1:
                 self.actionUpdate(1)
@@ -112,13 +110,8 @@ class OnlineFighter(Fighter):
         # keep player on screen
         self.bounds(screen_width, screen_height)
 
-        # count attack cooldown
-        if self.attack1_cooldown > 0:
-            self.attack1_cooldown -= 1
-
-        # count projectile cooldown
-        if self.attack2_cooldown > 0:
-            self.attack2_cooldown -= 1
+        # count down cooldowns
+        self.tick_cooldowns()
 
         # check if they fell off the map
         # if self.rect.y > 1000:
