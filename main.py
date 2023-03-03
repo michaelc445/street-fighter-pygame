@@ -992,7 +992,7 @@ def multi_lobby_menu(game_client):
                         continue
                     game_client.lobby_searching = True
                     game_client.player_name = name_input.value
-                    loop.create_task(game_client.join_lobby("176.61.91.52", 1234,
+                    loop.create_task(game_client.join_lobby(server_address, 17023,
                                                             lobby_code_input.value,name_input.value))
 
                 if back.checkForInput(mouse):
@@ -1066,7 +1066,7 @@ def menu_play():
                         return
                     time.sleep(2)
 
-                    game_client.join_game("176.61.91.52", game_client.game_port, game_client.player_name)
+                    game_client.join_game(server_address, game_client.game_port, game_client.player_name)
 
                     # print("connecting to server")
                     # game_client.connect("192.168.0.33", 1234, "m")
@@ -1630,7 +1630,7 @@ if __name__ == "__main__":
     punch_fx.set_volume(0.15)
     projectile_fx.set_volume(0.5)
     hit_fx.set_volume(0.5)
-
+    server_address = "project.michaelc445.container.netsoc.cloud"
     obstacles = []
 
     # load buttons
@@ -1642,3 +1642,4 @@ if __name__ == "__main__":
 
     
     main_menu()
+
