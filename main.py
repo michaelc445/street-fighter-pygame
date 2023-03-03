@@ -414,6 +414,9 @@ def multi_player_game_loop(game_client):
         # update display
         pygame.display.update()
         run_once(loop)
+    mixer.music.load(resource_path("game/assets/audio/background-game.wav"))
+    mixer.music.play(-1)
+    mixer.music.set_volume(background_music_volume)
 
 
 
@@ -1076,6 +1079,9 @@ def menu_play():
                     mixer.music.play(-1)
                     mixer.music.set_volume(background_music_volume)
                     multi_player_game_loop(game_client)
+                    mixer.music.load(resource_path("game/assets/audio/background-menu.wav"))
+                    mixer.music.play(-1)
+                    mixer.music.set_volume(background_music_volume)
                 if back.checkForInput(mouse):
                     pygame.display.set_caption("Main Menu")
                     leave_menu = True

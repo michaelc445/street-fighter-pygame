@@ -35,8 +35,6 @@ class Projectile():
         surface.blit(img, img_rect)
         
 
-
-
     def move(self, target, screen_width):
         #keep projectile on screen
         if (self.rect.left + self.dx < 0) or (self.rect.right + self.dx > screen_width):

@@ -89,12 +89,6 @@ class OnlineFighter(Fighter):
                     #check if an attack was executed
                 if self.action == 1 or self.action == 2:
                     self.attacking = False
-                #check if damage was taken
-                if self.action == 7:
-                    self.hit = False
-                        #if the player was in the middle of an attack, then the attack is stopped
-                    self.attacking = False
-                    self.frame = 0
 
     def move_enemy(self, screen_width, screen_height, surface, target, obstacles, key,x,y):
         speed = 10
