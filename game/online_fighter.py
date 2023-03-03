@@ -27,8 +27,7 @@ class OnlineFighter(Fighter):
         return message
 
     def move(self, screen_width, screen_height, surface, target, obstacles, game_client):
-        SPEED = 10
-        GRAVITY = 2
+        GRAVITY = 1
         self.dx = 0
         self.dy = 0
         # check player 1 movement
@@ -41,15 +40,8 @@ class OnlineFighter(Fighter):
         # keep player on screen
         self.bounds(screen_width, screen_height)
 
-        # count attack cooldown
-        if self.attack1_cooldown > 0:
-            self.attack1_cooldown -= 1
-
-        # count projectile cooldown
-        if self.attack2_cooldown > 0:
-            self.attack2_cooldown -= 1
-
-
+        # count down cooldowns
+        self.tick_cooldowns()
 
         self.obstacle_collision(surface, obstacles)
         # update projectiles

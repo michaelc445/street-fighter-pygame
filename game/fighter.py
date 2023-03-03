@@ -17,7 +17,6 @@ class Fighter(object):
         #self.blockAnimation = pygame.image.load(self.resource_path("game/assets/projectiles/Wind_Projectile.png"))
         #self.blockingData = [32, 32]
         #self.blockingList = self.loadBlockingImages(self.blockAnimation, 5)
-        self.hit = False
         self.shooting_projectile = False
         self.projectiles = []
         self.attack_type = 0
@@ -145,10 +144,6 @@ class Fighter(object):
             self.alive = False
             self.actionUpdate(3)
             animation_cooldown = 250
-        elif self.hit:
-            # hit
-            self.actionUpdate(7)
-            animation_cooldown = 120
 
         elif self.attacking:
             # attack 1
@@ -170,10 +165,6 @@ class Fighter(object):
             self.actionUpdate(4)
             animation_cooldown = 40
 
-        #elif self.blocking:
-        #    self.drawBlockAnimation(surface)
-        #    animation_cooldown = 40
-
         else:
             self.actionUpdate(0)
             animation_cooldown = 80
@@ -194,12 +185,6 @@ class Fighter(object):
                     #check if an attack was executed
                 if self.action == 1 or self.action == 2:
                     self.attacking = False
-                #check if damage was taken
-                if self.action == 7:
-                    self.hit = False
-                        #if the player was in the middle of an attack, then the attack is stopped
-                    self.attacking = False
-                    self.frame = 0
 
     def actionUpdate(self, newAction):
         if newAction != self.action:
@@ -235,7 +220,6 @@ class Fighter(object):
 
 
     def take_hit(self, damage, knockback, direction):
-        self.hit = True
         self.hit_sound.play()
         self.health -= damage
         self.color = (255, 255, 255)
