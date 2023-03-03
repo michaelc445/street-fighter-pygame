@@ -27,8 +27,7 @@ class OnlineFighter(Fighter):
         return message
 
     def move(self, screen_width, screen_height, surface, target, obstacles, game_client):
-        SPEED = 10
-        GRAVITY = 2
+        GRAVITY = 1
         self.dx = 0
         self.dy = 0
         # check player 1 movement
@@ -41,15 +40,8 @@ class OnlineFighter(Fighter):
         # keep player on screen
         self.bounds(screen_width, screen_height)
 
-        # count attack cooldown
-        if self.attack1_cooldown > 0:
-            self.attack1_cooldown -= 1
-
-        # count projectile cooldown
-        if self.attack2_cooldown > 0:
-            self.attack2_cooldown -= 1
-
-
+        # count down cooldowns
+        self.tick_cooldowns()
 
         self.obstacle_collision(surface, obstacles)
         # update projectiles
@@ -65,31 +57,42 @@ class OnlineFighter(Fighter):
 
     def frameUpdate(self):
         if self.health < 0:
+            # death
             self.health = 0
             self.alive = False
             self.actionUpdate(3)
-        elif self.hit:
-            self.actionUpdate(7)
+            animation_cooldown = 250
+
         elif self.attacking:
+            # attack 1
             if self.attack_type == 1:
                 self.actionUpdate(1)
+                animation_cooldown = 30
+            # attack 2
             elif self.attack_type == 2:
                 self.actionUpdate(2)
+                animation_cooldown = 30
+
         elif self.jump:
+            #jumping
             self.actionUpdate(5)
+            animation_cooldown = 30
+            
         elif self.running:
+            # running
             self.actionUpdate(4)
+            animation_cooldown = 40
+
         else:
             self.actionUpdate(0)
-
-        animation_cooldown = 30
+            animation_cooldown = 80
         #update image
         self.img = self.animationList[self.action][self.frame]
         #check if enough time has passed since the last update
         if pygame.time.get_ticks() - self.updateFrame > animation_cooldown:
             self.frame += 1
             self.updateFrame = pygame.time.get_ticks()
-        #check if the animation has finished
+        #check if the animation has finished h
         if self.frame >= len(self.animationList[self.action]):
             #if the player is dead then end the animation
             if self.alive == False:
@@ -99,20 +102,14 @@ class OnlineFighter(Fighter):
                     #check if an attack was executed
                 if self.action == 1 or self.action == 2:
                     self.attacking = False
-                #check if damage was taken
-                if self.action == 7:
-                    self.hit = False
-                        #if the player was in the middle of an attack, then the attack is stopped
-                    self.attacking = False
-                    self.frame = 0
 
     def move_enemy(self, screen_width, screen_height, surface, target, obstacles, key,x,y):
         speed = 10
         gravity = 2
         self.dx = 0
         self.dy = 0
-        self.x=x
-        self.y=y
+        self.rect.x=x
+        self.rect.y=y
         self.keybinds(self.controls, surface, target, key)
 
         self.grav(gravity)
@@ -120,16 +117,11 @@ class OnlineFighter(Fighter):
         # keep player on screen
         self.bounds(screen_width, screen_height)
 
-        # count attack cooldown
-        if self.attack1_cooldown > 0:
-            self.attack1_cooldown -= 1
-
-        # count projectile cooldown
-        if self.attack2_cooldown > 0:
-            self.attack2_cooldown -= 1
+        # count down cooldowns
+        self.tick_cooldowns()
 
         # check if they fell off the map
-        if self.rect.y > 1000:
-            self.health = -1
+        # if self.rect.y > 1000:
+        #     self.health = -1
 
 

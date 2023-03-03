@@ -22,6 +22,8 @@ class Projectile():
 
     def draw(self, surface):
 
+        # draw hit boxes
+        #pygame.draw.rect(surface, self.color, self.rect)
         if pygame.time.get_ticks() - self.updateFrame > self.animationCooldown:
             if self.frame >= self.numFrames-1:
                 self.frame = 0
@@ -31,10 +33,7 @@ class Projectile():
         img = pygame.transform.flip(img, self.direction, False)
         img_rect = img.get_rect(center=self.rect.center)
         surface.blit(img, img_rect)
-        # draw hit boxes
-        #pygame.draw.rect(surface, self.color, self.rect)
-
-
+        
 
     def move(self, target, screen_width):
         #keep projectile on screen
