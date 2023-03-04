@@ -259,7 +259,6 @@ def game_loop():
 # victory screen
 def victory_screen(screen, winner, scaled_bg, fighter1, fighter2):
     leave_menu = False
-    clock = pygame.time.Clock()
     run = True	
     victory_back = Button(image=None, pos=(500, 405),
                     text_input="Back", font=font(35),
@@ -305,7 +304,6 @@ def victory_screen(screen, winner, scaled_bg, fighter1, fighter2):
                     return idk
         if leave_menu:
             return idk
-        clock.tick(MENU_FPS)
         pygame.display.update()
 
 async def update_enemy(game_client, local_player, enemy_character):
@@ -1668,7 +1666,7 @@ if __name__ == "__main__":
 
     # cap frame rate
     clock = pygame.time.Clock()
-    MENU_FPS = 20
+    MENU_FPS = 45
     GAME_FPS = 60
 
     # define colors
