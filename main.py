@@ -201,7 +201,7 @@ def game_loop():
                     winner = p1_name
                 else:
                     winner = p2_name
-                victory_screen(screen, winner)
+                victory_screen(screen, winner, scaled_bg)
                 break
             if fighter_1.alive:
                 draw_text(p1_name + " WINS", font(50), RED, screen, (SCREEN_WIDTH / 2), SCREEN_HEIGHT / 3)
@@ -252,10 +252,8 @@ def game_loop():
 
 
 # victory screen
-def victory_screen(screen, winner):
+def victory_screen(screen, winner, scaled_bg):
     # set background
-    bg_image = pygame.image.load(resource_path("game/assets/maps/mountain.png")).convert_alpha()
-    scaled_bg = pygame.transform.scale(bg_image, (SCREEN_WIDTH, SCREEN_HEIGHT))
     screen.blit(scaled_bg, (0, 0))
     # draw text
     draw_text("VICTORY", font(80), RED, screen, (SCREEN_WIDTH / 2), SCREEN_HEIGHT / 3)
