@@ -197,11 +197,16 @@ def game_loop():
                 over_time = pygame.time.get_ticks()
         else:
             if scores[0] == 3 or scores[1] == 3:
+                if scores[0] == 3:
+                    winner = p1_name
+                else:
+                    winner = p2_name
+                victory_screen(screen, winner)
                 break
             if fighter_1.alive:
-                draw_text("PLAYER 1 WINS", font(50), RED, screen, (SCREEN_WIDTH / 2), SCREEN_HEIGHT / 3)
+                draw_text(p1_name + " WINS", font(50), RED, screen, (SCREEN_WIDTH / 2), SCREEN_HEIGHT / 3)
             elif fighter_2.alive:
-                draw_text("PLAYER 2 WINS", font(50), RED, screen, (SCREEN_WIDTH / 2), SCREEN_HEIGHT / 3)
+                draw_text(p2_name + " WINS", font(50), RED, screen, (SCREEN_WIDTH / 2), SCREEN_HEIGHT / 3)
             if pygame.time.get_ticks() - over_time >= round_cd:
                 over = False
                 fighter_1.reset()
@@ -215,9 +220,9 @@ def game_loop():
         fighter_2.frameUpdate()
 
         # draw fighters
-        p1_name = "P1"
+        p1_name = "Player 1"
         p1_colour = (0, 0, 255)
-        p2_name = "P2"
+        p2_name = "Player 2"
         p2_colour = (255, 0, 0)
 
         fighter_1.draw(screen, p1_name,p1_colour)
@@ -244,6 +249,19 @@ def game_loop():
     mixer.music.load(resource_path("game/assets/audio/background-menu.wav"))
     mixer.music.play(-1)
     #mixer.music.set_volume(0)
+
+
+# victory screen
+def victory_screen(screen, winner):
+    # set background
+    bg_image = pygame.image.load(resource_path("game/assets/maps/mountain.png")).convert_alpha()
+    scaled_bg = pygame.transform.scale(bg_image, (SCREEN_WIDTH, SCREEN_HEIGHT))
+    screen.blit(scaled_bg, (0, 0))
+    # draw text
+    draw_text("VICTORY", font(80), RED, screen, (SCREEN_WIDTH / 2), SCREEN_HEIGHT / 3)
+    draw_text(str(winner) + " WINS", font(50), RED, screen, (SCREEN_WIDTH / 2), SCREEN_HEIGHT / 2)
+    pygame.display.update()
+    pygame.time.delay(3000)
 
 
 async def update_enemy(game_client, local_player, enemy_character):
