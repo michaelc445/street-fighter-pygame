@@ -261,13 +261,13 @@ def victory_screen(screen, winner, scaled_bg, fighter1, fighter2):
     leave_menu = False
     clock = pygame.time.Clock()
     run = True	
-    victory_back = Button(image=None, pos=(350, 450),
+    victory_back = Button(image=None, pos=(500, 405),
                     text_input="Back", font=font(35),
-                    base_color="#d7fcd4", hovering_color="White")
+                    base_color="White", hovering_color="Grey")
 
-    victory_rematch = Button(image=None, pos=(600, 450),
+    victory_rematch = Button(image=None, pos=(500, 475),
                     text_input="Rematch", font=font(35),
-                    base_color="#d7fcd4", hovering_color="White") 
+                    base_color="White", hovering_color="Grey") 
 
     while run:
         # set background
