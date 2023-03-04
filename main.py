@@ -992,7 +992,7 @@ def multi_lobby_menu(game_client):
                         continue
                     game_client.lobby_searching = True
                     game_client.player_name = name_input.value
-                    loop.create_task(game_client.join_lobby(server_address, 17023,
+                    loop.create_task(game_client.join_lobby(server_address, 17311,
                                                             lobby_code_input.value,name_input.value))
 
                 if back.checkForInput(mouse):
@@ -1630,7 +1630,7 @@ if __name__ == "__main__":
     punch_fx.set_volume(0.15)
     projectile_fx.set_volume(0.5)
     hit_fx.set_volume(0.5)
-    server_address = "project.michaelc445.container.netsoc.cloud"
+    server_address = "martial-mayhem.michaelc445.container.netsoc.cloud"
     obstacles = []
 
     # load buttons
