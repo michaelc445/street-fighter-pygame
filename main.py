@@ -152,7 +152,7 @@ def game_loop():
     bg_image = pygame.image.load(resource_path(map_chosen)).convert_alpha()
     scaled_bg = pygame.transform.scale(bg_image, (SCREEN_WIDTH, SCREEN_HEIGHT))
     run = True
-    scores = [0,2]
+    scores = [0,0]
     #round variables
     intro = 3
     over = False
@@ -182,7 +182,7 @@ def game_loop():
             draw_text(str(intro), font(80), RED, screen, (SCREEN_WIDTH / 2), SCREEN_HEIGHT / 3)
             #reduce intro by 1 every second using pygame.time.get_ticks()
             if pygame.time.get_ticks() - last_tick_update >= 1000:
-                intro -= 3
+                intro -= 1
                 last_tick_update = pygame.time.get_ticks()
 
 
@@ -202,8 +202,6 @@ def game_loop():
                 draw_text(p2_name + " WINS", font(50), RED, screen, (SCREEN_WIDTH / 2), SCREEN_HEIGHT / 3)
             if pygame.time.get_ticks() - over_time >= round_cd:
                 over = False
-                fighter_1.reset()
-                fighter_2.reset()
                 if scores[0] == 3 or scores[1] == 3:
                     if scores[0] == 3:
                         winner = p1_name
@@ -214,6 +212,9 @@ def game_loop():
                         scores = [0,0]
                     else:
                         break
+                fighter_1.flip = False
+                fighter_1.reset()
+                fighter_2.reset()
 
 
 
@@ -229,7 +230,7 @@ def game_loop():
         p2_colour = (255, 0, 0)
 
         fighter_1.draw(screen, p1_name,p1_colour)
-        fighter_2.draw(screen, p2_name, p2_colour )
+        fighter_2.draw(screen, p2_name, p2_colour)
 
 
 
@@ -277,8 +278,9 @@ def victory_screen(screen, winner, scaled_bg, fighter1, fighter2):
         draw_text("VICTORY", font(80), RED, screen, (SCREEN_WIDTH / 2), SCREEN_HEIGHT / 3)
         draw_text(str(winner) + " WINS", font(50), RED, screen, (SCREEN_WIDTH / 2), SCREEN_HEIGHT / 2)
 
-        fighter1.draw(screen, "Player 1", (0, 0, 255))
-        fighter2.draw(screen , "Player 2", (255, 0, 0))
+
+        fighter1.draw(screen, "", (0, 0, 255))
+        fighter2.draw(screen , "", (255, 0, 0))
         
         for button in [victory_back, victory_rematch]:
             button.hover(mouse)
