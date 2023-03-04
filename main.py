@@ -196,13 +196,6 @@ def game_loop():
                 over = True
                 over_time = pygame.time.get_ticks()
         else:
-            if scores[0] == 3 or scores[1] == 3:
-                if scores[0] == 3:
-                    winner = p1_name
-                else:
-                    winner = p2_name
-                victory_screen(screen, winner, scaled_bg)
-                break
             if fighter_1.alive:
                 draw_text(p1_name + " WINS", font(50), RED, screen, (SCREEN_WIDTH / 2), SCREEN_HEIGHT / 3)
             elif fighter_2.alive:
@@ -211,6 +204,16 @@ def game_loop():
                 over = False
                 fighter_1.reset()
                 fighter_2.reset()
+                if scores[0] == 3 or scores[1] == 3:
+                    if scores[0] == 3:
+                        winner = p1_name
+                    else:
+                        winner = p2_name
+                    #victory_screen(screen, winner, scaled_bg)
+                    if victory_screen(screen, winner, scaled_bg) == "rematch":
+                        scores = [0,0]
+                    else:
+                        break
 
 
 
@@ -246,6 +249,7 @@ def game_loop():
         #locateFighter(fighter_1)
         # update display
         pygame.display.update()
+
     mixer.music.load(resource_path("game/assets/audio/background-menu.wav"))
     mixer.music.play(-1)
     #mixer.music.set_volume(0)
@@ -253,14 +257,53 @@ def game_loop():
 
 # victory screen
 def victory_screen(screen, winner, scaled_bg):
-    # set background
-    screen.blit(scaled_bg, (0, 0))
-    # draw text
-    draw_text("VICTORY", font(80), RED, screen, (SCREEN_WIDTH / 2), SCREEN_HEIGHT / 3)
-    draw_text(str(winner) + " WINS", font(50), RED, screen, (SCREEN_WIDTH / 2), SCREEN_HEIGHT / 2)
-    pygame.display.update()
-    pygame.time.delay(3000)
+    leave_menu = False
+    clock = pygame.time.Clock()
+    run = True	
+    victory_back = Button(image=None, pos=(350, 450),
+                    text_input="Back", font=font(35),
+                    base_color="#d7fcd4", hovering_color="White")
 
+    victory_rematch = Button(image=None, pos=(600, 450),
+                    text_input="Rematch", font=font(35),
+                    base_color="#d7fcd4", hovering_color="White") 
+
+    while run:
+        # set background
+        mouse = pygame.mouse.get_pos()
+        screen.blit(scaled_bg, (0, 0))
+        # draw text
+
+        draw_text("VICTORY", font(80), RED, screen, (SCREEN_WIDTH / 2), SCREEN_HEIGHT / 3)
+        draw_text(str(winner) + " WINS", font(50), RED, screen, (SCREEN_WIDTH / 2), SCREEN_HEIGHT / 2)
+
+        
+        
+        for button in [victory_back, victory_rematch]:
+            button.hover(mouse)
+            button.update(screen)
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    pygame.quit()
+                    sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if victory_back.checkForInput(mouse):
+                    leave_menu = True
+                    idk = "back"
+                    return idk
+                if victory_rematch.checkForInput(mouse):
+                    leave_menu = True
+                    idk = "rematch"
+                    return idk
+        if leave_menu:
+            return idk
+        clock.tick(MENU_FPS)
+        pygame.display.update()
 
 async def update_enemy(game_client, local_player, enemy_character):
     for message in game_client.get_updates():
