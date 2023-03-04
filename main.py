@@ -152,7 +152,7 @@ def game_loop():
     bg_image = pygame.image.load(resource_path(map_chosen)).convert_alpha()
     scaled_bg = pygame.transform.scale(bg_image, (SCREEN_WIDTH, SCREEN_HEIGHT))
     run = True
-    scores = [0,0]
+    scores = [0,2]
     #round variables
     intro = 3
     over = False
@@ -182,7 +182,7 @@ def game_loop():
             draw_text(str(intro), font(80), RED, screen, (SCREEN_WIDTH / 2), SCREEN_HEIGHT / 3)
             #reduce intro by 1 every second using pygame.time.get_ticks()
             if pygame.time.get_ticks() - last_tick_update >= 1000:
-                intro -= 1
+                intro -= 3
                 last_tick_update = pygame.time.get_ticks()
 
 
@@ -210,7 +210,7 @@ def game_loop():
                     else:
                         winner = p2_name
                     #victory_screen(screen, winner, scaled_bg)
-                    if victory_screen(screen, winner, scaled_bg) == "rematch":
+                    if victory_screen(screen, winner, scaled_bg, fighter_1, fighter_2) == "rematch":
                         scores = [0,0]
                     else:
                         break
@@ -256,7 +256,7 @@ def game_loop():
 
 
 # victory screen
-def victory_screen(screen, winner, scaled_bg):
+def victory_screen(screen, winner, scaled_bg, fighter1, fighter2):
     leave_menu = False
     clock = pygame.time.Clock()
     run = True	
@@ -277,7 +277,8 @@ def victory_screen(screen, winner, scaled_bg):
         draw_text("VICTORY", font(80), RED, screen, (SCREEN_WIDTH / 2), SCREEN_HEIGHT / 3)
         draw_text(str(winner) + " WINS", font(50), RED, screen, (SCREEN_WIDTH / 2), SCREEN_HEIGHT / 2)
 
-        
+        fighter1.draw(screen, "Player 1", (0, 0, 255))
+        fighter2.draw(screen , "Player 2", (255, 0, 0))
         
         for button in [victory_back, victory_rematch]:
             button.hover(mouse)
