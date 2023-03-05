@@ -34,6 +34,7 @@ class Fighter(object):
         self.controls = controls
         self._start_x = x
         self._start_y = y
+        self.jump_height = 20
         self.player_x = x
         self.player_y = y
         self.ai = ai
@@ -249,7 +250,6 @@ class Fighter(object):
                 projectile.draw(surface)
                 if not projectile.exists:
                     self.projectiles.remove(projectile)
-
     def keybinds(self, player_controls, surface, target,key):
         # get keypresses
         if key is None:
@@ -297,6 +297,7 @@ class Fighter(object):
             self.blocking = True
         elif self.block_duration == 0:
             self.blocking = False
+
 
     def grav(self, gravity):
         self.vel_y += gravity
