@@ -798,17 +798,50 @@ def menu_play():
 def menu_char(mode):
     global p1
     global p2
-    mode = mode
-    p1_color_wizard= "#d7fcd4"
-    p1_color_warrior= "#d7fcd4"
-    p1_color_nomad= "#d7fcd4"
 
-    p2_color_wizard= "#d7fcd4"
-    p2_color_warrior= "#d7fcd4"
-    p2_color_nomad= "#d7fcd4"
-    menu_scaled = pygame.transform.scale(menu_bg, (SCREEN_WIDTH, SCREEN_HEIGHT))
+    p1_color_wizard = "#d7fcd4"
+    p1_color_warrior = "#d7fcd4"
+    p1_color_nomad = "#d7fcd4"
+
+    p2_color_wizard = "#d7fcd4"
+    p2_color_warrior = "#d7fcd4"
+    p2_color_nomad = "#d7fcd4"
+
+    # draw player 1 characters
+    wizard1 = createWizard(Fighter, 1, 285, 175, False, punch_fx, projectile_fx, hit_fx, player1_controls,False)
+    nomad1 = createNomad(Fighter, 1, 275, 175, False, punch_fx, projectile_fx, hit_fx, player1_controls,False)
+    warrior1 = createWarrior(Fighter, 1, 265, 175, False, punch_fx, projectile_fx, hit_fx, player1_controls,False)
+
+    # draw player 2 characters
+    wizard2 = createWizard(Fighter, 1, 685, 175, False, punch_fx, projectile_fx, hit_fx, player1_controls,False)
+    nomad2 = createNomad(Fighter, 1, 675, 175, False, punch_fx, projectile_fx, hit_fx, player1_controls,False)
+    warrior2 = createWarrior(Fighter, 1, 665, 175, False, punch_fx, projectile_fx, hit_fx, player1_controls,False)
+
     leave_menu = False
     clock = pygame.time.Clock()
+
+    play = Button(image=pygame.image.load(button_med), pos=(700, 525),
+                  text_input="PLAY", font=font(35), base_color="Black", hovering_color="Yellow")
+
+    # character select buttons for player 1
+    p1_wizard = Button(image=None, pos=(175, 350),
+                       text_input="wizard", font=font(16), base_color=p1_color_wizard, hovering_color="Yellow")
+    p1_warrior = Button(image=None, pos=(300, 350),
+                        text_input="warrior", font=font(16), base_color=p1_color_warrior, hovering_color="Yellow")
+    p1_nomad = Button(image=None, pos=(425, 350),
+                      text_input="nomad", font=font(16), base_color=p1_color_nomad, hovering_color="Yellow")
+
+    # character select buttons for player 2
+    p2_wizard = Button(image=None, pos=(575, 350),
+                       text_input="wizard", font=font(16), base_color=p2_color_wizard, hovering_color="Blue")
+    p2_warrior = Button(image=None, pos=(700, 350),
+                        text_input="warrior", font=font(16), base_color=p2_color_warrior, hovering_color="Blue")
+    p2_nomad = Button(image=None, pos=(825, 350),
+                      text_input="nomad", font=font(16), base_color=p2_color_nomad, hovering_color="Blue")
+
+    back = Button(image=pygame.image.load(button_med), pos=(300, 525),
+                  text_input="BACK", font=font(35), base_color="Black", hovering_color="Yellow")
+
     while True:
 
         screen.blit(menu_scaled, (0, 0))
@@ -818,35 +851,41 @@ def menu_char(mode):
         rect = text.get_rect(center=(500, 50))
         screen.blit(text, rect)
 
-        #player 1
+        # draw wizard
+        if p1 == "wizard":
+            wizard1.frameUpdate()
+            wizard1.draw(screen, "", RED)
+        # draw warrior
+        if p1 == "warrior":
+            warrior1.frameUpdate()
+            warrior1.draw(screen, "", RED)
+        # draw nomad
+        if p1 == "nomad":
+            nomad1.frameUpdate()
+            nomad1.draw(screen, "", RED)
+
+        # draw wizard
+        if p2 == "wizard":
+            wizard2.frameUpdate()
+            wizard2.draw(screen, "", RED)
+        # draw warrior
+        if p2 == "warrior":
+            warrior2.frameUpdate()
+            warrior2.draw(screen, "", RED)
+        # draw nomad
+        if p2 == "nomad":
+            nomad2.frameUpdate()
+            nomad2.draw(screen, "", RED)
+
+            # player 1
         text = font(15).render("PLAYER 1", True, "#b68f40")
-        rect = text.get_rect(center=(300, 100))
+        rect = text.get_rect(center=(300, 125))
         screen.blit(text, rect)
 
-        #player 2
+        # player 2
         text = font(15).render("PLAYER 2", True, "#b68f40")
-        rect = text.get_rect(center=(700, 100))
+        rect = text.get_rect(center=(700, 125))
         screen.blit(text, rect)
-
-        play = Button(image=pygame.image.load(resource_path("game/assets/menu/medium.png")), pos=(700, 525),
-                        text_input="PLAY", font=font(35), base_color="Black", hovering_color="Yellow")
-        #character select buttons for player 1
-        p1_wizard = Button(image=None, pos=(300, 275),
-                        text_input="wizard", font=font(25), base_color=p1_color_wizard, hovering_color="Yellow")
-        p1_warrior = Button(image=None, pos=(300, 400),
-                        text_input="warrior", font=font(25), base_color=p1_color_warrior, hovering_color="Yellow")
-        p1_nomad = Button(image=None, pos=(300, 150),
-                        text_input="nomad", font=font(25), base_color=p1_color_nomad, hovering_color="Yellow")
-        #character select buttons for player 2
-        p2_wizard = Button(image=None, pos=(700, 275),
-                        text_input="wizard", font=font(25), base_color=p2_color_wizard, hovering_color="Blue")
-        p2_warrior = Button(image=None, pos=(700, 400),
-                        text_input="warrior", font=font(25), base_color=p2_color_warrior, hovering_color="Blue")
-        p2_nomad = Button(image=None, pos=(700, 150),
-                        text_input="nomad", font=font(25), base_color=p2_color_nomad, hovering_color="Blue")
-
-        back = Button(image=pygame.image.load(resource_path("game/assets/menu/medium.png")), pos=(300, 525),
-                      text_input="BACK", font=font(35), base_color="Black", hovering_color="Yellow")
 
         for button in [back, play, p1_wizard, p1_warrior, p1_nomad, p2_wizard, p2_warrior, p2_nomad]:
             button.hover(mouse)
@@ -861,7 +900,7 @@ def menu_char(mode):
                     pygame.quit()
                     sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
-                #make it so that when you click play, it goes to the game loop
+                # make it so that when you click play, it goes to the game loop
                 if play.checkForInput(mouse):
                     pygame.display.set_caption("Map Select")
                     map_select(mode)
@@ -873,33 +912,33 @@ def menu_char(mode):
                     p1_color_warrior = "#d7fcd4"
                     p1_color_wizard = "Yellow"
                     p1_color_nomad = "#d7fcd4"
-                    p1= "wizard"
+                    p1 = "wizard"
                 if p1_warrior.checkForInput(mouse):
                     p1_color_warrior = "Yellow"
                     p1_color_wizard = "#d7fcd4"
                     p1_color_nomad = "#d7fcd4"
-                    p1= "warrior"
+                    p1 = "warrior"
                 if p1_nomad.checkForInput(mouse):
                     p1_color_nomad = "Yellow"
                     p1_color_wizard = "#d7fcd4"
                     p1_color_warrior = "#d7fcd4"
-                    p1= "nomad"
+                    p1 = "nomad"
                 if p2_wizard.checkForInput(mouse):
                     p2_color_wizard = "Blue"
                     p2_color_warrior = "#d7fcd4"
                     p2_color_nomad = "#d7fcd4"
-                    p2= "wizard"
+                    p2 = "wizard"
                 if p2_warrior.checkForInput(mouse):
                     p2_color_warrior = "Blue"
                     p2_color_nomad = "#d7fcd4"
                     p2_color_wizard = "#d7fcd4"
-                    p2= "warrior"
+                    p2 = "warrior"
                 if p2_nomad.checkForInput(mouse):
                     p2_color_nomad = "Blue"
                     p2_color_wizard = "#d7fcd4"
                     p2_color_warrior = "#d7fcd4"
-                    p2= "nomad"
-                
+                    p2 = "nomad"
+
         if leave_menu:
             break
         clock.tick(MENU_FPS)
@@ -1243,7 +1282,16 @@ if __name__ == "__main__":
     hit_fx.set_volume(0.5)
 
     obstacles = []
+
     mixer.music.load(resource_path("game/assets/audio/background-menu.wav"))
     mixer.music.play(-1)
     #mixer.music.set_volume(0)
+    # load buttons
+    button_long = resource_path("game/assets/menu/long.png")
+    button_med = resource_path("game/assets/menu/medium.png")
+
+    # scale the menu background to fit the screen resolution
+    menu_scaled = pygame.transform.scale(menu_bg, (SCREEN_WIDTH, SCREEN_HEIGHT))
+
+
     main_menu()
