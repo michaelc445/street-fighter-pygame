@@ -68,10 +68,7 @@ def game():
 #####################################################################################################
 #####################################################################################################
 
-@app.route("/leaderboard.html", methods=["GET","POST"])
-def leaderboard():
-    status = log_status()
-    return render_template("leaderboard.html",status=status)
+
 
 #####################################################################################################
 #####################################################################################################
@@ -93,6 +90,20 @@ def characters():
     status = log_status()
     return render_template("characters.html",status=status)
 
+@app.route("/nomad", methods=["GET","POST"])
+def nomad():
+    status = log_status()
+    return render_template("nomad.html",status=status)
+
+@app.route("/wizard", methods=["GET","POST"])
+def wizard():
+    status = log_status()
+    return render_template("wizard.html",status=status)
+
+@app.route("/warrior", methods=["GET","POST"])
+def warrior():
+    status = log_status()
+    return render_template("warrior.html",status=status)
 
 #####################################################################################################
 #####################################################################################################
@@ -141,15 +152,15 @@ def login():
         user  = db.execute("SELECT * FROM users WHERE user_id = ?",(user_id,)).fetchone()
         if user == None:
             form.user_id.errors.append("User does not exist")
-            return render_template("login_form.html",form=form,status=status)
+            return render_template("nomad.html",form=form,status=status)
         elif not check_password_hash(user["password"],password) :
             form.password.errors.append("Password incorect")
-            return render_template("login_form.html",form=form,status=status)
+            return render_template("nomad.html",form=form,status=status)
         else:
             session.clear()
             session["user_id"]= user_id 
         return redirect(url_for("index"))
-    return render_template("login_form.html",form=form,status=status)
+    return render_template("nomad.html",form=form,status=status)
 
 @app.route("/log_out",methods=["GET","POST"])
 def log_out():

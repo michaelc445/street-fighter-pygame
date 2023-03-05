@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block main_content %}
+
+
+
+
+<div class="post-preview">
+    <img class="preview-img" src="../images/nomadchar.png"/>
+    <a href="{{  url_for( 'nomad' ) }}"><h2 class="post-title">The Nomad</h2></a>
+    <p class="post-meta">
+        The Nomad is a fierce warrior, wielding a sword with deadly precision in close combat. Their years of training and discipline have honed their skills in martial arts, allowing them to move with grace and power in battle.
+        <a href="{{  url_for( 'nomad' ) }}">Continue reading...</a>
+    </p>
+</div>
+<!-- Divider-->
+<hr class="my-4" />
+
+<div class="post-preview">
+    <img class="preview-img" src="../images/wizardchar.png"/>
+    <a href="{{  url_for( 'wizard' ) }}"><h2 class="post-title">The Wizard</h2></a>
+    <p class="post-meta">
+        The Wizard is a master of arcane magic, able to summon and control the very forces of nature. Their long-range spells are devastating to their enemies, striking them from afar with incredible speed and power.
+        <a href="{{  url_for( 'wizard' ) }}">Continue reading...</a>
+    </p>
+</div>
+<!-- Divider-->
+<hr class="my-4" />
+
+<div class="post-preview">
+    <img class="preview-img" src="../images/warriorchar.png"/>
+    <a href="{{  url_for( 'warrior' ) }}"><h2 class="post-title">The Wizard</h2></a>
+    <p class="post-meta">
+        The Warrior is a formidable force on the battlefield, with their mastery of swordsmanship and incredible strength. Their heavy attack is particularly devastating at close range, allowing them to quickly dispatch their enemies with a single, powerful strike.
+        <a href="{{  url_for( 'warrior' ) }}">Continue reading...</a>
+    </p>
+</div>
+
+
+{% endblock %}

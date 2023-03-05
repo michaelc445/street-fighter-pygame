@@ -1,16 +1,12 @@
 {% extends "base.html" %}
-{% block title %}{% endblock %}
-{% block login_status %}
-{{status}}
-{% endblock %}
+
 {% block main_content %}
-    <!--  wrote random stuff to see how things looked  -->
     <article class="mb-4">
         <div class="container px-4 px-lg-5">
-            <h1 class="section-heading">Welcome to Martial Mayhem, the online multiplayer fighting game made with pygame.</h1>
+            <h1 class="section-heading" style="text-align: center;">Welcome to Martial Mayhem, the online multiplayer fighting game made with pygame</h1>
                 <div class="row gx-4 gx-lg-5 justify-content-center">
                     <div class="col-md-10 col-lg-8 col-xl-7">
-                        <img  class="img-fluid" src="./images/nomadvwizard.png"/>
+                        <img  class="img-fluid" src="../images/nomadvwizard.png"/>
                     </div>
                 </div>
                 <h1 class="section-heading">
@@ -94,13 +90,15 @@
                 </h3>
                 <ul>
                     <li>
-                        <img src="./images/single.jpg"/> Battle against the computer in an intense one on one match!
+                        <img id="small" src="../images/single.jpg"/> Battle against the computer in an intense one on one match!
                     </li>
                     <li>
-                       <img src="./images/local.png"/>  local Play your friend locally using the same keyboard!
+                       <img id="small" src="../images/local.png"/>  local Play your friend locally using the same keyboard!
                     </li>
                     <li>
-                        <img src="./images/multi.png"/>  multiplayer Queue up for an intense match online!
+                        <img id="small" src="../images/multi.png"/>  multiplayer Queue up for an intense match online!
+                    </li>
+                    <li>
                         We use a server provided by NetSoc, which can host up to 10 simultaneous games.
                     </li>
                 </ul>
