@@ -29,7 +29,15 @@ message JoinLobbyRequest{
 
 }
 message CreateLobbyRequest{
+  // lobby code you want to create/join
   required string lobbyCode = 1;
+  // will be used for lobby code menu
+  required string name = 2;
+  //depending on what operation is we can request different info from server
+  // 1: request open lobby info
+  // 2: create/join lobby
+  // 3: remove previously added lobby code (exit lobby)
+  required int32 operation = 3;
 }
 message CreateLobbyResponse{
   required bool ok = 1;
@@ -44,6 +52,8 @@ message JoinLobbyResponse{
   required bool playerId = 2;
   //character select ready if true
   required bool start = 3;
+  //enemy name
+  required string enemyName = 4;
 }
 
 message CharacterSelectRequest{
@@ -79,6 +89,4 @@ message MapSelectResponse{
   required int32 mapId = 2;
   // match ready to start if true
   required bool start = 3;
-  // enemy selected map id
-  required int32 enemySelection = 4;
 }

@@ -12,7 +12,7 @@ def createWarrior(inherit_from, player, x, y, flip, punch_sound, projectile_soun
             self.rect = pygame.Rect((x, y, width, height))
 
             #character attributes
-            self.speed = 8
+            self.speed = 5
 
             #load warrior sheet
             self.warriorSheet = pygame.image.load(inherit_from.resource_path("game/assets/warrior/warrior_spritesheet.png"))
@@ -50,7 +50,7 @@ def createWarrior(inherit_from, player, x, y, flip, punch_sound, projectile_soun
                         target.take_hit(damage, knockback, self.flip)
                         #target.hit = True
 
-                    pygame.draw.rect(surface, (0, 255, 0), attacking_rect)
+                    #pygame.draw.rect(surface, (0, 255, 0), attacking_rect)
 
             if self.attack_type == 2:
                 if self.attack2_cooldown == 0:
@@ -66,6 +66,6 @@ def createWarrior(inherit_from, player, x, y, flip, punch_sound, projectile_soun
                         target.take_hit(damage, knockback, self.flip)
                         #target.hit = True
 
-                    pygame.draw.rect(surface, (0, 255, 0), attacking_rect)
+                    #pygame.draw.rect(surface, (0, 255, 0), attacking_rect)
 
     return Warrior(player, x, y, flip, punch_sound, projectile_sound, hit_sound,controls,ai)

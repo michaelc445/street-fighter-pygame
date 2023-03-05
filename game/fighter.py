@@ -24,6 +24,8 @@ class Fighter(object):
         self.health = 100
         self.attack1_cooldown = 0
         self.attack2_cooldown = 0
+        self.block_cooldown = 0
+        self.block_duration = 0
         self.color = (255, 0, 0)
         self.punch_sound = punch_sound
         self.projectile_sound = projectile_sound
@@ -112,14 +114,10 @@ class Fighter(object):
         #keep player from phasing through obstacles
         self.obstacle_collision(surface, obstacles)
 
-        # count attack cooldown
-        if self.attack1_cooldown > 0:
-            self.attack1_cooldown -= 1
+        # count down cooldowns
+        self.tick_cooldowns()
 
-        # count projectile cooldown
-        if self.attack2_cooldown > 0:
-            self.attack2_cooldown -= 1
-
+        # die if not on the map
         if self.rect.y > 1000:
             self.health = -1
         # update projectiles
@@ -130,6 +128,25 @@ class Fighter(object):
                 if not projectile.exists:
                     self.projectiles.remove(projectile)
 
+
+    def tick_cooldowns(self):
+        # count attack cooldown
+        if self.attack1_cooldown > 0:
+            self.attack1_cooldown -= 1
+
+        # count projectile cooldown
+        if self.attack2_cooldown > 0:
+            self.attack2_cooldown -= 1
+
+        # count block cooldown
+        if self.block_cooldown > 0:
+            self.block_cooldown -=1
+
+        # count block duration
+        if self.block_duration > 0:
+            self.block_duration -=1
+
+
     def frameUpdate(self):
         if self.health <= 0:
             # death
@@ -137,10 +154,6 @@ class Fighter(object):
             self.alive = False
             self.actionUpdate(3)
             animation_cooldown = 250
-        elif self.hit:
-            # hit
-            self.actionUpdate(7)
-            animation_cooldown = 120
 
         elif self.attacking:
             # attack 1
@@ -156,6 +169,7 @@ class Fighter(object):
             #jumping
             self.actionUpdate(5)
             animation_cooldown = 30
+
         elif self.running:
             # running
             self.actionUpdate(4)
@@ -185,12 +199,6 @@ class Fighter(object):
                     #check if an attack was executed
                 if self.action == 1 or self.action == 2:
                     self.attacking = False
-                #check if damage was taken
-                if self.action == 7:
-                    self.hit = False
-                        #if the player was in the middle of an attack, then the attack is stopped
-                    self.attacking = False
-                    self.frame = 0
 
     def actionUpdate(self, newAction):
         if newAction != self.action:
@@ -212,6 +220,7 @@ class Fighter(object):
 
     def draw(self, surface, player_name, player_colour):
         #draw player
+        #pygame.draw.rect(surface, self.color, self.rect)
 
         font = pygame.font.SysFont("impact", 20)
         text_surface = font.render(player_name, True, player_colour)
@@ -222,12 +231,11 @@ class Fighter(object):
         self.player_x = self.rect.x - self.offset[0] * self.scale
         self.player_y = self.rect.y - self.offset[1] * self.scale
 
-        if self.blocking:
+        if self.block_duration > 0:
             self.drawBlockAnimation(surface)
 
 
     def take_hit(self, damage, knockback, direction):
-        self.hit = True
         self.hit_sound.play()
         self.health -= damage
         self.color = (255, 255, 255)
@@ -249,7 +257,7 @@ class Fighter(object):
         self.running = False
         #self.jump = False  # uncomment this to fly :)
 
-        if not self.blocking and not self.attacking and self.alive:
+        if not self.attacking and self.alive:
             # move left
             if key[player_controls["left"]]:
                 self.dx = -self.speed
@@ -266,7 +274,7 @@ class Fighter(object):
 
             # jump
             if key[player_controls["jump"]] and not self.jump:
-                self.vel_y = -30
+                self.vel_y = -self.jump_height
                 self.jump = True
                 #self.actionUpdate(5)
 
@@ -282,10 +290,12 @@ class Fighter(object):
                 self.attack(surface, target)
 
         # block
-        if key[player_controls["block"]]:
+        if key[player_controls["block"]] and self.block_cooldown == 0 :
+            self.block_cooldown = 200
+            self.block_duration = 50
             self.color = (0, 0, 255)
             self.blocking = True
-        else:
+        elif self.block_duration == 0:
             self.blocking = False
 
     def grav(self, gravity):
@@ -340,4 +350,4 @@ class Fighter(object):
         #   self.dy = screen_height - 100 - self.rect.bottom
         #    self.jump = False
 
-        
+
