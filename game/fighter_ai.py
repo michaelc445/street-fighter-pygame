@@ -6,6 +6,7 @@ class Fighter_ai(Fighter):
     def __init__(self, player, x, y, flip, punch_sound, projectile_sound, hit_sound, controls):
         super().__init__(player, x, y, flip, punch_sound, projectile_sound, hit_sound, controls)
         self.moves=[0,0,0,0,0,0]
+        self.jumping = True
 
     def set_moves(self,enemy_state):
         enemy_state = enemy_state
@@ -131,7 +132,7 @@ class Fighter_ai(Fighter):
 
             # jump
             if self.moves[2]==1 and not self.jump:
-                self.vel_y = -30
+                self.vel_y = -self.jump_height
                 self.jump = True
 
 
