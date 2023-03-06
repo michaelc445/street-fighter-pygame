@@ -78,10 +78,175 @@ def sfx_change(level):
         punch_fx.set_volume(0.3)
         projectile_fx.set_volume(1)
         hit_fx.set_volume(1)
-
-
+#local game loop
 # game loop
-def game_loop(mode):
+def game_loop():
+    if map == "mountain":
+        p1_spawn = [100, 134]
+        p2_spawn = [850, 134]
+        map_chosen = "game/assets/maps/mountain.png"
+        # mountain obstacles
+        middle_ground1 = Obstacle(270, 410, 465, 60)
+        middle_ground2 = Obstacle(290, 470, 425, 60)
+        left_cliff1 = Obstacle(0, 235, 240, 60)
+        left_cliff2 = Obstacle(0, 295, 205, 60)
+        left_cliff3 = Obstacle(0, 355, 150, 60)
+        left_cliff4 = Obstacle(0, 405, 125, 300)
+        right_cliff1 = Obstacle(760, 235, 240, 60)
+        right_cliff2 = Obstacle(800, 295, 205, 60)
+        right_cliff3 = Obstacle(850, 355, 150, 60)
+        right_cliff4 = Obstacle(875, 405, 125, 300)
+
+        obstacles = [middle_ground1, middle_ground2, left_cliff1, left_cliff2, left_cliff3, left_cliff4, right_cliff1,
+                     right_cliff2, right_cliff3, right_cliff4]
+
+    elif map == "church":
+        p1_spawn = [56, 286]
+        p2_spawn = [900, 286]
+        map_chosen = "game/assets/maps/church.png"
+        # church obstacles
+        middle_floor = Obstacle(150, 530, 700, 80)
+        left_side = Obstacle(0, 387, 142, 160)
+        right_side = Obstacle(860, 387, 142, 160)
+        middle_top = Obstacle(235, 240, 525, 40)
+
+        obstacles = [middle_floor, left_side, right_side, middle_top]
+
+    elif map == "cliffs":
+        p1_spawn = [135, 254]
+        p2_spawn = [870, 45]
+        map_chosen = "game/assets/maps/cliffs.png"
+        # cliffs obstacles
+        left_island1 = Obstacle(107, 355, 90, 20)
+        left_island2 = Obstacle(120, 355, 60, 45)
+        middle_island1 = Obstacle(325, 275, 400, 25)
+        middle_island2 = Obstacle(350, 295, 350, 27)
+        right_cliff1 = Obstacle(797, 145, 300, 50)
+        right_cliff2 = Obstacle(810, 195, 200, 40)
+        right_cliff3 = Obstacle(830, 235, 200, 35)
+        right_cliff4 = Obstacle(850, 265, 200, 35)
+        right_cliff5 = Obstacle(870, 285, 200, 35)
+        right_cliff6 = Obstacle(225, 500, 570, 80)
+
+        obstacles = [left_island1, left_island2, middle_island1, middle_island2, right_cliff1, right_cliff2,
+                     right_cliff3, right_cliff4, right_cliff5, right_cliff6]
+
+    if p1 == "wizard":
+        fighter_1 = createWizard(Fighter, 1, p1_spawn[0], p1_spawn[1], False, punch_fx, projectile_fx, hit_fx,
+                                 player1_controls)
+
+    elif p1 == "nomad":
+        fighter_1 = createNomad(Fighter, 1, p1_spawn[0], p1_spawn[1], False, punch_fx, projectile_fx, hit_fx,
+                                player1_controls)
+
+    elif p1 == "warrior":
+        fighter_1 = createWarrior(Fighter, 1, p1_spawn[0], p1_spawn[1], False, punch_fx, projectile_fx, hit_fx,
+                                  player1_controls)
+
+    if p2 == "wizard":
+        fighter_2 = createWizard(Fighter, 2, p2_spawn[0], p2_spawn[1], True, punch_fx, projectile_fx, hit_fx,
+                                 player2_controls)
+
+    elif p2 == "nomad":
+        fighter_2 = createNomad(Fighter, 2, p2_spawn[0], p2_spawn[1], True, punch_fx, projectile_fx, hit_fx,
+                                player2_controls)
+
+    elif p2 == "warrior":
+        fighter_2 = createWarrior(Fighter, 2, p2_spawn[0], p2_spawn[1], True, punch_fx, projectile_fx, hit_fx,
+                                  player2_controls)
+
+    # load map
+    bg_image = pygame.image.load(resource_path(map_chosen)).convert_alpha()
+    scaled_bg = pygame.transform.scale(bg_image, (SCREEN_WIDTH, SCREEN_HEIGHT))
+    run = True
+    scores = [0, 0]
+    # round variables
+    intro = 3
+    over = False
+    round_cd = 1500
+    last_tick_update = pygame.time.get_ticks()
+
+    while run:
+
+        # cap frame rate
+        clock.tick(GAME_FPS)
+
+        # draw background
+        draw_bg(scaled_bg)
+
+        # draw health bars
+        draw_health_bar(fighter_1.health, 20, 20)
+        draw_health_bar(fighter_2.health, 580, 20)
+
+        draw_scores(scores[0], scores[1])
+
+        # move fighters
+        if intro <= 0:
+            fighter_1.move(SCREEN_WIDTH, SCREEN_HEIGHT, screen, fighter_2, obstacles)
+            fighter_2.move(SCREEN_WIDTH, SCREEN_HEIGHT, screen, fighter_1, obstacles)
+        else:
+            draw_text(str(intro), font(80), RED, screen, (SCREEN_WIDTH / 2), SCREEN_HEIGHT / 3)
+            # reduce intro by 1 every second using pygame.time.get_ticks()
+            if pygame.time.get_ticks() - last_tick_update >= 1000:
+                intro -= 1
+                last_tick_update = pygame.time.get_ticks()
+
+        if over == False:
+            if not fighter_1.alive:
+                scores[1] += 1
+                over = True
+                over_time = pygame.time.get_ticks()
+            elif not fighter_2.alive:
+                scores[0] += 1
+                over = True
+                over_time = pygame.time.get_ticks()
+        else:
+            if scores[0] == 3 or scores[1] == 3:
+                break
+            if fighter_1.alive:
+                draw_text("PLAYER 1 WINS", font(50), RED, screen, (SCREEN_WIDTH / 2), SCREEN_HEIGHT / 3)
+            elif fighter_2.alive:
+                draw_text("PLAYER 2 WINS", font(50), RED, screen, (SCREEN_WIDTH / 2), SCREEN_HEIGHT / 3)
+            if pygame.time.get_ticks() - over_time >= round_cd:
+                over = False
+                fighter_1.reset()
+                fighter_2.reset()
+
+        # update pulse
+        fighter_1.frameUpdate()
+        fighter_2.frameUpdate()
+
+        # draw fighters
+        p1_name = "P1"
+        p1_colour = (0, 0, 255)
+        p2_name = "P2"
+        p2_colour = (255, 0, 0)
+
+        fighter_1.draw(screen, p1_name, p1_colour)
+        fighter_2.draw(screen, p2_name, p2_colour)
+
+        # draw obstacles
+        for obstacle in obstacles:
+            obstacle.draw(screen)
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                run = False
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    run = False
+
+        # if fighter 1 or 2 punches, play the punch.wav sound effect
+        # print coordinates of player 1
+        # locateFighter(fighter_1)
+        # update display
+        pygame.display.update()
+    mixer.music.load(resource_path("game/assets/audio/background-menu.wav"))
+    mixer.music.play(-1)
+    # mixer.music.set_volume(0)
+
+# single player game loop
+def single_game_loop():
     if map == "mountain":
         p1_spawn = [100, 134]
         p2_spawn = [850, 134]
@@ -132,35 +297,26 @@ def game_loop(mode):
         obstacles = [left_island1, left_island2, middle_island1, middle_island2, right_cliff1, right_cliff2, right_cliff3, right_cliff4, right_cliff5, right_cliff6]
 
     if p1 == "wizard":
-        fighter_1 = createWizard(Fighter, 1, p1_spawn[0], p1_spawn[1], False, punch_fx, projectile_fx, hit_fx, player1_controls,False)
+        fighter_1 = createWizard(Fighter, 1, p1_spawn[0], p1_spawn[1], False, punch_fx, projectile_fx, hit_fx, player1_controls)
 
     elif p1 == "nomad":
-        fighter_1 = createNomad(Fighter, 1, p1_spawn[0], p1_spawn[1], False, punch_fx, projectile_fx, hit_fx, player1_controls,False)
+        fighter_1 = createNomad(Fighter, 1, p1_spawn[0], p1_spawn[1], False, punch_fx, projectile_fx, hit_fx, player1_controls)
 
     elif p1 == "warrior":
-        fighter_1 = createWarrior(Fighter, 1, p1_spawn[0], p1_spawn[1], False, punch_fx, projectile_fx, hit_fx, player1_controls,False)
+        fighter_1 = createWarrior(Fighter, 1, p1_spawn[0], p1_spawn[1], False, punch_fx, projectile_fx, hit_fx, player1_controls)
 
-    if mode == "Single Player":
-        if p2 == "wizard":
-            fighter_2 = createWizard(Fighter_ai, 2, p2_spawn[0], p2_spawn[1], True, punch_fx, projectile_fx, hit_fx,
-                                     player2_controls,True)
 
-        elif p2 == "nomad":
-            fighter_2 = createNomad(Fighter_ai, 2, p2_spawn[0], p2_spawn[1], True, punch_fx, projectile_fx, hit_fx,
-                                    player2_controls,True)
+    if p2 == "wizard":
+        fighter_2 = createWizard(Fighter_ai, 2, p2_spawn[0], p2_spawn[1], True, punch_fx, projectile_fx, hit_fx,
+                                 player2_controls)
 
-        elif p2 == "warrior":
-            fighter_2 = createWarrior(Fighter_ai, 2, p2_spawn[0], p2_spawn[1], True, punch_fx, projectile_fx, hit_fx,
-                                      player2_controls, True)
-    else:
-        if p2 == "wizard":
-            fighter_2 = createWizard(Fighter, 2, p2_spawn[0], p2_spawn[1], True, punch_fx, projectile_fx, hit_fx, player2_controls,False)
+    elif p2 == "nomad":
+        fighter_2 = createNomad(Fighter_ai, 2, p2_spawn[0], p2_spawn[1], True, punch_fx, projectile_fx, hit_fx,
+                                player2_controls)
 
-        elif p2 == "nomad":
-            fighter_2 = createNomad(Fighter, 2, p2_spawn[0], p2_spawn[1], True, punch_fx, projectile_fx, hit_fx, player2_controls,False)
-
-        elif p2 == "warrior":
-            fighter_2 = createWarrior(Fighter, 2, p2_spawn[0], p2_spawn[1], True, punch_fx, projectile_fx, hit_fx, player2_controls,False)
+    elif p2 == "warrior":
+        fighter_2 = createWarrior(Fighter_ai, 2, p2_spawn[0], p2_spawn[1], True, punch_fx, projectile_fx, hit_fx,
+                                  player2_controls)
 
 
     #load map
@@ -175,10 +331,10 @@ def game_loop(mode):
     last_tick_update = pygame.time.get_ticks()
 
     while run:
-        if mode == "Single Player":
-            player_state = fighter_1.return_state()
 
-            fighter_2.set_moves(player_state)
+        player_state = fighter_1.return_state()
+
+        fighter_2.set_moves(player_state)
         # cap frame rate
         clock.tick(GAME_FPS)
 
@@ -1133,14 +1289,14 @@ def menu_char(mode):
     p2_color_nomad = "#d7fcd4"
 
     # draw player 1 characters
-    wizard1 = createWizard(Fighter, 1, 285, 175, False, punch_fx, projectile_fx, hit_fx, player1_controls,False)
-    nomad1 = createNomad(Fighter, 1, 275, 175, False, punch_fx, projectile_fx, hit_fx, player1_controls,False)
-    warrior1 = createWarrior(Fighter, 1, 265, 175, False, punch_fx, projectile_fx, hit_fx, player1_controls,False)
+    wizard1 = createWizard(Fighter, 1, 285, 175, False, punch_fx, projectile_fx, hit_fx, player1_controls)
+    nomad1 = createNomad(Fighter, 1, 275, 175, False, punch_fx, projectile_fx, hit_fx, player1_controls)
+    warrior1 = createWarrior(Fighter, 1, 265, 175, False, punch_fx, projectile_fx, hit_fx, player1_controls)
 
     # draw player 2 characters
-    wizard2 = createWizard(Fighter, 1, 685, 175, False, punch_fx, projectile_fx, hit_fx, player1_controls,False)
-    nomad2 = createNomad(Fighter, 1, 675, 175, False, punch_fx, projectile_fx, hit_fx, player1_controls,False)
-    warrior2 = createWarrior(Fighter, 1, 665, 175, False, punch_fx, projectile_fx, hit_fx, player1_controls,False)
+    wizard2 = createWizard(Fighter, 1, 685, 175, False, punch_fx, projectile_fx, hit_fx, player1_controls)
+    nomad2 = createNomad(Fighter, 1, 675, 175, False, punch_fx, projectile_fx, hit_fx, player1_controls)
+    warrior2 = createWarrior(Fighter, 1, 665, 175, False, punch_fx, projectile_fx, hit_fx, player1_controls)
 
 
     leave_menu = False
@@ -1361,7 +1517,10 @@ def map_select(mode):
                     mixer.music.load(resource_path("game/assets/audio/background-game.wav"))
                     mixer.music.play(-1)
                     mixer.music.set_volume(background_music_volume)
-                    game_loop(mode)
+                    if mode == "Single Player":
+                        single_game_loop()
+                    else:
+                        game_loop()
 
                 if back.checkForInput(mouse):
                     pygame.display.set_caption("Character Select")

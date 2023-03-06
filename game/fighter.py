@@ -1,7 +1,7 @@
 import pygame
 import sys,os
 class Fighter(object):
-    def __init__(self, player, x, y, flip, punch_sound, projectile_sound, hit_sound,controls,ai):
+    def __init__(self, player, x, y, flip, punch_sound, projectile_sound, hit_sound,controls):
         self.updateFrame = pygame.time.get_ticks()
         self.action = 0  # 0=idle, 1=attack1, 2=attack2, 3=dying, 4=running, 5=jumping, 6=falling, 7=hit
         self.frame = 0
@@ -37,7 +37,6 @@ class Fighter(object):
         self.jump_height = 20
         self.player_x = x
         self.player_y = y
-        self.ai = ai
         self.moves = [0,0,0,0,0,0]
 
     def return_state(self):
@@ -93,17 +92,15 @@ class Fighter(object):
             base_path = os.path.abspath(".")
 
         return os.path.join(base_path, relative_path)
-    
+
     def move(self, screen_width, screen_height, surface, target, obstacles):
         GRAVITY = 2
         self.dx = 0
         self.dy = 0
 
         # check player 1 movement
-        if self.ai:  # if ai instance call fighter ai func
-            self.keyAi( surface, target,None)
-        else:
-            self.keybinds(self.controls, surface, target,None)
+
+        self.keybinds(self.controls, surface, target, None)
 
         # apply gravity
         self.grav(GRAVITY)
@@ -111,8 +108,7 @@ class Fighter(object):
         # keep player on screen
         self.bounds(screen_width, screen_height)
 
-
-        #keep player from phasing through obstacles
+        # keep player from phasing through obstacles
         self.obstacle_collision(surface, obstacles)
 
         # count down cooldowns

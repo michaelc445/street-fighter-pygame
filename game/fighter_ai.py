@@ -3,8 +3,8 @@ import sys,os
 from game.fighter import Fighter
 
 class Fighter_ai(Fighter):
-    def __init__(self, player, x, y, flip, punch_sound, projectile_sound, hit_sound, controls, ai):
-        super().__init__(player, x, y, flip, punch_sound, projectile_sound, hit_sound, controls, ai)
+    def __init__(self, player, x, y, flip, punch_sound, projectile_sound, hit_sound, controls):
+        super().__init__(player, x, y, flip, punch_sound, projectile_sound, hit_sound, controls)
         self.moves=[0,0,0,0,0,0]
 
     def set_moves(self,enemy_state):
@@ -77,7 +77,37 @@ class Fighter_ai(Fighter):
                         player_move[4] = 1
 
         self.moves=player_move
+    def move(self, screen_width, screen_height, surface, target, obstacles):
+        GRAVITY = 1
+        self.dx = 0
+        self.dy = 0
 
+        # check player 1 movement
+
+        self.keyAi( surface, target, None)
+
+        # apply gravity
+        self.grav(GRAVITY)
+
+        # keep player on screen
+        self.bounds(screen_width, screen_height)
+
+        # keep player from phasing through obstacles
+        self.obstacle_collision(surface, obstacles)
+
+        # count down cooldowns
+        self.tick_cooldowns()
+
+        # die if not on the map
+        if self.rect.y > 1000:
+            self.health = -1
+        # update projectiles
+        if self.projectiles:
+            for projectile in self.projectiles:
+                projectile.move(target, screen_width)
+                projectile.draw(surface)
+                if not projectile.exists:
+                    self.projectiles.remove(projectile)
 
     def keyAi(self, surface, target,key):
         if key is None:
