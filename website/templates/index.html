@@ -1,12 +1,18 @@
 {% extends "base.html" %}
 
 {% block main_content %}
+
+
+
     <article class="mb-4">
         <div class="container px-4 px-lg-5">
             <h1 class="section-heading" style="text-align: center;">Welcome to Martial Mayhem, the online multiplayer fighting game made with pygame</h1>
                 <div class="row gx-4 gx-lg-5 justify-content-center">
                     <div class="col-md-10 col-lg-8 col-xl-7">
-                        <img  class="img-fluid" src="../images/nomadvwizard.png"/>
+                        <video width="640" height="480" controls>
+                          <source src="../images/trailer.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                        </video>
                     </div>
                 </div>
                 <h1 class="section-heading">
@@ -40,34 +46,11 @@
                     Option 2: Download from this website or from our GitHub.
                 </h3>
                 <p>
-                    To download from this website simply click the download link at the top of the page or click here <a href="{{  url_for('Download')   }}">Download</a></li>
-                    If you would prefer to download from our GitHub please follow the following steps.
-                <ul>
-                    <li>
-                        1. Go to your favourite terminal, clone the repository at this link <a href="https://github.com/michaelc445/street-fighter-pygame">github.com/michaelc445/street-fighter-pygame</a></li>
-                    </li>
+                    You have two options for downloading Martial Mayhem. you can either download the game directly or download from our github.
+                    To download directly or for more information about how to download from ut github click here<a href="{{  url_for('Download')   }}">Download</a>.<br>
+                    Or Click the download link at the top of this page.
 
-                    <li>
-                        2. Enter the following commands:
-                            <ul>
-                                <li>
-                                    pip3 -m install requirements.txt
-                                </li>
-                                <li>
-                                    python3 main.py
-                                </li>
 
-                            </ul>
-                    </li>
-                    <li>
-                        3. in main.spec, change the path in line 9 to the path where your python packages are located.
-                            and be sure to use double backslashes
-                    </li>
-                    <li>
-                        4. in the terminal where main.spec is located type:
-                        pyinstaller main.spec
-                    </li>
-                </ul>
                 </p>
                 <p>&nbsp</p>
                 <h3 class="section-heading">

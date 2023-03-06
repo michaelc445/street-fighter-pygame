@@ -1,12 +1,79 @@
 {% extends "base.html" %}
-{% block login_status %}
-{{status}}
-{% endblock %}
+
 {% block main_content %}
 
-<h1>
-    download
-</h1>
 
-{{no_account}}
+
+
+<h1>
+    Download
+</h1>
+<p>&nbsp</p>
+<h3 class="post-subtitle">
+    Direct Download
+</h3>
+<div class="post-preview">
+    <a href="https://drive.google.com/uc?export=download&id=1O4VgCZxcffIxJsMzVHQXIuhUkjdwDtl3" download="Martial Mayhem.zip">
+    Download for windows &nbsp <img  class="icon" src="../images/windows.png"/>
+    </a>
+    <p class="post-meta">
+       Click the above link to download for Windows. <br>Then unzip the file and run martial_mayhem.exe and you are ready to play!
+    </p>
+</div>
+
+<div class="post-preview">
+    <a href="https://drive.google.com/uc?export=download&id=1O4VgCZxcffIxJsMzVHQXIuhUkjdwDtl3" download="Martial Mayhem.zip">
+    Download for linux &nbsp <img  class="icon" src="../images/Linux.png"/>
+    </a>
+    <p class="post-meta">
+       Click the above link to download for Linux. <br>Then unzip the file and run martial_mayhem and you are ready to play!
+    </p>
+</div>
+<hr class="my-4" />
+
+<div class="post-preview">
+    <h3 class="post-subtitle">
+        GitHub Download
+    </h3>
+    <p>
+        To download the game from GitHub please follow these steps:
+    <ul>
+        <li>
+            1. Go to your favourite terminal and enter the following command to clone the repository:
+<pre class="long_code">
+  <code>
+  git clone https://github.com/michaelc445/street-fighter-pygame
+  </code>
+</pre>
+        </li>
+        <li>
+            2. Enter the following command to navigate to the game directory:
+<pre>
+    <code>
+    cd street-fighter-pygame
+    </code>
+</pre>
+        </li>
+        <li>
+            3. Enter the following command to install the game requirements:
+<pre>
+    <code>
+    pip3 install -r requirements.txt
+    </code>
+</pre>
+        </li>
+        <li>
+            4. Enter the following command to run the game:
+<pre>
+    <code>
+    python3 main.py
+    </code>
+</pre>
+        </li>
+
+    </ul>
+    </p>
+</div>
+
 {% endblock %}
+

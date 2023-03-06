@@ -11049,6 +11049,9 @@ blockquote {
 .form-floating label {
   color: #6c757d;
 }
+.icon{
+    max-width: 3%;
+}
 
 #mainNav {
   position: absolute;
@@ -11242,7 +11245,30 @@ header.masthead .site-heading .h1 {
     display:block;
     padding-bottom:0.5em;
 }
+li a{
+    color:#0085A1;
+}
+p a {
+    color:#0085A1;
+}
+.long_code{
+    max-width:65%;
+}
+pre{
+   border: solid white;
+   background-color: black;
+   padding:0;
+   max-width:40%
+}
+.title{
+display: block;
+ max-width:40%;
+ padding:0;
+ margin:0;
+ margin-left: auto;
+ margin-right: auto;
 
+}
 .post-preview > a {
   color: white;
 }
