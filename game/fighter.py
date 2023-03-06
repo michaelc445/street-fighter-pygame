@@ -1,7 +1,9 @@
 import pygame
-import sys,os
+import sys, os
+
+
 class Fighter(object):
-    def __init__(self, player, x, y, flip, punch_sound, projectile_sound, hit_sound,controls):
+    def __init__(self, player, x, y, flip, punch_sound, projectile_sound, hit_sound, controls):
         self.updateFrame = pygame.time.get_ticks()
         self.action = 0  # 0=idle, 1=attack1, 2=attack2, 3=dying, 4=running, 5=jumping, 6=falling, 7=hit
         self.frame = 0
@@ -14,10 +16,9 @@ class Fighter(object):
         self.running = False
         self.attacking = False
         self.blocking = False
-        #self.blockAnimation = pygame.image.load(self.resource_path("game/assets/projectiles/Wind_Projectile.png"))
-        #self.blockingData = [32, 32]
-        #self.blockingList = self.loadBlockingImages(self.blockAnimation, 5)
-        self.hit = False
+        # self.blockAnimation = pygame.image.load(self.resource_path("game/assets/projectiles/Wind_Projectile.png"))
+        # self.blockingData = [32, 32]
+        # self.blockingList = self.loadBlockingImages(self.blockAnimation, 5)
         self.shooting_projectile = False
         self.projectiles = []
         self.attack_type = 0
@@ -37,11 +38,11 @@ class Fighter(object):
         self.jump_height = 20
         self.player_x = x
         self.player_y = y
-        self.moves = [0,0,0,0,0,0]
+        self.moves = [0, 0, 0, 0, 0, 0]
 
     def return_state(self):
-        return  [self.player_x,self.player_y,self.vel_x,self.vel_y, self.shooting_projectile, self.attacking,
-                        self.running , self.jump , self.blocking]
+        return [self.player_x, self.player_y, self.vel_x, self.vel_y, self.shooting_projectile, self.attacking,
+                self.running, self.jump, self.blocking]
 
     def loadImages(self, spriteSheet, animationSteps):
         # extract images from sprite sheet
@@ -62,8 +63,10 @@ class Fighter(object):
         animationList = []
 
         for x in range(animationSteps):
-            tempImage = spriteSheet.subsurface(x * self.blockingSizeX, 4 * self.blockingSizeY, self.blockingSizeX, self.blockingSizeX)
-            tempImage = pygame.transform.scale(tempImage, (self.sizeX * self.blockingScale, self.sizeY * self.blockingScale))
+            tempImage = spriteSheet.subsurface(x * self.blockingSizeX, 4 * self.blockingSizeY, self.blockingSizeX,
+                                               self.blockingSizeX)
+            tempImage = pygame.transform.scale(tempImage,
+                                               (self.sizeX * self.blockingScale, self.sizeY * self.blockingScale))
             animationList.append(tempImage)
         return animationList
 
@@ -71,7 +74,7 @@ class Fighter(object):
         animationList = []
         for frame in range(numFrames):
             tempImage = spriteSheet.subsurface(frame * imgWidth, 0 * imgHeight, imgWidth, imgHeight)
-            tempImage = pygame.transform.scale(tempImage, (rect.height + offSetX,  rect.width + offSetY))
+            tempImage = pygame.transform.scale(tempImage, (rect.height + offSetX, rect.width + offSetY))
             animationList.append(tempImage)
         return animationList
 
@@ -85,6 +88,7 @@ class Fighter(object):
         self.attack1_cooldown = 0
         self.attack2_cooldown = 0
         self.projectiles = []
+
     def resource_path(relative_path):
         try:
             base_path = sys._MEIPASS
@@ -94,7 +98,7 @@ class Fighter(object):
         return os.path.join(base_path, relative_path)
 
     def move(self, screen_width, screen_height, surface, target, obstacles):
-        GRAVITY = 2
+        GRAVITY = 1
         self.dx = 0
         self.dy = 0
 
@@ -125,7 +129,6 @@ class Fighter(object):
                 if not projectile.exists:
                     self.projectiles.remove(projectile)
 
-
     def tick_cooldowns(self):
         # count attack cooldown
         if self.attack1_cooldown > 0:
@@ -137,12 +140,11 @@ class Fighter(object):
 
         # count block cooldown
         if self.block_cooldown > 0:
-            self.block_cooldown -=1
+            self.block_cooldown -= 1
 
         # count block duration
         if self.block_duration > 0:
-            self.block_duration -=1
-
+            self.block_duration -= 1
 
     def frameUpdate(self):
         if self.health <= 0:
@@ -163,7 +165,7 @@ class Fighter(object):
                 animation_cooldown = 30
 
         elif self.jump:
-            #jumping
+            # jumping
             self.actionUpdate(5)
             animation_cooldown = 30
 
@@ -172,28 +174,24 @@ class Fighter(object):
             self.actionUpdate(4)
             animation_cooldown = 40
 
-        #elif self.blocking:
-        #    self.drawBlockAnimation(surface)
-        #    animation_cooldown = 40
-
         else:
             self.actionUpdate(0)
             animation_cooldown = 80
 
-        #update image
+        # update image
         self.img = self.animationList[self.action][self.frame]
-        #check if enough time has passed since the last update
+        # check if enough time has passed since the last update
         if pygame.time.get_ticks() - self.updateFrame > animation_cooldown:
             self.frame += 1
             self.updateFrame = pygame.time.get_ticks()
-        #check if the animation has finished
+        # check if the animation has finished
         if self.frame >= len(self.animationList[self.action]):
-            #if the player is dead then end the animation
+            # if the player is dead then end the animation
             if self.alive == False:
                 self.frame = len(self.animationList[self.action]) - 1
             else:
                 self.frame = 0
-                    #check if an attack was executed
+                # check if an attack was executed
                 if self.action == 1 or self.action == 2:
                     self.attacking = False
 
@@ -203,7 +201,7 @@ class Fighter(object):
             self.action = newAction
             self.updateFrame = pygame.time.get_ticks()
 
-    def drawBlockAnimation(self ,surface):
+    def drawBlockAnimation(self, surface):
         animationCooldown = 40
         if pygame.time.get_ticks() - self.updateFrame > animationCooldown:
             if self.blockingFrame >= self.blockingSteps - 1:
@@ -212,12 +210,12 @@ class Fighter(object):
             self.updateFrame = pygame.time.get_ticks()
         img = self.blockingList[self.blockingFrame]
         img_rect = img.get_rect(center=self.rect.center)
-        #surface.blit(self.blockingList[self.blockingFrame], (self.rect.x - self.blockingOffset[0] * self.scale, self.rect.y - self.blockingOffset[1] * self.scale))
+        # surface.blit(self.blockingList[self.blockingFrame], (self.rect.x - self.blockingOffset[0] * self.scale, self.rect.y - self.blockingOffset[1] * self.scale))
         surface.blit(img, img_rect)
 
     def draw(self, surface, player_name, player_colour):
-        #draw player
-        #pygame.draw.rect(surface, self.color, self.rect)
+        # draw player
+        # pygame.draw.rect(surface, self.color, self.rect)
 
         font = pygame.font.SysFont("impact", 20)
         text_surface = font.render(player_name, True, player_colour)
@@ -231,14 +229,14 @@ class Fighter(object):
         if self.block_duration > 0:
             self.drawBlockAnimation(surface)
 
-
     def take_hit(self, damage, knockback, direction):
         self.hit_sound.play()
         self.health -= damage
         self.color = (255, 255, 255)
         self.vel_x += (knockback - 2 * knockback * direction)
         self.vel_y -= knockback
-    def draw_projectile(self,target,screen_width,surface):
+
+    def draw_projectile(self, target, screen_width, surface):
 
         if self.projectiles:
             for projectile in self.projectiles:
@@ -246,12 +244,13 @@ class Fighter(object):
                 projectile.draw(surface)
                 if not projectile.exists:
                     self.projectiles.remove(projectile)
-    def keybinds(self, player_controls, surface, target,key):
+
+    def keybinds(self, player_controls, surface, target, key):
         # get keypresses
         if key is None:
             key = pygame.key.get_pressed()
         self.running = False
-        #self.jump = False  # uncomment this to fly :)
+        # self.jump = False  # uncomment this to fly :)
 
         if not self.attacking and self.alive:
             # move left
@@ -272,7 +271,7 @@ class Fighter(object):
             if key[player_controls["jump"]] and not self.jump:
                 self.vel_y = -self.jump_height
                 self.jump = True
-                #self.actionUpdate(5)
+                # self.actionUpdate(5)
 
             # attack
             if key[player_controls["attack1"]] or key[player_controls["attack2"]]:
@@ -282,18 +281,16 @@ class Fighter(object):
                 if key[player_controls["attack2"]]:
                     self.attack_type = 2
 
-
                 self.attack(surface, target)
 
         # block
-        if key[player_controls["block"]] and self.block_cooldown == 0 :
+        if key[player_controls["block"]] and self.block_cooldown == 0:
             self.block_cooldown = 200
             self.block_duration = 50
             self.color = (0, 0, 255)
             self.blocking = True
         elif self.block_duration == 0:
             self.blocking = False
-
 
     def grav(self, gravity):
         self.vel_y += gravity
@@ -312,7 +309,7 @@ class Fighter(object):
 
         # draw feet of character
         standing_on_platform_check = pygame.Rect((self.rect.x, self.rect.y + self.rect.height, self.rect.width, 10))
-        #pygame.draw.rect(surface, (230, 176, 30), standing_on_platform_check)
+        # pygame.draw.rect(surface, (230, 176, 30), standing_on_platform_check)
         for obstacle in obstacles:
             if x_collision_check.colliderect(obstacle.rect):
                 self.vel_x = -self.vel_x
@@ -342,9 +339,7 @@ class Fighter(object):
             # bounce off wall if knocked into it
             self.vel_x = -self.vel_x
 
-        #if self.rect.bottom + self.dy > screen_height - 100:
+        # if self.rect.bottom + self.dy > screen_height - 100:
         #    self.vel_y = 0
         #   self.dy = screen_height - 100 - self.rect.bottom
         #    self.jump = False
-
-
