@@ -85,7 +85,7 @@ class Fighter_Bot(Fighter):
 
         # check player 1 movement
 
-        self.keyAi( surface, target, None)
+        self.keyBot( surface, target, None)
 
         # apply gravity
         self.grav(GRAVITY)
@@ -110,7 +110,7 @@ class Fighter_Bot(Fighter):
                 if not projectile.exists:
                     self.projectiles.remove(projectile)
 
-    def keyAi(self, surface, target,key):
+    def keyBot(self, surface, target,key):
         if key is None:
             key = pygame.key.get_pressed()
         self.running = False
