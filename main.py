@@ -1,6 +1,7 @@
 import pygame, asyncio, pygame_textinput
 from pygame import mixer
 from game.fighter import Fighter
+from game.fighter_Bot import Fighter_Bot
 from game.online_fighter import OnlineFighter
 from game.characters.nomad import createNomad
 from game.characters.warrior import createWarrior
@@ -13,6 +14,7 @@ import time
 
 
 def draw_bg(scaled_bg_image):
+
     screen.blit(scaled_bg_image, (0, 0))
 
 def draw_text(text, font, color, surface, x, y):
@@ -76,8 +78,7 @@ def sfx_change(level):
         punch_fx.set_volume(0.3)
         projectile_fx.set_volume(1)
         hit_fx.set_volume(1)
-
-
+#local game loop
 # game loop
 def game_loop():
     if map == "mountain":
@@ -127,6 +128,172 @@ def game_loop():
         right_cliff5 = Obstacle(870, 285, 200, 35)
         right_cliff6 = Obstacle(225, 500, 570, 80)
 
+        obstacles = [left_island1, left_island2, middle_island1, middle_island2, right_cliff1, right_cliff2,
+                     right_cliff3, right_cliff4, right_cliff5, right_cliff6]
+
+    if p1 == "wizard":
+        fighter_1 = createWizard(Fighter, 1, p1_spawn[0], p1_spawn[1], False, punch_fx, projectile_fx, hit_fx,
+                                 player1_controls)
+
+    elif p1 == "nomad":
+        fighter_1 = createNomad(Fighter, 1, p1_spawn[0], p1_spawn[1], False, punch_fx, projectile_fx, hit_fx,
+                                player1_controls)
+
+    elif p1 == "warrior":
+        fighter_1 = createWarrior(Fighter, 1, p1_spawn[0], p1_spawn[1], False, punch_fx, projectile_fx, hit_fx,
+                                  player1_controls)
+
+    if p2 == "wizard":
+        fighter_2 = createWizard(Fighter, 2, p2_spawn[0], p2_spawn[1], True, punch_fx, projectile_fx, hit_fx,
+                                 player2_controls)
+
+    elif p2 == "nomad":
+        fighter_2 = createNomad(Fighter, 2, p2_spawn[0], p2_spawn[1], True, punch_fx, projectile_fx, hit_fx,
+                                player2_controls)
+
+    elif p2 == "warrior":
+        fighter_2 = createWarrior(Fighter, 2, p2_spawn[0], p2_spawn[1], True, punch_fx, projectile_fx, hit_fx,
+                                  player2_controls)
+
+    # load map
+    bg_image = pygame.image.load(resource_path(map_chosen)).convert_alpha()
+    scaled_bg = pygame.transform.scale(bg_image, (SCREEN_WIDTH, SCREEN_HEIGHT))
+    run = True
+    scores = [0, 0]
+    # round variables
+    intro = 3
+    over = False
+    round_cd = 1500
+    last_tick_update = pygame.time.get_ticks()
+
+    while run:
+
+        # cap frame rate
+        clock.tick(GAME_FPS)
+
+        # draw background
+        draw_bg(scaled_bg)
+
+        # draw health bars
+        draw_health_bar(fighter_1.health, 20, 20)
+        draw_health_bar(fighter_2.health, 580, 20)
+
+        draw_scores(scores[0], scores[1])
+
+        # move fighters
+        if intro <= 0:
+            fighter_1.move(SCREEN_WIDTH, SCREEN_HEIGHT, screen, fighter_2, obstacles)
+            fighter_2.move(SCREEN_WIDTH, SCREEN_HEIGHT, screen, fighter_1, obstacles)
+        else:
+            draw_text(str(intro), font(80), RED, screen, (SCREEN_WIDTH / 2), SCREEN_HEIGHT / 3)
+            # reduce intro by 1 every second using pygame.time.get_ticks()
+            if pygame.time.get_ticks() - last_tick_update >= 1000:
+                intro -= 1
+                last_tick_update = pygame.time.get_ticks()
+
+        if over == False:
+            if not fighter_1.alive:
+                scores[1] += 1
+                over = True
+                over_time = pygame.time.get_ticks()
+            elif not fighter_2.alive:
+                scores[0] += 1
+                over = True
+                over_time = pygame.time.get_ticks()
+        else:
+            if scores[0] == 3 or scores[1] == 3:
+                break
+            if fighter_1.alive:
+                draw_text("PLAYER 1 WINS", font(50), RED, screen, (SCREEN_WIDTH / 2), SCREEN_HEIGHT / 3)
+            elif fighter_2.alive:
+                draw_text("PLAYER 2 WINS", font(50), RED, screen, (SCREEN_WIDTH / 2), SCREEN_HEIGHT / 3)
+            if pygame.time.get_ticks() - over_time >= round_cd:
+                over = False
+                fighter_1.reset()
+                fighter_2.reset()
+
+        # update pulse
+        fighter_1.frameUpdate()
+        fighter_2.frameUpdate()
+
+        # draw fighters
+        p1_name = "P1"
+        p1_colour = (0, 0, 255)
+        p2_name = "P2"
+        p2_colour = (255, 0, 0)
+
+        fighter_1.draw(screen, p1_name, p1_colour)
+        fighter_2.draw(screen, p2_name, p2_colour)
+
+        # draw obstacles
+        for obstacle in obstacles:
+            obstacle.draw(screen)
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                run = False
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    run = False
+
+        # if fighter 1 or 2 punches, play the punch.wav sound effect
+        # print coordinates of player 1
+        # locateFighter(fighter_1)
+        # update display
+        pygame.display.update()
+    mixer.music.load(resource_path("game/assets/audio/background-menu.wav"))
+    mixer.music.play(-1)
+    # mixer.music.set_volume(0)
+
+# single player game loop
+def single_game_loop():
+    if map == "mountain":
+        p1_spawn = [100, 134]
+        p2_spawn = [850, 134]
+        map_chosen = "game/assets/maps/mountain.png"
+        # mountain obstacles
+        middle_ground1 = Obstacle(270, 410, 465, 60)
+        middle_ground2 = Obstacle(290, 470, 425, 60)
+        left_cliff1 = Obstacle(0, 235, 240, 60)
+        left_cliff2 = Obstacle(0, 295, 205, 60)
+        left_cliff3 = Obstacle(0, 355, 150, 60)
+        left_cliff4 = Obstacle(0, 405, 125, 300)
+        right_cliff1 = Obstacle(760, 235, 240, 60)
+        right_cliff2 = Obstacle(800, 295, 205, 60)
+        right_cliff3 = Obstacle(850, 355, 150, 60)
+        right_cliff4 = Obstacle(875, 405, 125, 300)
+
+        obstacles = [middle_ground1, middle_ground2, left_cliff1, left_cliff2, left_cliff3, left_cliff4, right_cliff1,
+                     right_cliff2, right_cliff3, right_cliff4]
+
+    elif map == "church":
+        p1_spawn = [900, 286]
+        p2_spawn = [56, 286]
+        map_chosen = "game/assets/maps/church.png"
+        # church obstacles
+        middle_floor = Obstacle(150, 530, 700, 80)
+        left_side = Obstacle(0, 387, 142, 160)
+        right_side = Obstacle(860, 387, 142, 160)
+        middle_top = Obstacle(235, 240, 525, 40)
+
+        obstacles = [middle_floor, left_side, right_side, middle_top]
+
+    elif map == "cliffs":
+        p1_spawn = [135, 254]
+        p2_spawn = [870, 45]
+        map_chosen = "game/assets/maps/cliffs.png"
+        # cliffs obstacles
+        left_island1 = Obstacle(107, 355, 90, 20)
+        left_island2 = Obstacle(120, 355, 60, 45)
+        middle_island1 = Obstacle(325, 275, 400, 25)
+        middle_island2 = Obstacle(350, 295, 350, 27)
+        right_cliff1 = Obstacle(797, 145, 300, 50)
+        right_cliff2 = Obstacle(810, 195, 200, 40)
+        right_cliff3 = Obstacle(830, 235, 200, 35)
+        right_cliff4 = Obstacle(850, 265, 200, 35)
+        right_cliff5 = Obstacle(870, 285, 200, 35)
+        right_cliff6 = Obstacle(225, 500, 570, 80)
+
         obstacles = [left_island1, left_island2, middle_island1, middle_island2, right_cliff1, right_cliff2, right_cliff3, right_cliff4, right_cliff5, right_cliff6]
 
     if p1 == "wizard":
@@ -138,14 +305,18 @@ def game_loop():
     elif p1 == "warrior":
         fighter_1 = createWarrior(Fighter, 1, p1_spawn[0], p1_spawn[1], False, punch_fx, projectile_fx, hit_fx, player1_controls)
 
+
     if p2 == "wizard":
-        fighter_2 = createWizard(Fighter, 2, p2_spawn[0], p2_spawn[1], True, punch_fx, projectile_fx, hit_fx, player2_controls)
+        fighter_2 = createWizard(Fighter_Bot, 2, p2_spawn[0], p2_spawn[1], True, punch_fx, projectile_fx, hit_fx,
+                                 player2_controls)
 
     elif p2 == "nomad":
-        fighter_2 = createNomad(Fighter, 2, p2_spawn[0], p2_spawn[1], True, punch_fx, projectile_fx, hit_fx, player2_controls)
+        fighter_2 = createNomad(Fighter_Bot, 2, p2_spawn[0], p2_spawn[1], True, punch_fx, projectile_fx, hit_fx,
+                                player2_controls)
 
     elif p2 == "warrior":
-        fighter_2 = createWarrior(Fighter, 2, p2_spawn[0], p2_spawn[1], True, punch_fx, projectile_fx, hit_fx, player2_controls)
+        fighter_2 = createWarrior(Fighter_Bot, 2, p2_spawn[0], p2_spawn[1], True, punch_fx, projectile_fx, hit_fx,
+                                  player2_controls)
 
 
     #load map
@@ -158,9 +329,12 @@ def game_loop():
     over = False
     round_cd = 1500
     last_tick_update = pygame.time.get_ticks()
-    
+
     while run:
 
+        player_state = fighter_1.return_state()
+
+        fighter_2.set_moves(player_state)
         # cap frame rate
         clock.tick(GAME_FPS)
 
@@ -231,6 +405,8 @@ def game_loop():
 
         fighter_1.draw(screen, p1_name,p1_colour)
         fighter_2.draw(screen, p2_name, p2_colour)
+
+
 
 
 
@@ -462,6 +638,7 @@ def multi_player_game_loop(game_client):
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+
                 local_player.game_client.quit_game()
 
                 run = False
@@ -710,6 +887,12 @@ def opt():
         opt_rect = opt_text.get_rect(center=(500, 65))
         screen.blit(opt_text, opt_rect)
 
+        opt_controls = Button(image=pygame.image.load(resource_path("game/assets/menu/medium.png")), pos=(500, 175),
+                              text_input="CONTROLS", font=font(35), base_color="#d7fcd4", hovering_color="White")
+        opt_audio = Button(image=pygame.image.load(resource_path("game/assets/menu/medium.png")), pos=(500, 325),
+                           text_input="AUDIO", font=font(35), base_color="#d7fcd4", hovering_color="White")
+        opt_back = Button(image=pygame.image.load(resource_path("game/assets/menu/medium.png")), pos=(500, 475),
+                          text_input="BACK", font=font(35), base_color="#d7fcd4", hovering_color="White")
 
         for button in [opt_controls, opt_audio, opt_back]:
             button.hover(opt_mouse)
@@ -781,7 +964,7 @@ def audio():
         screen.blit(audio_text, audio_rect)
 
 
-        # create a button for music volume        
+        # create a button for music volume
         music_text = font(40).render("MUSIC", True, "#b68f40")
         music_rect = music_text.get_rect(center=(200, 175))
         screen.blit(music_text, music_rect)
@@ -977,7 +1160,7 @@ def multi_lobby_menu(game_client):
 
     name_button = Button(image=pygame.image.load(resource_path("game/assets/menu/small.png")), pos=name_pos,
                          text_input="name", font=font(25), base_color="White", hovering_color="White")
-    
+
 
 
     while True:
@@ -997,7 +1180,7 @@ def multi_lobby_menu(game_client):
         rect = text.get_rect(center=(500, 50))
         screen.blit(text, rect)
 
-        
+
         text = font(15).render("Player Name", True, "#b68f40")
         rect = text.get_rect(center=(500, 125))
         screen.blit(text, rect)
@@ -1088,7 +1271,7 @@ def menu_play():
     leave_menu = False
 
     clock = pygame.time.Clock()
-    
+
     while True:
 
         screen.blit(menu_scaled, (0, 0))
@@ -1113,10 +1296,10 @@ def menu_play():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if single_player.checkForInput(mouse):
                     pygame.display.set_caption("Single Player")
-                    menu_char()
+                    menu_char("Single Player")
                 if local.checkForInput(mouse):
                     pygame.display.set_caption("Local Multiplayer")
-                    menu_char()
+                    menu_char("Local")
                 if multiplayer.checkForInput(mouse):
                     pygame.display.set_caption("Multi Player Menu")
                     game_client = GameClient(1234)
@@ -1150,29 +1333,27 @@ def menu_play():
             break
         clock.tick(MENU_FPS)
         pygame.display.update()
-    
 
-# character select menu
-def menu_char():
+
+#character select menu
+def menu_char(mode):
     global p1
     global p2
 
-    p1_color_wizard= "#d7fcd4"
-    p1_color_warrior= "#d7fcd4"
-    p1_color_nomad= "#d7fcd4"
+    p1_color_wizard = "#d7fcd4"
+    p1_color_warrior = "#d7fcd4"
+    p1_color_nomad = "#d7fcd4"
 
-    p2_color_wizard= "#d7fcd4"
-    p2_color_warrior= "#d7fcd4"
-    p2_color_nomad= "#d7fcd4"
+    p2_color_wizard = "#d7fcd4"
+    p2_color_warrior = "#d7fcd4"
+    p2_color_nomad = "#d7fcd4"
 
-
-    #draw player 1 characters
+    # draw player 1 characters
     wizard1 = createWizard(Fighter, 1, 285, 175, False, punch_fx, projectile_fx, hit_fx, player1_controls)
     nomad1 = createNomad(Fighter, 1, 275, 175, False, punch_fx, projectile_fx, hit_fx, player1_controls)
     warrior1 = createWarrior(Fighter, 1, 265, 175, False, punch_fx, projectile_fx, hit_fx, player1_controls)
 
-
-    #draw player 2 characters
+    # draw player 2 characters
     wizard2 = createWizard(Fighter, 1, 685, 175, False, punch_fx, projectile_fx, hit_fx, player1_controls)
     nomad2 = createNomad(Fighter, 1, 675, 175, False, punch_fx, projectile_fx, hit_fx, player1_controls)
     warrior2 = createWarrior(Fighter, 1, 665, 175, False, punch_fx, projectile_fx, hit_fx, player1_controls)
@@ -1183,7 +1364,7 @@ def menu_char():
 
     play = Button(image=pygame.image.load(button_med), pos=(700, 525),
                     text_input="PLAY", font=font(35), base_color="Black", hovering_color="Yellow")
-    
+
     #character select buttons for player 1
     p1_wizard = Button(image=None, pos=(175, 350),
                     text_input="wizard", font=font(16), base_color=p1_color_wizard, hovering_color="Yellow")
@@ -1191,7 +1372,7 @@ def menu_char():
                     text_input="warrior", font=font(16), base_color=p1_color_warrior, hovering_color="Yellow")
     p1_nomad = Button(image=None, pos=(425, 350),
                     text_input="nomad", font=font(16), base_color=p1_color_nomad, hovering_color="Yellow")
-    
+
     #character select buttons for player 2
     p2_wizard = Button(image=None, pos=(575, 350),
                     text_input="wizard", font=font(16), base_color=p2_color_wizard, hovering_color="Blue")
@@ -1213,39 +1394,38 @@ def menu_char():
         rect = text.get_rect(center=(500, 50))
         screen.blit(text, rect)
 
-        #draw wizard
-        if p1=="wizard":
+        # draw wizard
+        if p1 == "wizard":
             wizard1.frameUpdate()
             wizard1.draw(screen, "", RED)
-        #draw warrior
-        if p1=="warrior":
+        # draw warrior
+        if p1 == "warrior":
             warrior1.frameUpdate()
             warrior1.draw(screen, "", RED)
-        #draw nomad
-        if p1=="nomad":
+        # draw nomad
+        if p1 == "nomad":
             nomad1.frameUpdate()
             nomad1.draw(screen, "", RED)
 
-
-        #draw wizard
-        if p2=="wizard":
+        # draw wizard
+        if p2 == "wizard":
             wizard2.frameUpdate()
             wizard2.draw(screen, "", RED)
-        #draw warrior
-        if p2=="warrior":
+        # draw warrior
+        if p2 == "warrior":
             warrior2.frameUpdate()
             warrior2.draw(screen, "", RED)
-        #draw nomad
-        if p2=="nomad":
+        # draw nomad
+        if p2 == "nomad":
             nomad2.frameUpdate()
-            nomad2.draw(screen, "", RED)    
+            nomad2.draw(screen, "", RED)
 
-        #player 1
+            # player 1
         text = font(15).render("PLAYER 1", True, "#b68f40")
         rect = text.get_rect(center=(300, 125))
         screen.blit(text, rect)
 
-        #player 2
+        # player 2
         text = font(15).render("PLAYER 2", True, "#b68f40")
         rect = text.get_rect(center=(700, 125))
         screen.blit(text, rect)
@@ -1264,10 +1444,10 @@ def menu_char():
                     pygame.quit()
                     sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
-                #make it so that when you click play, it goes to the game loop
+                # make it so that when you click play, it goes to the game loop
                 if play.checkForInput(mouse):
                     pygame.display.set_caption("Map Select")
-                    map_select()
+                    map_select(mode)
                 if back.checkForInput(mouse):
                     pygame.display.set_caption("Main Menu")
                     leave_menu = True
@@ -1276,33 +1456,33 @@ def menu_char():
                     p1_color_warrior = "#d7fcd4"
                     p1_color_wizard = "Yellow"
                     p1_color_nomad = "#d7fcd4"
-                    p1= "wizard"
+                    p1 = "wizard"
                 if p1_warrior.checkForInput(mouse):
                     p1_color_warrior = "Yellow"
                     p1_color_wizard = "#d7fcd4"
                     p1_color_nomad = "#d7fcd4"
-                    p1= "warrior"
+                    p1 = "warrior"
                 if p1_nomad.checkForInput(mouse):
                     p1_color_nomad = "Yellow"
                     p1_color_wizard = "#d7fcd4"
                     p1_color_warrior = "#d7fcd4"
-                    p1= "nomad"
+                    p1 = "nomad"
                 if p2_wizard.checkForInput(mouse):
                     p2_color_wizard = "Blue"
                     p2_color_warrior = "#d7fcd4"
                     p2_color_nomad = "#d7fcd4"
-                    p2= "wizard"
+                    p2 = "wizard"
                 if p2_warrior.checkForInput(mouse):
                     p2_color_warrior = "Blue"
                     p2_color_nomad = "#d7fcd4"
                     p2_color_wizard = "#d7fcd4"
-                    p2= "warrior"
+                    p2 = "warrior"
                 if p2_nomad.checkForInput(mouse):
                     p2_color_nomad = "Blue"
                     p2_color_wizard = "#d7fcd4"
                     p2_color_warrior = "#d7fcd4"
-                    p2= "nomad"
-                
+                    p2 = "nomad"
+
         if leave_menu:
             break
         clock.tick(MENU_FPS)
@@ -1310,11 +1490,11 @@ def menu_char():
 
 
 #create a map select screen
-def map_select():
+def map_select(mode):
     global map
     leave_menu = False
     clock = pygame.time.Clock()
-
+    mode=mode
     #church map preview
     image1 = pygame.image.load(resource_path("game/assets/maps/church.png"))
     image1 = pygame.transform.scale(image1, (250, 125))
@@ -1331,6 +1511,7 @@ def map_select():
     BLACK = (0, 0, 0)
 
     while True:
+        menu_scaled = pygame.transform.scale(menu_bg, (SCREEN_WIDTH, SCREEN_HEIGHT))
         screen.blit(menu_scaled, (0, 0))
         mouse = pygame.mouse.get_pos()
 
@@ -1396,7 +1577,11 @@ def map_select():
                     mixer.music.load(resource_path("game/assets/audio/background-game.wav"))
                     mixer.music.play(-1)
                     mixer.music.set_volume(background_music_volume)
-                    game_loop()
+                    if mode == "Single Player":
+                        single_game_loop()
+                    else:
+                        game_loop()
+
                 if back.checkForInput(mouse):
                     pygame.display.set_caption("Character Select")
                     leave_menu = True
@@ -1512,9 +1697,9 @@ def multi_char_select(game_client):
                 p2_war = "Blue"
                 p2_wiz = default_colour
                 p2_nom = default_colour
-                enemy_choice = warrior2
 
             if game_client.enemy_resp.start:
+
                 break
 
             game_client.enemy_resp = None
@@ -1587,10 +1772,10 @@ def main_menu():
 
     options = Button(image=pygame.image.load(button_long), pos=(500, 325),
                      text_input="OPTIONS", font=font(55), base_color="#d7fcd4", hovering_color="White")
-    
+
     quit = Button(image=pygame.image.load(button_med), pos=(500, 470),
                   text_input="QUIT", font=font(55), base_color="#d7fcd4", hovering_color="White")
-    
+
     text = font(75).render("Main Menu", True, "#b68f40")
     rect = text.get_rect(center=(500, 50))
     clock = pygame.time.Clock()
@@ -1700,5 +1885,5 @@ if __name__ == "__main__":
     #scale the menu background to fit the screen resolution
     menu_scaled = pygame.transform.scale(menu_bg, (SCREEN_WIDTH, SCREEN_HEIGHT))
 
-    
+
     main_menu()
