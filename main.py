@@ -1,7 +1,7 @@
 import pygame, asyncio, pygame_textinput
 from pygame import mixer
 from game.fighter import Fighter
-from game.fighter_ai import Fighter_ai
+from game.fighter_Bot import Fighter_Bot
 from game.online_fighter import OnlineFighter
 from game.characters.nomad import createNomad
 from game.characters.warrior import createWarrior
@@ -307,15 +307,15 @@ def single_game_loop():
 
 
     if p2 == "wizard":
-        fighter_2 = createWizard(Fighter_ai, 2, p2_spawn[0], p2_spawn[1], True, punch_fx, projectile_fx, hit_fx,
+        fighter_2 = createWizard(Fighter_Bot, 2, p2_spawn[0], p2_spawn[1], True, punch_fx, projectile_fx, hit_fx,
                                  player2_controls)
 
     elif p2 == "nomad":
-        fighter_2 = createNomad(Fighter_ai, 2, p2_spawn[0], p2_spawn[1], True, punch_fx, projectile_fx, hit_fx,
+        fighter_2 = createNomad(Fighter_Bot, 2, p2_spawn[0], p2_spawn[1], True, punch_fx, projectile_fx, hit_fx,
                                 player2_controls)
 
     elif p2 == "warrior":
-        fighter_2 = createWarrior(Fighter_ai, 2, p2_spawn[0], p2_spawn[1], True, punch_fx, projectile_fx, hit_fx,
+        fighter_2 = createWarrior(Fighter_Bot, 2, p2_spawn[0], p2_spawn[1], True, punch_fx, projectile_fx, hit_fx,
                                   player2_controls)
 
 

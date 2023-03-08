@@ -2,7 +2,7 @@ import pygame
 import sys,os
 from game.fighter import Fighter
 
-class Fighter_ai(Fighter):
+class Fighter_Bot(Fighter):
     def __init__(self, player, x, y, flip, punch_sound, projectile_sound, hit_sound, controls):
         super().__init__(player, x, y, flip, punch_sound, projectile_sound, hit_sound, controls)
         self.moves=[0,0,0,0,0,0]
