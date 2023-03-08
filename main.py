@@ -743,11 +743,11 @@ def player1():
                                font=font(15), base_color="#d7fcd4", hovering_color="White")
 
         player1_attack1 = Button(image=None, pos=(500, 350),
-                                 text_input="Punch : " + pygame.key.name(player1_controls["attack1"]),
+                                 text_input="Attack1 : " + pygame.key.name(player1_controls["attack1"]),
                                  font=font(15), base_color="#d7fcd4", hovering_color="White")
 
         player1_attack2 = Button(image=None, pos=(500, 400),
-                                 text_input="Projectile : " + pygame.key.name(player1_controls["attack2"]),
+                                 text_input="Attack2 : " + pygame.key.name(player1_controls["attack2"]),
                                  font=font(15), base_color="#d7fcd4", hovering_color="White")
 
         player1_back = Button(image=pygame.image.load(button_med), pos=(500, 475),
@@ -820,11 +820,11 @@ def player2():
                                font=font(15), base_color="#d7fcd4", hovering_color="White")
 
         player2_attack1 = Button(image=None, pos=(500, 350),
-                                 text_input="Punch : " + pygame.key.name(player2_controls["attack1"]),
+                                 text_input="Attack1 : " + pygame.key.name(player2_controls["attack1"]),
                                  font=font(15), base_color="#d7fcd4", hovering_color="White")
 
         player2_attack2 = Button(image=None, pos=(500, 400),
-                                 text_input="Projectile : " + pygame.key.name(player2_controls["attack2"]),
+                                 text_input="Attack2 : " + pygame.key.name(player2_controls["attack2"]),
                                  font=font(15), base_color="#d7fcd4", hovering_color="White")
 
         player2_back = Button(image=pygame.image.load(button_med), pos=(500, 475),
