@@ -47,6 +47,7 @@ def createNomad(inherit_from, player, x, y, flip, punch_sound, projectile_sound,
 
 
 
+
         def attack(self, surface, target):
             if self.attack_type == 1:
                 if self.attack1_cooldown == 0:
