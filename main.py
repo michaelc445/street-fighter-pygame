@@ -443,7 +443,7 @@ def victory_screen(screen, winner, scaled_bg, fighter1, fighter2):
     victory_rematch = Button(image=None, pos=(500, 475),
                     text_input="Rematch", font=font(35),
                     base_color="White", hovering_color="Grey") 
-
+    idk = " "
     while run:
         # set background
         mouse = pygame.mouse.get_pos()
@@ -1697,7 +1697,7 @@ def multi_char_select(game_client):
                 p2_war = "Blue"
                 p2_wiz = default_colour
                 p2_nom = default_colour
-
+                enemy_choice= warrior2
             if game_client.enemy_resp.start:
 
                 break
