@@ -630,7 +630,10 @@ progress {
   font-size: 0.875em;
   color: #6c757d;
 }
-
+iframe{
+    display: block;
+    margin: auto;
+}
 .container,
 .container-fluid,
 .container-xxl,

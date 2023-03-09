@@ -10,7 +10,7 @@
                 <div class="row gx-4 gx-lg-5 justify-content-center">
                     <div class="col-md-10 col-lg-8 col-xl-7">
                         <video width="640" height="480" controls>
-                          <source src="../images/trailer.mp4" type="video/mp4">
+                          <source src="{{ url_for('static', filename='images/trailer.mp4') }}" type="video/mp4">
                         Your browser does not support the video tag.
                         </video>
                     </div>
@@ -73,13 +73,13 @@
                 </h3>
                 <ul>
                     <li>
-                        <img id="small" src="../images/single.jpg"/> Battle against the computer in an intense one on one match!
+                        <img id="small" src="{{ url_for('static', filename='images/single.jpg') }}"/> Battle against the computer in an intense one on one match!
                     </li>
                     <li>
-                       <img id="small" src="../images/local.png"/>  local Play your friend locally using the same keyboard!
+                       <img id="small" src="{{ url_for('static', filename='images/local.png') }}"/>  local Play your friend locally using the same keyboard!
                     </li>
                     <li>
-                        <img id="small" src="../images/multi.png"/>  multiplayer Queue up for an intense match online!
+                        <img id="small" src="{{ url_for('static', filename='images/multi.png') }}"/>  multiplayer Queue up for an intense match online!
                     </li>
                     <li>
                         We use a server provided by NetSoc, which can host up to 10 simultaneous games.
