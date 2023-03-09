@@ -478,6 +478,9 @@ output {
 
 iframe {
   border: 0;
+  display: block;
+  margin: auto;
+  align:center;
 }
 
 summary {
@@ -605,7 +608,7 @@ progress {
 }
 
 .img-fluid {
-  max-width: 100%;
+  width: 100%;
   height: auto;
 }
 
@@ -630,10 +633,7 @@ progress {
   font-size: 0.875em;
   color: #6c757d;
 }
-iframe{
-    display: block;
-    margin: auto;
-}
+
 .container,
 .container-fluid,
 .container-xxl,

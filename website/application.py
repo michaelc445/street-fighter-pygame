@@ -1,3 +1,4 @@
+
 from flask import Flask, render_template , request , make_response , session , redirect, url_for ,g
 from database import get_db, close_db
 from forms import  RegistrationForm ,LoginForm
@@ -5,9 +6,9 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_session import Session
 
 application = app = Flask(__name__)
-app.config["SECRET_KEY"] =  "this-is-my-secret-key"
-app.config["SESSION_PERMANENT"] = False
-app.config["SESSION_TYPE"] = "filesystem"
+application.config["SECRET_KEY"] =  "this-is-my-secret-key"
+application.config["SESSION_PERMANENT"] = False
+application.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
 
