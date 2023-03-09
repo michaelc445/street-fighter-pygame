@@ -10,7 +10,7 @@ def createWizard(inherit_from, player, x, y, flip, punch_sound, projectile_sound
             width = 60
             self.rect = pygame.Rect((x, y, width, height))
             #character attributes
-            self.speed = 8
+            self.speed = 14
             #load wizard sheet
             self.wizardSheet = pygame.image.load(inherit_from.resource_path("assets/wizard/wizard_spritesheet.png"))
             #self.spriteSheet = self.wizardSheet
@@ -32,7 +32,7 @@ def createWizard(inherit_from, player, x, y, flip, punch_sound, projectile_sound
 
             # attack 1 animation
             self.projectileAnimation1 = pygame.image.load(inherit_from.resource_path("assets/projectiles/pulseSpritesheet.png"))
-            self.projectileSteps1 = 3
+            self.projectileSteps1 = 4
             self.imgWidth1 = 63
             self.imgHeight1 = 32
             self.offSetX1 = 0
@@ -42,7 +42,7 @@ def createWizard(inherit_from, player, x, y, flip, punch_sound, projectile_sound
             self.animationCooldown1 = 100
             # attack 2 animation
             self.projectileAnimation2 = pygame.image.load(inherit_from.resource_path("assets/projectiles/17_felspell_spritesheet.png"))
-            self.projectileSteps2 = 7
+            self.projectileSteps2 = 8
             self.imgWidth2 = 100
             self.imgHeight2 = 100
             self.offSetX2 = 0
@@ -73,7 +73,7 @@ def createWizard(inherit_from, player, x, y, flip, punch_sound, projectile_sound
                     knockback = 10
                     self.projectile_sound.play()
                     self.projectiles.append(
-                        Projectile(self.rect.centerx - (2 * self.rect.width * self.flip), self.rect.y, 2 * self.rect.width,
+                        Projectile(self.rect.centerx - (2 * self.rect.width * self.flip), self.rect.y,  self.rect.width,
                                 self.rect.height, damage, knockback, self, 5 - (10 * self.flip), self.projectile_imgs2, self.animationCooldown2, self.projectileSteps2))
                     self.attack2_cooldown = 150
 

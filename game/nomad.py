@@ -1,6 +1,6 @@
 import pygame
 
-#from game import projectile
+
 from projectile import Projectile
 
 def createNomad(inherit_from, player, x, y, flip, punch_sound, projectile_sound, hit_sound, controls):
@@ -14,7 +14,7 @@ def createNomad(inherit_from, player, x, y, flip, punch_sound, projectile_sound,
             self.rect = pygame.Rect((x, y, width, height))
 
             #character attributes
-            self.speed = 10
+            self.speed = 14
 
             #load nomad sheet
             self.nomadSheet = pygame.image.load(inherit_from.resource_path("assets/nomad/nomad_spritesheet.png"))
@@ -36,7 +36,7 @@ def createNomad(inherit_from, player, x, y, flip, punch_sound, projectile_sound,
             self.blockingList = self.loadBlockingImages(self.blockAnimation, self.blockingSteps)
             # attack 2 animation
             self.projectileAnimation = pygame.image.load(inherit_from.resource_path("assets/projectiles/tornado.png"))
-            self.projectileSteps = 7
+            self.projectileSteps = 8
             self.imgWidth = 128
             self.imgHeight = 128
             self.offSetX = 200
@@ -44,6 +44,7 @@ def createNomad(inherit_from, player, x, y, flip, punch_sound, projectile_sound,
             self.projectileRect = pygame.Rect((self.rect.centerx - (2 * self.rect.width * self.flip), self.rect.y,  2 * self.rect.width, self.rect.height // 2))
             self.projectile_imgs = self.loadProjectileImages(self.projectileAnimation, self.projectileSteps, self.imgWidth, self.imgHeight, self.projectileRect, self.offSetX, self.offSetY)
             self.animationCooldown = 40
+
 
 
 
@@ -56,13 +57,13 @@ def createNomad(inherit_from, player, x, y, flip, punch_sound, projectile_sound,
                     knockback = 10
                     attacking_rect = pygame.Rect(self.rect.centerx - (2 * self.rect.width * self.flip),
                                                  self.rect.y, 2 * self.rect.width,
-                                                 self.rect.height // 2)
+                                                 self.rect.height)
                     self.attack1_cooldown = 20
 
                     if attacking_rect.colliderect(target.rect) and not target.blocking:
                         target.take_hit(damage, knockback, self.flip)
 
-                    pygame.draw.rect(surface, (0, 255, 0), attacking_rect)
+                    #pygame.draw.rect(surface, (0, 255, 0), attacking_rect)
 
             if self.attack_type == 2:
                 if self.attack2_cooldown == 0:
@@ -73,8 +74,8 @@ def createNomad(inherit_from, player, x, y, flip, punch_sound, projectile_sound,
                     self.projectiles.append(
                         Projectile(self.rect.centerx - (2 * self.rect.width * self.flip),
                                    self.rect.y,
-                                   2 * self.rect.width,
-                                   self.rect.height // 2,
+                                   self.rect.width,
+                                   self.rect.height,
                                    damage,
                                    knockback,
                                    self, 10 - (20 * self.flip),

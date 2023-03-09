@@ -79,7 +79,7 @@ class Fighter_ai(Fighter):
 
         self.moves=player_move
     def move(self, screen_width, screen_height, surface, target, obstacles):
-        GRAVITY = 1
+        GRAVITY = 1.2
         self.dx = 0
         self.dy = 0
 

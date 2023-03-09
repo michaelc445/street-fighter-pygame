@@ -41,7 +41,7 @@ class Main:
         # cap frame rate
         self.clock = pygame.time.Clock()
         self.MENU_FPS = 20
-        self.GAME_FPS = 60
+        self.GAME_FPS = 30
         # define colors
         self.YELLOW = (255, 255, 0)
         self.RED = (255, 0, 0)
@@ -576,7 +576,7 @@ class Main:
                     sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if victory_back.checkForInput(mouse):
-                    leave_menu = True
+                    self.game_state = "main_menu"
                     idk = "back"
                     return idk
                 if victory_rematch.checkForInput(mouse):
@@ -607,7 +607,7 @@ class Main:
     # controls
     def controls(self):
         leave_menu = False
-        clock = pygame.time.Clock()
+        self.clock = pygame.time.Clock()
 
 
         controls_mouse = pygame.mouse.get_pos()
@@ -818,7 +818,7 @@ class Main:
     def opt(self):
         menu_scaled = pygame.transform.scale(self.menu_bg, (self.SCREEN_WIDTH, self.SCREEN_HEIGHT))
         leave_menu = False
-        clock = pygame.time.Clock()
+        self.clock = pygame.time.Clock()
 
         opt_mouse = pygame.mouse.get_pos()
 
@@ -860,15 +860,15 @@ class Main:
                     self.game_state="Audio"
             if leave_menu:
                 break
-            clock.tick(self.MENU_FPS)
-            pygame.display.update()
+            self.clock.tick(self.MENU_FPS)
+
 
 
     # create a function to handle audio levels using buttons for sound effects and music
     def audio(self):
         menu_scaled = pygame.transform.scale(self.menu_bg, (self.SCREEN_WIDTH, self.SCREEN_HEIGHT))
         leave_menu = False
-        clock = pygame.time.Clock()
+        self.clock = pygame.time.Clock()
         audio_mouse = pygame.mouse.get_pos()
         self.screen.blit(menu_scaled, (0, 0))
 
@@ -946,8 +946,8 @@ class Main:
                     self.sfx_change(4)
             if leave_menu:
                 break
-            clock.tick(self.MENU_FPS)
-            pygame.display.update()
+            self.clock.tick(self.MENU_FPS)
+
 
 
     #new menu for when you click play, it should have a "local multiplayer" and a "singleplayer" button

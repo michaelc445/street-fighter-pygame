@@ -98,7 +98,7 @@ class Fighter(object):
         return os.path.join(base_path, relative_path)
 
     def move(self, screen_width, screen_height, surface, target, obstacles):
-        GRAVITY = 1
+        GRAVITY = 1.2
         self.dx = 0
         self.dy = 0
 
@@ -295,9 +295,9 @@ class Fighter(object):
     def grav(self, gravity):
         self.vel_y += gravity
         if self.vel_x > 0:
-            self.vel_x -= 0.5
+            self.vel_x -= .5
         if self.vel_x < 0:
-            self.vel_x += 0.5
+            self.vel_x += .5
         self.dy += self.vel_y
         self.dx += self.vel_x
 
