@@ -664,13 +664,13 @@ def controls():
 
     # make player 1 controls with a button
     controls_player1 = Button(image=pygame.image.load(button_med), pos=(500, 175),
-                                text_input="Player 1", font=font(35), base_color="#d7fcd4", hovering_color="White")
+                                text_input="Player 1", font=font(35), base_color="#daf7d7", hovering_color="White")
 
     controls_player2 = Button(image=pygame.image.load(button_med), pos=(500, 325),
-                                text_input="Player 2", font=font(35), base_color="#d7fcd4", hovering_color="White")
+                                text_input="Player 2", font=font(35), base_color="#daf7d7", hovering_color="White")
 
     controls_back = Button(image=pygame.image.load(button_med), pos=(500, 475),
-                            text_input="BACK", font=font(35), base_color="#d7fcd4", hovering_color="White")
+                            text_input="BACK", font=font(35), base_color="#daf7d7", hovering_color="White")
 
 
     while True:
@@ -728,30 +728,30 @@ def player1():
         # make player 1 controls with a button
         player1_up = Button(image=None, pos=(500, 150),
                             text_input="Jump : " + pygame.key.name(player1_controls["jump"]), font=font(15),
-                            base_color="#d7fcd4", hovering_color="White")
+                            base_color="#daf7d7", hovering_color="White")
 
         player1_down = Button(image=None, pos=(500, 200),
                               text_input="Block : " + pygame.key.name(player1_controls["block"]),
-                              font=font(15), base_color="#d7fcd4", hovering_color="White")
+                              font=font(15), base_color="#daf7d7", hovering_color="White")
 
         player1_left = Button(image=None, pos=(500, 250),
                               text_input="Left : " + pygame.key.name(player1_controls["left"]), font=font(15),
-                              base_color="#d7fcd4", hovering_color="White")
+                              base_color="#daf7d7", hovering_color="White")
 
         player1_right = Button(image=None, pos=(500, 300),
                                text_input="Right : " + pygame.key.name(player1_controls["right"]),
-                               font=font(15), base_color="#d7fcd4", hovering_color="White")
+                               font=font(15), base_color="#daf7d7", hovering_color="White")
 
         player1_attack1 = Button(image=None, pos=(500, 350),
                                  text_input="Attack1 : " + pygame.key.name(player1_controls["attack1"]),
-                                 font=font(15), base_color="#d7fcd4", hovering_color="White")
+                                 font=font(15), base_color="#daf7d7", hovering_color="White")
 
         player1_attack2 = Button(image=None, pos=(500, 400),
                                  text_input="Attack2 : " + pygame.key.name(player1_controls["attack2"]),
-                                 font=font(15), base_color="#d7fcd4", hovering_color="White")
+                                 font=font(15), base_color="#daf7d7", hovering_color="White")
 
         player1_back = Button(image=pygame.image.load(button_med), pos=(500, 475),
-                              text_input="BACK", font=font(35), base_color="#d7fcd4", hovering_color="White")
+                              text_input="BACK", font=font(35), base_color="#daf7d7", hovering_color="White")
 
         for button in [player1_back, player1_up, player1_down, player1_left, player1_right, player1_attack1,
                        player1_attack2]:
@@ -805,30 +805,30 @@ def player2():
         # make player 2 controls with a button
         player2_up = Button(image=None, pos=(500, 150),
                             text_input="Jump : " + pygame.key.name(player2_controls["jump"]), font=font(15),
-                            base_color="#d7fcd4", hovering_color="White")
+                            base_color="#daf7d7", hovering_color="White")
 
         player2_down = Button(image=None, pos=(500, 200),
                               text_input="Block : " + pygame.key.name(player2_controls["block"]),
-                              font=font(15), base_color="#d7fcd4", hovering_color="White")
+                              font=font(15), base_color="#daf7d7", hovering_color="White")
 
         player2_left = Button(image=None, pos=(500, 250),
                               text_input="Left : " + pygame.key.name(player2_controls["left"]), font=font(15),
-                              base_color="#d7fcd4", hovering_color="White")
+                              base_color="#daf7d7", hovering_color="White")
 
         player2_right = Button(image=None, pos=(500, 300),
                                text_input="Right : " + pygame.key.name(player2_controls["right"]),
-                               font=font(15), base_color="#d7fcd4", hovering_color="White")
+                               font=font(15), base_color="#daf7d7", hovering_color="White")
 
         player2_attack1 = Button(image=None, pos=(500, 350),
                                  text_input="Attack1 : " + pygame.key.name(player2_controls["attack1"]),
-                                 font=font(15), base_color="#d7fcd4", hovering_color="White")
+                                 font=font(15), base_color="#daf7d7", hovering_color="White")
 
         player2_attack2 = Button(image=None, pos=(500, 400),
                                  text_input="Attack2 : " + pygame.key.name(player2_controls["attack2"]),
-                                 font=font(15), base_color="#d7fcd4", hovering_color="White")
+                                 font=font(15), base_color="#daf7d7", hovering_color="White")
 
         player2_back = Button(image=pygame.image.load(button_med), pos=(500, 475),
-                              text_input="BACK", font=font(35), base_color="#d7fcd4", hovering_color="White")
+                              text_input="BACK", font=font(35), base_color="#daf7d7", hovering_color="White")
 
         for button in [player2_back, player2_up, player2_down, player2_left, player2_right, player2_attack1,
                        player2_attack2]:
@@ -872,11 +872,11 @@ def opt():
 
 
     opt_controls = Button(image=pygame.image.load(button_med), pos=(500, 175),
-                            text_input="CONTROLS", font=font(35), base_color="#d7fcd4", hovering_color="White")
+                            text_input="CONTROLS", font=font(35), base_color="#daf7d7", hovering_color="White")
     opt_audio = Button(image=pygame.image.load(button_med), pos=(500, 325),
-                        text_input="AUDIO", font=font(35), base_color="#d7fcd4", hovering_color="White")
+                        text_input="AUDIO", font=font(35), base_color="#daf7d7", hovering_color="White")
     opt_back = Button(image=pygame.image.load(button_med), pos=(500, 475),
-                        text_input="BACK", font=font(35), base_color="#d7fcd4", hovering_color="White")
+                        text_input="BACK", font=font(35), base_color="#daf7d7", hovering_color="White")
 
     while True:
         opt_mouse = pygame.mouse.get_pos()
@@ -888,11 +888,11 @@ def opt():
         screen.blit(opt_text, opt_rect)
 
         opt_controls = Button(image=pygame.image.load(resource_path("game/assets/menu/medium.png")), pos=(500, 175),
-                              text_input="CONTROLS", font=font(35), base_color="#d7fcd4", hovering_color="White")
+                              text_input="CONTROLS", font=font(35), base_color="#daf7d7", hovering_color="White")
         opt_audio = Button(image=pygame.image.load(resource_path("game/assets/menu/medium.png")), pos=(500, 325),
-                           text_input="AUDIO", font=font(35), base_color="#d7fcd4", hovering_color="White")
+                           text_input="AUDIO", font=font(35), base_color="#daf7d7", hovering_color="White")
         opt_back = Button(image=pygame.image.load(resource_path("game/assets/menu/medium.png")), pos=(500, 475),
-                          text_input="BACK", font=font(35), base_color="#d7fcd4", hovering_color="White")
+                          text_input="BACK", font=font(35), base_color="#daf7d7", hovering_color="White")
 
         for button in [opt_controls, opt_audio, opt_back]:
             button.hover(opt_mouse)
@@ -931,29 +931,29 @@ def audio():
 
 
     audio_back = Button(image=pygame.image.load(button_med), pos=(500, 475),
-                        text_input="BACK", font=font(35), base_color="#d7fcd4", hovering_color="White")
+                        text_input="BACK", font=font(35), base_color="#daf7d7", hovering_color="White")
     # make 4 buttons for music volume, 1 for each quarter
     music_0 = Button(image=None, pos=(400, 175),
-                        text_input="0%", font=font(25), base_color="#d7fcd4", hovering_color="White")
+                        text_input="0%", font=font(25), base_color="#daf7d7", hovering_color="White")
     music_1 = Button(image=None, pos=(510, 175),
-                        text_input="25%", font=font(25), base_color="#d7fcd4", hovering_color="White")
+                        text_input="25%", font=font(25), base_color="#daf7d7", hovering_color="White")
     music_2 = Button(image=None, pos=(620, 175),
-                        text_input="50%", font=font(25), base_color="#d7fcd4", hovering_color="White")
+                        text_input="50%", font=font(25), base_color="#daf7d7", hovering_color="White")
     music_3 = Button(image=None, pos=(730, 175),
-                        text_input="75%", font=font(25), base_color="#d7fcd4", hovering_color="White")
+                        text_input="75%", font=font(25), base_color="#daf7d7", hovering_color="White")
     music_4 = Button(image=None, pos=(840, 175),
-                        text_input="100%", font=font(25), base_color="#d7fcd4", hovering_color="White")
+                        text_input="100%", font=font(25), base_color="#daf7d7", hovering_color="White")
 
     sfx_0 = Button(image=None, pos=(400, 325),
-                    text_input="0%", font=font(25), base_color="#d7fcd4", hovering_color="White")
+                    text_input="0%", font=font(25), base_color="#daf7d7", hovering_color="White")
     sfx_1 = Button(image=None, pos=(510, 325),
-                    text_input="25%", font=font(25), base_color="#d7fcd4", hovering_color="White")
+                    text_input="25%", font=font(25), base_color="#daf7d7", hovering_color="White")
     sfx_2 = Button(image=None, pos=(620, 325),
-                    text_input="50%", font=font(25), base_color="#d7fcd4", hovering_color="White")
+                    text_input="50%", font=font(25), base_color="#daf7d7", hovering_color="White")
     sfx_3 = Button(image=None, pos=(730, 325),
-                    text_input="75%", font=font(25), base_color="#d7fcd4", hovering_color="White")
+                    text_input="75%", font=font(25), base_color="#daf7d7", hovering_color="White")
     sfx_4 = Button(image=None, pos=(840, 325),
-                    text_input="100%", font=font(25), base_color="#d7fcd4", hovering_color="White")
+                    text_input="100%", font=font(25), base_color="#daf7d7", hovering_color="White")
 
     while True:
         audio_mouse = pygame.mouse.get_pos()
@@ -1093,11 +1093,11 @@ def multi_map_select(game_client):
                       text_input="PLAY", font=font(35), base_color="White", hovering_color="Yellow")
         #map select buttons
         map1 = Button(image=image1, pos=(200, 300),
-                        text_input="", font=font(25), base_color="#d7fcd4", hovering_color="Yellow")
+                        text_input="", font=font(25), base_color="#daf7d7", hovering_color="Yellow")
         map2 = Button(image=image2, pos=(500, 300),
-                        text_input="", font=font(25), base_color="#d7fcd4", hovering_color="Yellow")
+                        text_input="", font=font(25), base_color="#daf7d7", hovering_color="Yellow")
         map3 = Button(image=image3, pos=(800, 300),
-                        text_input="", font=font(25), base_color="#d7fcd4", hovering_color="Yellow")
+                        text_input="", font=font(25), base_color="#daf7d7", hovering_color="Yellow")
 
         back = Button(image=pygame.image.load(button_med), pos=(300, 525),
                       text_input="BACK", font=font(35), base_color="White", hovering_color="Yellow")
@@ -1258,16 +1258,16 @@ def multi_lobby_menu(game_client):
 def menu_play():
 
     single_player = Button(image=pygame.image.load(button_long), pos=(500, 150),
-                           text_input="SINGLEPLAYER", font=font(35), base_color="#d7fcd4", hovering_color="White")
+                           text_input="SINGLEPLAYER", font=font(35), base_color="#daf7d7", hovering_color="White")
 
     local = Button(image=pygame.image.load(button_long), pos=(500, 275),
-                   text_input="LOCAL", font=font(35), base_color="#d7fcd4", hovering_color="White")
+                   text_input="LOCAL", font=font(35), base_color="#daf7d7", hovering_color="White")
 
     multiplayer = Button(image=pygame.image.load(button_long), pos=(500, 400),
-                         text_input="MULTIPLAYER", font=font(35), base_color="#d7fcd4", hovering_color="White")
+                         text_input="MULTIPLAYER", font=font(35), base_color="#daf7d7", hovering_color="White")
 
     back = Button(image=pygame.image.load(button_med), pos=(500, 525),
-                  text_input="BACK", font=font(35), base_color="#d7fcd4", hovering_color="White")
+                  text_input="BACK", font=font(35), base_color="#daf7d7", hovering_color="White")
     leave_menu = False
 
     clock = pygame.time.Clock()
@@ -1340,13 +1340,13 @@ def menu_char(mode):
     global p1
     global p2
 
-    p1_color_wizard = "#d7fcd4"
-    p1_color_warrior = "#d7fcd4"
-    p1_color_nomad = "#d7fcd4"
+    p1_color_wizard = "#daf7d7"
+    p1_color_warrior = "#daf7d7"
+    p1_color_nomad = "#daf7d7"
 
-    p2_color_wizard = "#d7fcd4"
-    p2_color_warrior = "#d7fcd4"
-    p2_color_nomad = "#d7fcd4"
+    p2_color_wizard = "#daf7d7"
+    p2_color_warrior = "#daf7d7"
+    p2_color_nomad = "#daf7d7"
 
     # draw player 1 characters
     wizard1 = createWizard(Fighter, 1, 285, 175, False, punch_fx, projectile_fx, hit_fx, player1_controls)
@@ -1453,34 +1453,34 @@ def menu_char(mode):
                     leave_menu = True
                     break
                 if p1_wizard.check_for_input(mouse):
-                    p1_color_warrior = "#d7fcd4"
+                    p1_color_warrior = "#daf7d7"
                     p1_color_wizard = "Yellow"
-                    p1_color_nomad = "#d7fcd4"
+                    p1_color_nomad = "#daf7d7"
                     p1 = "wizard"
                 if p1_warrior.check_for_input(mouse):
                     p1_color_warrior = "Yellow"
-                    p1_color_wizard = "#d7fcd4"
-                    p1_color_nomad = "#d7fcd4"
+                    p1_color_wizard = "#daf7d7"
+                    p1_color_nomad = "#daf7d7"
                     p1 = "warrior"
                 if p1_nomad.check_for_input(mouse):
                     p1_color_nomad = "Yellow"
-                    p1_color_wizard = "#d7fcd4"
-                    p1_color_warrior = "#d7fcd4"
+                    p1_color_wizard = "#daf7d7"
+                    p1_color_warrior = "#daf7d7"
                     p1 = "nomad"
                 if p2_wizard.check_for_input(mouse):
                     p2_color_wizard = "Blue"
-                    p2_color_warrior = "#d7fcd4"
-                    p2_color_nomad = "#d7fcd4"
+                    p2_color_warrior = "#daf7d7"
+                    p2_color_nomad = "#daf7d7"
                     p2 = "wizard"
                 if p2_warrior.check_for_input(mouse):
                     p2_color_warrior = "Blue"
-                    p2_color_nomad = "#d7fcd4"
-                    p2_color_wizard = "#d7fcd4"
+                    p2_color_nomad = "#daf7d7"
+                    p2_color_wizard = "#daf7d7"
                     p2 = "warrior"
                 if p2_nomad.check_for_input(mouse):
                     p2_color_nomad = "Blue"
-                    p2_color_wizard = "#d7fcd4"
-                    p2_color_warrior = "#d7fcd4"
+                    p2_color_wizard = "#daf7d7"
+                    p2_color_warrior = "#daf7d7"
                     p2 = "nomad"
 
         if leave_menu:
@@ -1549,11 +1549,11 @@ def map_select(mode):
                         text_input="PLAY", font=font(35), base_color="White", hovering_color="Yellow")
         #map select buttons
         map1 = Button(image=image1, pos=(200, 300),
-                        text_input="", font=font(25), base_color="#d7fcd4", hovering_color="Yellow")
+                        text_input="", font=font(25), base_color="#daf7d7", hovering_color="Yellow")
         map2 = Button(image=image2, pos=(500, 300),
-                        text_input="", font=font(25), base_color="#d7fcd4", hovering_color="Yellow")
+                        text_input="", font=font(25), base_color="#daf7d7", hovering_color="Yellow")
         map3 = Button(image=image3, pos=(800, 300),
-                        text_input="", font=font(25), base_color="#d7fcd4", hovering_color="Yellow")
+                        text_input="", font=font(25), base_color="#daf7d7", hovering_color="Yellow")
 
         back = Button(image=pygame.image.load(button_med), pos=(300, 525),
                       text_input="BACK", font=font(35), base_color="White", hovering_color="Yellow")
@@ -1600,10 +1600,10 @@ def map_select(mode):
 
 def multi_char_select(game_client):
     global p1, p2
-    default_colour = "#d7fcd4"
-    p2_wiz = "#d7fcd4"
-    p2_war = "#d7fcd4"
-    p2_nom = "#d7fcd4"
+    default_colour = "#daf7d7"
+    p2_wiz = "#daf7d7"
+    p2_war = "#daf7d7"
+    p2_nom = "#daf7d7"
 
     #draw player 1 characters
     wizard1 = createWizard(Fighter, 1, 285, 175, False, punch_fx, projectile_fx, hit_fx, player1_controls)
@@ -1616,10 +1616,10 @@ def multi_char_select(game_client):
     nomad2 = createNomad(Fighter, 1, 675, 175, False, punch_fx, projectile_fx, hit_fx, player1_controls)
     warrior2 = createWarrior(Fighter, 1, 665, 175, False, punch_fx, projectile_fx, hit_fx, player1_controls)
 
-    p1_color_wizard = "#d7fcd4"
+    p1_color_wizard = "#daf7d7"
     p2_color_wizard = "Blue"
 
-    p1_color_warrior = "#d7fcd4"
+    p1_color_warrior = "#daf7d7"
     p1_color_nomad = "Yellow"
 
     play = Button(image=pygame.image.load(button_med), pos=(700, 525),
@@ -1768,13 +1768,13 @@ async def update_lobby(game_client):
 # main menu
 def main_menu():
     play = Button(image=pygame.image.load(button_long), pos=(500, 180),
-                  text_input="PLAY", font=font(55), base_color="#d7fcd4", hovering_color="White")
+                  text_input="PLAY", font=font(55), base_color="#daf7d7", hovering_color="White")
 
     options = Button(image=pygame.image.load(button_long), pos=(500, 325),
-                     text_input="OPTIONS", font=font(55), base_color="#d7fcd4", hovering_color="White")
+                     text_input="OPTIONS", font=font(55), base_color="#daf7d7", hovering_color="White")
 
     quit = Button(image=pygame.image.load(button_med), pos=(500, 470),
-                  text_input="QUIT", font=font(55), base_color="#d7fcd4", hovering_color="White")
+                  text_input="QUIT", font=font(55), base_color="#daf7d7", hovering_color="White")
 
     text = font(75).render("Main Menu", True, "#b88d37")
     rect = text.get_rect(center=(500, 50))
