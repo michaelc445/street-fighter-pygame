@@ -470,11 +470,11 @@ def victory_screen(screen, winner, scaled_bg, fighter1, fighter2):
                     pygame.quit()
                     sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
-                if victory_back.checkForInput(mouse):
+                if victory_back.check_for_input(mouse):
                     leave_menu = True
                     idk = "back"
                     return idk
-                if victory_rematch.checkForInput(mouse):
+                if victory_rematch.check_for_input(mouse):
                     leave_menu = True
                     idk = "rematch"
                     return idk
@@ -678,7 +678,7 @@ def controls():
         controls_mouse = pygame.mouse.get_pos()
         screen.blit(menu_scaled, (0, 0))
 
-        controls_text = font(50).render("CONTROLS", True, "#b68f40")
+        controls_text = font(50).render("CONTROLS", True, "#b88d37")
         controls_rect = controls_text.get_rect(center=(500, 65))
         screen.blit(controls_text, controls_rect)
 
@@ -696,12 +696,12 @@ def controls():
                     pygame.quit()
                     sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
-                if controls_back.checkForInput(controls_mouse):
+                if controls_back.check_for_input(controls_mouse):
                     leave_menu = True
                     break
-                if controls_player1.checkForInput(controls_mouse):
+                if controls_player1.check_for_input(controls_mouse):
                     player1()
-                if controls_player2.checkForInput(controls_mouse):
+                if controls_player2.check_for_input(controls_mouse):
                     player2()
         if leave_menu:
             break
@@ -721,7 +721,7 @@ def player1():
 
         screen.blit(menu_scaled, (0, 0))
 
-        player1_text = font(50).render("PLAYER 1", True, "#b68f40")
+        player1_text = font(50).render("PLAYER 1", True, "#b88d37")
         player1_rect = player1_text.get_rect(center=(500, 65))
         screen.blit(player1_text, player1_rect)
 
@@ -767,20 +767,20 @@ def player1():
                     pygame.quit()
                     sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
-                if player1_back.checkForInput(player1_mouse):
+                if player1_back.check_for_input(player1_mouse):
                     leave_menu = True
                     break
-                if player1_up.checkForInput(player1_mouse):
+                if player1_up.check_for_input(player1_mouse):
                     control_handling(player1_controls, "jump")
-                if player1_down.checkForInput(player1_mouse):
+                if player1_down.check_for_input(player1_mouse):
                     control_handling(player1_controls, "block")
-                if player1_left.checkForInput(player1_mouse):
+                if player1_left.check_for_input(player1_mouse):
                     control_handling(player1_controls, "left")
-                if player1_right.checkForInput(player1_mouse):
+                if player1_right.check_for_input(player1_mouse):
                     control_handling(player1_controls, "right")
-                if player1_attack1.checkForInput(player1_mouse):
+                if player1_attack1.check_for_input(player1_mouse):
                     control_handling(player1_controls, "attack1")
-                if player1_attack2.checkForInput(player1_mouse):
+                if player1_attack2.check_for_input(player1_mouse):
                     control_handling(player1_controls, "attack2")
         if leave_menu:
             break
@@ -798,7 +798,7 @@ def player2():
 
         screen.blit(menu_scaled, (0, 0))
 
-        player2_text = font(50).render("PLAYER 2", True, "#b68f40")
+        player2_text = font(50).render("PLAYER 2", True, "#b88d37")
         player2_rect = player2_text.get_rect(center=(500, 65))
         screen.blit(player2_text, player2_rect)
 
@@ -844,20 +844,20 @@ def player2():
                     pygame.quit()
                     sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
-                if player2_back.checkForInput(player2_mouse):
+                if player2_back.check_for_input(player2_mouse):
                     leave_menu = True
                     break
-                if player2_up.checkForInput(player2_mouse):
+                if player2_up.check_for_input(player2_mouse):
                     control_handling(player2_controls, "jump")
-                if player2_down.checkForInput(player2_mouse):
+                if player2_down.check_for_input(player2_mouse):
                     control_handling(player2_controls, "block")
-                if player2_left.checkForInput(player2_mouse):
+                if player2_left.check_for_input(player2_mouse):
                     control_handling(player2_controls, "left")
-                if player2_right.checkForInput(player2_mouse):
+                if player2_right.check_for_input(player2_mouse):
                     control_handling(player2_controls, "right")
-                if player2_attack1.checkForInput(player2_mouse):
+                if player2_attack1.check_for_input(player2_mouse):
                     control_handling(player2_controls, "attack1")
-                if player2_attack2.checkForInput(player2_mouse):
+                if player2_attack2.check_for_input(player2_mouse):
                     control_handling(player2_controls, "attack2")
         if leave_menu:
             break
@@ -883,7 +883,7 @@ def opt():
 
         screen.blit(menu_scaled, (0, 0))
 
-        opt_text = font(50).render("OPTIONS", True, "#b68f40")
+        opt_text = font(50).render("OPTIONS", True, "#b88d37")
         opt_rect = opt_text.get_rect(center=(500, 65))
         screen.blit(opt_text, opt_rect)
 
@@ -907,14 +907,14 @@ def opt():
                     pygame.quit()
                     sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
-                if opt_back.checkForInput(opt_mouse):
+                if opt_back.check_for_input(opt_mouse):
                     pygame.display.set_caption("Main Menu")
                     leave_menu = True
                     break
-                if opt_controls.checkForInput(opt_mouse):
+                if opt_controls.check_for_input(opt_mouse):
                     pygame.display.set_caption("Controls")
                     controls()
-                if opt_audio.checkForInput(opt_mouse):
+                if opt_audio.check_for_input(opt_mouse):
                     pygame.display.set_caption("Audio")
                     audio()
         if leave_menu:
@@ -959,13 +959,13 @@ def audio():
         audio_mouse = pygame.mouse.get_pos()
         screen.blit(menu_scaled, (0, 0))
 
-        audio_text = font(50).render("AUDIO VOLUME", True, "#b68f40")
+        audio_text = font(50).render("AUDIO VOLUME", True, "#b88d37")
         audio_rect = audio_text.get_rect(center=(500, 65))
         screen.blit(audio_text, audio_rect)
 
 
         # create a button for music volume
-        music_text = font(40).render("MUSIC", True, "#b68f40")
+        music_text = font(40).render("MUSIC", True, "#b88d37")
         music_rect = music_text.get_rect(center=(200, 175))
         screen.blit(music_text, music_rect)
 
@@ -973,7 +973,7 @@ def audio():
 
 
         # create same buttons as music for sound effects
-        sfx_text = font(40).render("SFX", True, "#b68f40")
+        sfx_text = font(40).render("SFX", True, "#b88d37")
         sfx_rect = sfx_text.get_rect(center=(200, 325))
         screen.blit(sfx_text, sfx_rect)
 
@@ -991,34 +991,34 @@ def audio():
                     pygame.quit()
                     sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
-                if audio_back.checkForInput(audio_mouse):
+                if audio_back.check_for_input(audio_mouse):
                     pygame.display.set_caption("Options")
                     leave_menu = True
                     break
-                if music_0.checkForInput(audio_mouse):
+                if music_0.check_for_input(audio_mouse):
                     background_music_volume = 0
                     mixer.music.set_volume(background_music_volume)
-                if music_1.checkForInput(audio_mouse):
+                if music_1.check_for_input(audio_mouse):
                     background_music_volume = 0.25
                     mixer.music.set_volume(background_music_volume)
-                if music_2.checkForInput(audio_mouse):
+                if music_2.check_for_input(audio_mouse):
                     background_music_volume = 0.5
                     mixer.music.set_volume(background_music_volume)
-                if music_3.checkForInput(audio_mouse):
+                if music_3.check_for_input(audio_mouse):
                     background_music_volume = 0.75
                     mixer.music.set_volume(background_music_volume)
-                if music_4.checkForInput(audio_mouse):
+                if music_4.check_for_input(audio_mouse):
                     background_music_volume = 1
                     mixer.music.set_volume(background_music_volume)
-                if sfx_0.checkForInput(audio_mouse):
+                if sfx_0.check_for_input(audio_mouse):
                     sfx_change(0)
-                if sfx_1.checkForInput(audio_mouse):
+                if sfx_1.check_for_input(audio_mouse):
                     sfx_change(1)
-                if sfx_2.checkForInput(audio_mouse):
+                if sfx_2.check_for_input(audio_mouse):
                     sfx_change(2)
-                if sfx_3.checkForInput(audio_mouse):
+                if sfx_3.check_for_input(audio_mouse):
                     sfx_change(3)
-                if sfx_4.checkForInput(audio_mouse):
+                if sfx_4.check_for_input(audio_mouse):
                     sfx_change(4)
         if leave_menu:
             break
@@ -1058,7 +1058,7 @@ def multi_map_select(game_client):
         if not game_client.continue_map_select:
             game_client.socket.close()
             return False
-        text = font(35).render("MAP SELECT", True, "#b68f40")
+        text = font(35).render("MAP SELECT", True, "#b88d37")
         rect = text.get_rect(center=(500, 50))
         screen.blit(text, rect)
 
@@ -1116,19 +1116,19 @@ def multi_map_select(game_client):
                     sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 # make it so that when you click play, it goes to the game loop
-                if play.checkForInput(mouse):
+                if play.check_for_input(mouse):
                     pygame.display.set_caption("Game")
                     locked_in = True
-                if back.checkForInput(mouse):
+                if back.check_for_input(mouse):
                     pygame.display.set_caption("Map Select")
                     return False
-                if map1.checkForInput(mouse):
+                if map1.check_for_input(mouse):
                     p_choice = 0
                     map= "church"
-                if map2.checkForInput(mouse):
+                if map2.check_for_input(mouse):
                     p_choice = 1
                     map = "mountain"
-                if map3.checkForInput(mouse):
+                if map3.check_for_input(mouse):
                     p_choice = 2
                     map = "cliffs"
 
@@ -1176,16 +1176,16 @@ def multi_lobby_menu(game_client):
 
         mouse = pygame.mouse.get_pos()
 
-        text = font(35).render("Lobby Menu", True, "#b68f40")
+        text = font(35).render("Lobby Menu", True, "#b88d37")
         rect = text.get_rect(center=(500, 50))
         screen.blit(text, rect)
 
 
-        text = font(15).render("Player Name", True, "#b68f40")
+        text = font(15).render("Player Name", True, "#b88d37")
         rect = text.get_rect(center=(500, 125))
         screen.blit(text, rect)
 
-        text = font(15).render("Lobby Code", True, "#b68f40")
+        text = font(15).render("Lobby Code", True, "#b88d37")
         rect = text.get_rect(center=(500, 275))
         screen.blit(text, rect)
 
@@ -1229,7 +1229,7 @@ def multi_lobby_menu(game_client):
                     sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 # make it so that when you click play, it goes to the game loop
-                if play.checkForInput(mouse):
+                if play.check_for_input(mouse):
                     pygame.display.set_caption("Game")
                     if game_client.lobby_searching:
                         continue
@@ -1238,13 +1238,13 @@ def multi_lobby_menu(game_client):
                     loop.create_task(game_client.join_lobby("176.61.91.52", 1234,
                                                             lobby_code_input.value,name_input.value))
 
-                if back.checkForInput(mouse):
+                if back.check_for_input(mouse):
                     pygame.display.set_caption("Map Select")
                     return False
-                if lobby_code_button.checkForInput(mouse):
+                if lobby_code_button.check_for_input(mouse):
                     lobby_in = True
                     name_in = False
-                if name_button.checkForInput(mouse):
+                if name_button.check_for_input(mouse):
                     #check if backspace was clicked, if yes, delete last character from name_input.value
                     lobby_in = False
                     name_in = True
@@ -1277,7 +1277,7 @@ def menu_play():
         screen.blit(menu_scaled, (0, 0))
         mouse = pygame.mouse.get_pos()
 
-        text = font(70).render("GAME MODE", True, "#b68f40")
+        text = font(70).render("GAME MODE", True, "#b88d37")
         rect = text.get_rect(center=(500, 50))
         screen.blit(text, rect)
 
@@ -1294,13 +1294,13 @@ def menu_play():
                     pygame.quit()
                     sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
-                if single_player.checkForInput(mouse):
+                if single_player.check_for_input(mouse):
                     pygame.display.set_caption("Single Player")
                     menu_char("Single Player")
-                if local.checkForInput(mouse):
+                if local.check_for_input(mouse):
                     pygame.display.set_caption("Local Multiplayer")
                     menu_char("Local")
-                if multiplayer.checkForInput(mouse):
+                if multiplayer.check_for_input(mouse):
                     pygame.display.set_caption("Multi Player Menu")
                     game_client = GameClient(1234)
                     game_client.socket.setblocking(False)
@@ -1325,7 +1325,7 @@ def menu_play():
                     mixer.music.load(resource_path("game/assets/audio/background-menu.wav"))
                     mixer.music.play(-1)
                     mixer.music.set_volume(background_music_volume)
-                if back.checkForInput(mouse):
+                if back.check_for_input(mouse):
                     pygame.display.set_caption("Main Menu")
                     leave_menu = True
                     break
@@ -1390,7 +1390,7 @@ def menu_char(mode):
         screen.blit(menu_scaled, (0, 0))
         mouse = pygame.mouse.get_pos()
 
-        text = font(35).render("CHARACTER SELECT", True, "#b68f40")
+        text = font(35).render("CHARACTER SELECT", True, "#b88d37")
         rect = text.get_rect(center=(500, 50))
         screen.blit(text, rect)
 
@@ -1421,12 +1421,12 @@ def menu_char(mode):
             nomad2.draw(screen, "", RED)
 
             # player 1
-        text = font(15).render("PLAYER 1", True, "#b68f40")
+        text = font(15).render("PLAYER 1", True, "#b88d37")
         rect = text.get_rect(center=(300, 125))
         screen.blit(text, rect)
 
         # player 2
-        text = font(15).render("PLAYER 2", True, "#b68f40")
+        text = font(15).render("PLAYER 2", True, "#b88d37")
         rect = text.get_rect(center=(700, 125))
         screen.blit(text, rect)
 
@@ -1445,39 +1445,39 @@ def menu_char(mode):
                     sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 # make it so that when you click play, it goes to the game loop
-                if play.checkForInput(mouse):
+                if play.check_for_input(mouse):
                     pygame.display.set_caption("Map Select")
                     map_select(mode)
-                if back.checkForInput(mouse):
+                if back.check_for_input(mouse):
                     pygame.display.set_caption("Main Menu")
                     leave_menu = True
                     break
-                if p1_wizard.checkForInput(mouse):
+                if p1_wizard.check_for_input(mouse):
                     p1_color_warrior = "#d7fcd4"
                     p1_color_wizard = "Yellow"
                     p1_color_nomad = "#d7fcd4"
                     p1 = "wizard"
-                if p1_warrior.checkForInput(mouse):
+                if p1_warrior.check_for_input(mouse):
                     p1_color_warrior = "Yellow"
                     p1_color_wizard = "#d7fcd4"
                     p1_color_nomad = "#d7fcd4"
                     p1 = "warrior"
-                if p1_nomad.checkForInput(mouse):
+                if p1_nomad.check_for_input(mouse):
                     p1_color_nomad = "Yellow"
                     p1_color_wizard = "#d7fcd4"
                     p1_color_warrior = "#d7fcd4"
                     p1 = "nomad"
-                if p2_wizard.checkForInput(mouse):
+                if p2_wizard.check_for_input(mouse):
                     p2_color_wizard = "Blue"
                     p2_color_warrior = "#d7fcd4"
                     p2_color_nomad = "#d7fcd4"
                     p2 = "wizard"
-                if p2_warrior.checkForInput(mouse):
+                if p2_warrior.check_for_input(mouse):
                     p2_color_warrior = "Blue"
                     p2_color_nomad = "#d7fcd4"
                     p2_color_wizard = "#d7fcd4"
                     p2 = "warrior"
-                if p2_nomad.checkForInput(mouse):
+                if p2_nomad.check_for_input(mouse):
                     p2_color_nomad = "Blue"
                     p2_color_wizard = "#d7fcd4"
                     p2_color_warrior = "#d7fcd4"
@@ -1515,7 +1515,7 @@ def map_select(mode):
         screen.blit(menu_scaled, (0, 0))
         mouse = pygame.mouse.get_pos()
 
-        text = font(35).render("MAP SELECT", True, "#b68f40")
+        text = font(35).render("MAP SELECT", True, "#b88d37")
         rect = text.get_rect(center=(500, 50))
         screen.blit(text, rect)
 
@@ -1572,7 +1572,7 @@ def map_select(mode):
                     sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 # make it so that when you click play, it goes to the game loop
-                if play.checkForInput(mouse):
+                if play.check_for_input(mouse):
                     pygame.display.set_caption("Game")
                     mixer.music.load(resource_path("game/assets/audio/background-game.wav"))
                     mixer.music.play(-1)
@@ -1582,15 +1582,15 @@ def map_select(mode):
                     else:
                         game_loop()
 
-                if back.checkForInput(mouse):
+                if back.check_for_input(mouse):
                     pygame.display.set_caption("Character Select")
                     leave_menu = True
                     break
-                if map1.checkForInput(mouse):
+                if map1.check_for_input(mouse):
                     map = "church"
-                if map2.checkForInput(mouse):
+                if map2.check_for_input(mouse):
                     map = "mountain"
-                if map3.checkForInput(mouse):
+                if map3.check_for_input(mouse):
                     map = "cliffs"
         if leave_menu:
             break
@@ -1709,17 +1709,17 @@ def multi_char_select(game_client):
         for button in enemy_chars:
             button.update(screen)
 
-        text = font(35).render("CHARACTER SELECT", True, "#b68f40")
+        text = font(35).render("CHARACTER SELECT", True, "#b88d37")
         rect = text.get_rect(center=(500, 50))
         screen.blit(text, rect)
 
         # player 1
-        text = font(15).render("YOUR PICK", True, "#b68f40")
+        text = font(15).render("YOUR PICK", True, "#b88d37")
         rect = text.get_rect(center=(300, 100))
         screen.blit(text, rect)
 
         # player 2
-        text = font(15).render("ENEMY PICK", True, "#b68f40")
+        text = font(15).render("ENEMY PICK", True, "#b88d37")
         rect = text.get_rect(center=(700, 100))
         screen.blit(text, rect)
         if l_count == 0:
@@ -1734,19 +1734,19 @@ def multi_char_select(game_client):
                     sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 # make it so that when you click play, it goes to the game loop
-                if play.checkForInput(mouse):
+                if play.check_for_input(mouse):
                     locked_in = True
 
                     game_client.local_char = p_choice
                     # pygame.display.set_caption("Game")
 
-                if back.checkForInput(mouse):
+                if back.check_for_input(mouse):
                     pygame.display.set_caption("Main Menu")
                     main_menu()
                 if locked_in:
                     continue
                 for i, button in enumerate(characters):
-                    if button.checkForInput(mouse):
+                    if button.check_for_input(mouse):
                         game_client.send_character_choice(i, False)
                         button.base_color = "Yellow"
                         p_choice = i
@@ -1776,7 +1776,7 @@ def main_menu():
     quit = Button(image=pygame.image.load(button_med), pos=(500, 470),
                   text_input="QUIT", font=font(55), base_color="#d7fcd4", hovering_color="White")
 
-    text = font(75).render("Main Menu", True, "#b68f40")
+    text = font(75).render("Main Menu", True, "#b88d37")
     rect = text.get_rect(center=(500, 50))
     clock = pygame.time.Clock()
 
@@ -1801,13 +1801,13 @@ def main_menu():
                     pygame.quit()
                     sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
-                if play.checkForInput(mouse):
+                if play.check_for_input(mouse):
                     pygame.display.set_caption("Game Mode")
                     menu_play()
-                if options.checkForInput(mouse):
+                if options.check_for_input(mouse):
                     pygame.display.set_caption("Options")
                     opt()
-                if quit.checkForInput(mouse):
+                if quit.check_for_input(mouse):
                     pygame.quit()
                     sys.exit()
         clock.tick(MENU_FPS)
