@@ -267,8 +267,8 @@ def single_game_loop():
                      right_cliff2, right_cliff3, right_cliff4]
 
     elif map == "church":
-        p1_spawn = [900, 286]
-        p2_spawn = [56, 286]
+        p2_spawn = [900, 286]
+        p1_spawn = [56, 286]
         map_chosen = "game/assets/maps/church.png"
         # church obstacles
         middle_floor = Obstacle(150, 530, 700, 80)
@@ -370,14 +370,23 @@ def single_game_loop():
                 over = True
                 over_time = pygame.time.get_ticks()
         else:
-            if scores[0] == 3 or scores[1] == 3:
-                break
             if fighter_1.alive:
-                draw_text("PLAYER 1 WINS", font(50), RED, screen, (SCREEN_WIDTH / 2), SCREEN_HEIGHT / 3)
+                draw_text(p1_name + " WINS", font(50), RED, screen, (SCREEN_WIDTH / 2), SCREEN_HEIGHT / 3)
             elif fighter_2.alive:
-                draw_text("PLAYER 2 WINS", font(50), RED, screen, (SCREEN_WIDTH / 2), SCREEN_HEIGHT / 3)
+                draw_text(p2_name + " WINS", font(50), RED, screen, (SCREEN_WIDTH / 2), SCREEN_HEIGHT / 3)
             if pygame.time.get_ticks() - over_time >= round_cd:
                 over = False
+                if scores[0] == 3 or scores[1] == 3:
+                    if scores[0] == 3:
+                        winner = p1_name
+                    else:
+                        winner = p2_name
+                    #victory_screen(screen, winner, scaled_bg)
+                    if victory_screen(screen, winner, scaled_bg, fighter_1, fighter_2) == "rematch":
+                        scores = [0,0]
+                    else:
+                        break
+                fighter_1.flip = False
                 fighter_1.reset()
                 fighter_2.reset()
 
@@ -389,13 +398,13 @@ def single_game_loop():
         fighter_2.frameUpdate()
 
         # draw fighters
-        p1_name = "P1"
+        p1_name = "Player 1"
         p1_colour = (0, 0, 255)
-        p2_name = "P2"
+        p2_name = "Player 2"
         p2_colour = (255, 0, 0)
 
         fighter_1.draw(screen, p1_name,p1_colour)
-        fighter_2.draw(screen, p2_name, p2_colour )
+        fighter_2.draw(screen, p2_name, p2_colour)
 
 
 
@@ -417,10 +426,61 @@ def single_game_loop():
         #locateFighter(fighter_1)
         # update display
         pygame.display.update()
+
     mixer.music.load(resource_path("game/assets/audio/background-menu.wav"))
     mixer.music.play(-1)
     #mixer.music.set_volume(0)
 
+
+# victory screen
+def victory_screen(screen, winner, scaled_bg, fighter1, fighter2):
+    leave_menu = False
+    run = True	
+    victory_back = Button(image=None, pos=(500, 405),
+                    text_input="Back", font=font(35),
+                    base_color="White", hovering_color="Grey")
+
+    victory_rematch = Button(image=None, pos=(500, 475),
+                    text_input="Rematch", font=font(35),
+                    base_color="White", hovering_color="Grey") 
+    idk = " "
+    while run:
+        # set background
+        mouse = pygame.mouse.get_pos()
+        screen.blit(scaled_bg, (0, 0))
+        # draw text
+
+        draw_text("VICTORY", font(80), RED, screen, (SCREEN_WIDTH / 2), SCREEN_HEIGHT / 3)
+        draw_text(str(winner) + " WINS", font(50), RED, screen, (SCREEN_WIDTH / 2), SCREEN_HEIGHT / 2)
+
+
+        fighter1.draw(screen, "", (0, 0, 255))
+        fighter2.draw(screen , "", (255, 0, 0))
+        
+        for button in [victory_back, victory_rematch]:
+            button.hover(mouse)
+            button.update(screen)
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    pygame.quit()
+                    sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if victory_back.checkForInput(mouse):
+                    leave_menu = True
+                    idk = "back"
+                    return idk
+                if victory_rematch.checkForInput(mouse):
+                    leave_menu = True
+                    idk = "rematch"
+                    return idk
+        if leave_menu:
+            return idk
+        pygame.display.update()
 
 async def update_enemy(game_client, local_player, enemy_character):
     for message in game_client.get_updates():
@@ -683,11 +743,11 @@ def player1():
                                font=font(15), base_color="#d7fcd4", hovering_color="White")
 
         player1_attack1 = Button(image=None, pos=(500, 350),
-                                 text_input="Punch : " + pygame.key.name(player1_controls["attack1"]),
+                                 text_input="Attack1 : " + pygame.key.name(player1_controls["attack1"]),
                                  font=font(15), base_color="#d7fcd4", hovering_color="White")
 
         player1_attack2 = Button(image=None, pos=(500, 400),
-                                 text_input="Projectile : " + pygame.key.name(player1_controls["attack2"]),
+                                 text_input="Attack2 : " + pygame.key.name(player1_controls["attack2"]),
                                  font=font(15), base_color="#d7fcd4", hovering_color="White")
 
         player1_back = Button(image=pygame.image.load(button_med), pos=(500, 475),
@@ -760,11 +820,11 @@ def player2():
                                font=font(15), base_color="#d7fcd4", hovering_color="White")
 
         player2_attack1 = Button(image=None, pos=(500, 350),
-                                 text_input="Punch : " + pygame.key.name(player2_controls["attack1"]),
+                                 text_input="Attack1 : " + pygame.key.name(player2_controls["attack1"]),
                                  font=font(15), base_color="#d7fcd4", hovering_color="White")
 
         player2_attack2 = Button(image=None, pos=(500, 400),
-                                 text_input="Projectile : " + pygame.key.name(player2_controls["attack2"]),
+                                 text_input="Attack2 : " + pygame.key.name(player2_controls["attack2"]),
                                  font=font(15), base_color="#d7fcd4", hovering_color="White")
 
         player2_back = Button(image=pygame.image.load(button_med), pos=(500, 475),
@@ -1637,7 +1697,7 @@ def multi_char_select(game_client):
                 p2_war = "Blue"
                 p2_wiz = default_colour
                 p2_nom = default_colour
-
+                enemy_choice= warrior2
             if game_client.enemy_resp.start:
 
                 break
@@ -1791,7 +1851,7 @@ if __name__ == "__main__":
 
     # cap frame rate
     clock = pygame.time.Clock()
-    MENU_FPS = 20
+    MENU_FPS = 45
     GAME_FPS = 60
 
     # define colors
